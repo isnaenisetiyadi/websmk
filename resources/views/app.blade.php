@@ -8,9 +8,12 @@
     <title>SMK N 1 Mepanga</title>
     <meta content="" name="descriptison">
     <meta content="" name="keywords">
+    <!-- <link rel = "icon" href = "https://media.geeksforgeeks.org/wp-content/cdn-uploads/gfg_200X200.png" 
+        type = "image/x-icon">  -->
 
     <!-- Favicons -->
-    <link href="{{ asset('img/favicon.png')}}" rel="icon">
+    <!-- <link href="{{ asset('img/favicon.png')}}" rel="icon"> -->
+    <link href="{{ asset('images/logo/logo_smk.png')}}" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
    
