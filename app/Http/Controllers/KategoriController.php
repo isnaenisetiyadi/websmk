@@ -38,7 +38,8 @@ class KategoriController extends Controller
         ], $code);
     }
 
-    public function showBerita(){
+    public function showBerita()
+    {
         $status = "error";
         $message = "BACKEND: ";
         $data = null;
@@ -46,7 +47,7 @@ class KategoriController extends Controller
         $kategori = Kategori::with(['berita' => function ($q) {
             $q->with('post');
         }])->get();
-        
+
         if ($kategori) {
             $status = "success";
             $message = "BACKEND: data kategori->berita sudah diperoleh";
@@ -62,6 +63,84 @@ class KategoriController extends Controller
             'data' => $data,
         ], $code);
     }
+    public function store(Request $request)
+    {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+        $kategori = new Kategori();
+        $kategori->nama = $request->nama;
+        if ($kategori->save()) {
+            $status = "success";
+            $message = "BACKEND: Kategori sudah ditambahkan";
+            $data = $kategori->toArray();
+            $code = 200;
+        } else {
+
+            $message = "BACKEND: Kategori gagal ditambahkan";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ], $code);
+    }
+    public function update(Request $request)
+    {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+        $kategori = Kategori::find($request->id);
+        if ($kategori) {
+            $kategori->nama = $request->nama;
+
+            if ($kategori->save()) {
+                $status = "success";
+                $message = "BACKEND: Kategori sudah diupdate";
+                $data = $kategori->toArray();
+                $code = 200;
+            } else {
+
+                $message = "BACKEND: Kategori gagal diupdate";
+            }
+        } else {
+            $message = "BACKEND: Tidak ada kategori dengan id ini";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ], $code);
+    }
+    public function destroy($id)
+    {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+        $kategori = Kategori::find($id);
+        if ($kategori) {
+            if ($kategori->delete()) {
+                $status = "success";
+                $message = "BACKEND: Kategori sudah dihapus";
+                $data = $kategori->toArray();
+                $code = 200;
+            } else {
+
+                $message = "BACKEND: Kategori gagal dihapus";
+            }
+        } else {
+            $message = "BACKEND: Tidak ada kategori dengan id ini";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ], $code);
+    }
+
     // public function postbykategori()
     // {
     //     $status = "error";

@@ -1,6 +1,7 @@
 import Index from '../components/Index.vue';
 import HubungiKami from '../components/HubungiKami.vue';
 import Berita from '../components/Berita/Index.vue';
+import Kategori from '../components/Kategori/Index.vue';
 import BeritaItem from '../components/Berita/BeritaItem.vue';
 import Pengumuman from '../components/Pengumuman/Index.vue';
 import Siswa from '../components/Awards/Siswa.vue';
@@ -40,6 +41,7 @@ export default [
     { path: '/', component: Index },
     { path: '/berita', component: Berita },
     { path: '/beritaitem', component: BeritaItem },
+    { path: '/kategori', component: Kategori },
     { path: '/pengumuman', component: Pengumuman },
     { path: '/galeri', component: Galeri },
     { path: '/awards/siswa', component: Siswa },

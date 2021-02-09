@@ -119,6 +119,10 @@
                       <router-link to="/entry/berita">Berita</router-link>
                     </li>
                     <li>
+                      <router-link to="/kategori">Kategori</router-link>
+                    </li>
+                    <hr>
+                    <li>
                       <router-link to="/users">User</router-link>
                     </li>
                     <li>

@@ -54,6 +54,9 @@ Route::get('kategori/showBerita','KategoriController@showBerita');
 Route::get('kategori/postbykategori','KategoriController@postbykategori');
 Route::get('postperkategori/{id}','PostController@postperkategori');
 Route::get('postperkategori2/{id}','PostController@postperkategori2');
+Route::post('kategori/store','KategoriController@store');
+Route::post('kategori/update','KategoriController@update');
+Route::post('kategori/destroy/{id}','KategoriController@destroy');
 
 Route::get('post/hits','PostController@hits');
 Route::get('post/show/{id}','PostController@show');
