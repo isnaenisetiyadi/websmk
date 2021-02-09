@@ -57,9 +57,9 @@
               <p class="mb-5" data-aos="fade-right" data-aos-delay="100">
                 {{ jurusanItem.deskripsi }}
               </p>
-              <p data-aos="fade-right" data-aos-delay="200" data-aos-offset="-500">
+              <!-- <p data-aos="fade-right" data-aos-delay="200" data-aos-offset="-500">
                 <a href="#" class="btn btn-outline-white">Tour Jurusan</a>
-              </p>
+              </p> -->
             </div>
             <div class="col-lg-8 text-center personal-section">
               <div>

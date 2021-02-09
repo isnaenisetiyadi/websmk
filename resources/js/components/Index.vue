@@ -29,7 +29,9 @@
                 Sekolah Menengah Kejuruan
               </p>
               <p data-aos="fade-right" data-aos-delay="200" data-aos-offset="-500">
-                <a href="#" class="btn btn-outline-white">Mulai</a>
+                <!-- <a href="#" class="btn btn-outline-white">Mulai</a> -->
+                <!-- <a href="#" class="btn btn-outline-white">Mulai</a> -->
+                <router-link to="/berita" class="btn btn-outline-white">Mulai</router-link>
               </p>
             </div>
             <div class="col-lg-4 text-center">

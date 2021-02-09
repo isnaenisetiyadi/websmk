@@ -233,7 +233,7 @@ export default {
       berita: {},
       komentar: "",
       loadKomentarChild: "",
-      // kategoris: {},
+      kategoris: {},
     };
   },
   mounted() {

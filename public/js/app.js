@@ -5125,8 +5125,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       berita: {},
       komentar: "",
-      loadKomentarChild: "" // kategoris: {},
-
+      loadKomentarChild: "",
+      kategoris: {}
     };
   },
   mounted: function mounted() {
@@ -6855,6 +6855,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
 //
 //
 //
@@ -92033,7 +92035,58 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(0),
+    _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "row align-items-center" }, [
+        _c("div", { staticClass: "col-12 hero-text-image" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-lg-4 text-center text-lg-left" }, [
+              _c("h1", { attrs: { "data-aos": "fade-right" } }, [
+                _vm._v("Vocational High School")
+              ]),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass: "mb-5",
+                  attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
+                },
+                [
+                  _vm._v(
+                    "\n              Sekolah Menengah Kejuruan\n            "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  attrs: {
+                    "data-aos": "fade-right",
+                    "data-aos-delay": "200",
+                    "data-aos-offset": "-500"
+                  }
+                },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-outline-white",
+                      attrs: { to: "/berita" }
+                    },
+                    [_vm._v("Mulai")]
+                  )
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._m(1)
+          ])
+        ])
+      ])
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -92070,204 +92123,160 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row align-items-center" }, [
-        _c("div", { staticClass: "col-12 hero-text-image" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-lg-4 text-center text-lg-left" }, [
-              _c("h1", { attrs: { "data-aos": "fade-right" } }, [
-                _vm._v("Vocational High School")
-              ]),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass: "mb-5",
-                  attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
-                },
-                [
-                  _vm._v(
-                    "\n              Sekolah Menengah Kejuruan\n            "
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  attrs: {
-                    "data-aos": "fade-right",
-                    "data-aos-delay": "200",
-                    "data-aos-offset": "-500"
-                  }
-                },
-                [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "btn btn-outline-white",
-                      attrs: { href: "#" }
-                    },
-                    [_vm._v("Mulai")]
-                  )
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-4 text-center" }, [
-              _c("img", {
-                staticClass: "logo-smk",
-                attrs: {
-                  src: "images/logo/logo_smk.png",
-                  alt: "Image",
-                  "data-aos": "fade-down",
-                  "data-aos-delay": "100"
-                }
-              }),
-              _vm._v(" "),
-              _c("img", {
-                staticClass: "logo-atph",
-                attrs: {
-                  src: "images/logo/logo_atph.png",
-                  alt: "Image",
-                  "data-aos": "fade-up",
-                  "data-aos-delay": "700"
-                }
-              }),
-              _vm._v(" "),
-              _c("img", {
-                staticClass: "logo-apat",
-                attrs: {
-                  src: "images/logo/logo_apat.png",
-                  alt: "Image",
-                  "data-aos": "fade-right",
-                  "data-aos-delay": "900"
-                }
-              }),
-              _vm._v(" "),
-              _c("img", {
-                staticClass: "logo-akl",
-                attrs: {
-                  src: "images/logo/logo_akl.png",
-                  alt: "Image",
-                  "data-aos": "fade-left",
-                  "data-aos-delay": "500"
-                }
-              }),
-              _vm._v(" "),
-              _c("img", {
-                staticClass: "logo-tkj",
-                attrs: {
-                  src: "images/logo/logo_tkj.png",
-                  alt: "Image",
-                  "data-aos": "fade-down",
-                  "data-aos-delay": "1100"
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-4 text-center text-lg-right" }, [
-              _c(
-                "h3",
-                {
-                  staticClass: "mb-2 judul",
-                  staticStyle: { color: "white" },
-                  attrs: { "data-aos": "fade-up" }
-                },
-                [_vm._v("Visi :")]
-              ),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass: "visi",
-                  attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
-                },
-                [
-                  _vm._v(
-                    "\n              Terampil, Cerdas, Terdidik berdasarkan iman dan taqwa\n            "
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "h3",
-                {
-                  staticClass: "mb-2 judul",
-                  staticStyle: { color: "white" },
-                  attrs: { "data-aos": "fade-up" }
-                },
-                [_vm._v("Misi :")]
-              ),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass: "misi",
-                  attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
-                },
-                [
-                  _vm._v(
-                    "\n              Mengembangkan iklim belajar berdasarkan norma budaya Indoneisa\n            "
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass: "misi",
-                  attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
-                },
-                [
-                  _vm._v(
-                    "\n              Mengembangkan sistem pendidikan yang fleksible\n            "
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass: "misi",
-                  attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
-                },
-                [
-                  _vm._v(
-                    "\n              Menyiapkan tamatan yang memiliki keterampilan sesuai profesionalismenya\n            "
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass: "misi",
-                  attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
-                },
-                [
-                  _vm._v(
-                    "\n              Mencetak tamatan yang memiliki karir di bidangnya serta memberi landasan\n              untuk melanjutkan pendidikan ke jenjang yang lebih tinggi\n            "
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass: "misi",
-                  attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
-                },
-                [
-                  _vm._v(
-                    "\n              Mencetak tamatan yang memiliki karir di bidangnya\n            "
-                  )
-                ]
-              )
-            ])
-          ])
-        ])
-      ])
+    return _c("div", { staticClass: "col-lg-4 text-center" }, [
+      _c("img", {
+        staticClass: "logo-smk",
+        attrs: {
+          src: "images/logo/logo_smk.png",
+          alt: "Image",
+          "data-aos": "fade-down",
+          "data-aos-delay": "100"
+        }
+      }),
+      _vm._v(" "),
+      _c("img", {
+        staticClass: "logo-atph",
+        attrs: {
+          src: "images/logo/logo_atph.png",
+          alt: "Image",
+          "data-aos": "fade-up",
+          "data-aos-delay": "700"
+        }
+      }),
+      _vm._v(" "),
+      _c("img", {
+        staticClass: "logo-apat",
+        attrs: {
+          src: "images/logo/logo_apat.png",
+          alt: "Image",
+          "data-aos": "fade-right",
+          "data-aos-delay": "900"
+        }
+      }),
+      _vm._v(" "),
+      _c("img", {
+        staticClass: "logo-akl",
+        attrs: {
+          src: "images/logo/logo_akl.png",
+          alt: "Image",
+          "data-aos": "fade-left",
+          "data-aos-delay": "500"
+        }
+      }),
+      _vm._v(" "),
+      _c("img", {
+        staticClass: "logo-tkj",
+        attrs: {
+          src: "images/logo/logo_tkj.png",
+          alt: "Image",
+          "data-aos": "fade-down",
+          "data-aos-delay": "1100"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-lg-4 text-center text-lg-right" }, [
+      _c(
+        "h3",
+        {
+          staticClass: "mb-2 judul",
+          staticStyle: { color: "white" },
+          attrs: { "data-aos": "fade-up" }
+        },
+        [_vm._v("Visi :")]
+      ),
+      _vm._v(" "),
+      _c(
+        "p",
+        {
+          staticClass: "visi",
+          attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
+        },
+        [
+          _vm._v(
+            "\n              Terampil, Cerdas, Terdidik berdasarkan iman dan taqwa\n            "
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "h3",
+        {
+          staticClass: "mb-2 judul",
+          staticStyle: { color: "white" },
+          attrs: { "data-aos": "fade-up" }
+        },
+        [_vm._v("Misi :")]
+      ),
+      _vm._v(" "),
+      _c(
+        "p",
+        {
+          staticClass: "misi",
+          attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
+        },
+        [
+          _vm._v(
+            "\n              Mengembangkan iklim belajar berdasarkan norma budaya Indoneisa\n            "
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "p",
+        {
+          staticClass: "misi",
+          attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
+        },
+        [
+          _vm._v(
+            "\n              Mengembangkan sistem pendidikan yang fleksible\n            "
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "p",
+        {
+          staticClass: "misi",
+          attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
+        },
+        [
+          _vm._v(
+            "\n              Menyiapkan tamatan yang memiliki keterampilan sesuai profesionalismenya\n            "
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "p",
+        {
+          staticClass: "misi",
+          attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
+        },
+        [
+          _vm._v(
+            "\n              Mencetak tamatan yang memiliki karir di bidangnya serta memberi landasan\n              untuk melanjutkan pendidikan ke jenjang yang lebih tinggi\n            "
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "p",
+        {
+          staticClass: "misi",
+          attrs: { "data-aos": "fade-right", "data-aos-delay": "100" }
+        },
+        [
+          _vm._v(
+            "\n              Mencetak tamatan yang memiliki karir di bidangnya\n            "
+          )
+        ]
+      )
     ])
   }
 ]
@@ -95291,9 +95300,7 @@ var render = function() {
                         "\n            "
                     )
                   ]
-                ),
-                _vm._v(" "),
-                _vm._m(0)
+                )
               ]),
               _vm._v(" "),
               _c(
@@ -95351,30 +95358,7 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "p",
-      {
-        attrs: {
-          "data-aos": "fade-right",
-          "data-aos-delay": "200",
-          "data-aos-offset": "-500"
-        }
-      },
-      [
-        _c(
-          "a",
-          { staticClass: "btn btn-outline-white", attrs: { href: "#" } },
-          [_vm._v("Tour Jurusan")]
-        )
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
