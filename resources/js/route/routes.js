@@ -36,12 +36,19 @@ import Jurusans from '../pages/Jurusan/Index.vue';
 import OrganisasiEntry from '../pages/Organisasi/Index.vue';
 import ProgramEntry from '../pages/Program/Index.vue';
 
+import AccessDenied from '../pages/Error/Access.vue';
+
 const userId = '';
 export default [
     { path: '/', component: Index },
+    { path: '/error/access', component: AccessDenied },
     { path: '/berita', component: Berita },
     { path: '/beritaitem', component: BeritaItem },
-    { path: '/kategori', component: Kategori },
+    {
+        path: '/kategori',
+        component: Kategori,
+        meta: { login: true, super_user: true }
+    },
     { path: '/pengumuman', component: Pengumuman },
     { path: '/galeri', component: Galeri },
     { path: '/awards/siswa', component: Siswa },
@@ -58,14 +65,22 @@ export default [
     { path: '/organisasi/viewer', component: OrganisasiViewer },
     { path: '/organisasi/psht', component: Psht },
     { path: '/organisasi/multimedia', component: Multimedia },
-    { path: '/organisasi/entry', component: OrganisasiEntry },
-    { path: '/program/entry', component: ProgramEntry },
+    {
+        path: '/organisasi/entry',
+        component: OrganisasiEntry,
+        meta: { login: true, super_user: true }
+    },
+    {
+        path: '/program/entry',
+        component: ProgramEntry,
+        meta: { login: true, admin: true }
+    },
 
     {
         path: '/entry/berita',
         component: BeritaEntry,
         name: 'register',
-        meta: { login: true }
+        meta: { login: true, admin: true }
     },
 
     { path: '/entry/login', component: Login, meta: { guest: true } },
@@ -75,14 +90,26 @@ export default [
         path: '/users',
         component: Users,
         name: 'users',
-        meta: { login: true }
+        meta: { login: true, super_user: true }
     },
     { path: '/pricing', component: Pricing },
     { path: '/web', component: Web },
     { path: '/hubungikami', component: HubungiKami },
 
-    { path: '/gurus', component: Gurus },
-    { path: '/guru/tambah', component: GuruTambah },
+    {
+        path: '/gurus',
+        component: Gurus,
+        meta: { login: true, admin: true }
+    },
+    {
+        path: '/guru/tambah',
+        component: GuruTambah,
+        meta: { login: true, admin: true }
+    },
 
-    { path: '/jurusans', component: Jurusans },
+    {
+        path: '/jurusans',
+        component: Jurusans,
+        meta: { login: true, super_user: true }
+    },
 ]

@@ -79,7 +79,7 @@
 
               <h3 class="mb-2 judul" style="color: white" data-aos="fade-up">Misi :</h3>
               <p class="misi" data-aos="fade-right" data-aos-delay="100">
-                Mengembangkan iklim belajar berdasarkan norma budaya Indoneisa
+                Mengembangkan iklim belajar berdasarkan norma budaya Indonesia
               </p>
               <p class="misi" data-aos="fade-right" data-aos-delay="100">
                 Mengembangkan sistem pendidikan yang fleksible
@@ -91,9 +91,7 @@
                 Mencetak tamatan yang memiliki karir di bidangnya serta memberi landasan
                 untuk melanjutkan pendidikan ke jenjang yang lebih tinggi
               </p>
-              <p class="misi" data-aos="fade-right" data-aos-delay="100">
-                Mencetak tamatan yang memiliki karir di bidangnya
-              </p>
+             
             </div>
           </div>
         </div>
@@ -216,10 +214,16 @@
     <div class="container mb-5">
       <div class="row trending-frame" v-for="(kategori, index) in kategoris" :key="index">
         <div class="caption text-center">{{ kategori.nama }} TERBARU :</div>
-        <div class="col-md-12">
-          <div class="row">
+        <div class="col-md-12" >
+          <div class="row" v-if="kategori.berita[0]">
             <div class="trending-item" v-for="(berita, index) in kategori.berita" :key="index">
               <Trending :berita="berita" />
+            </div>
+          </div>
+          <div class="row" v-else style="width:100%;">
+            <div class="col-md-12 align-middle text-center">
+              <h1><i class="icofont-worried"></i></h1>
+              <span>Belum ada {{kategori.nama}}</span>
             </div>
           </div>
         </div>

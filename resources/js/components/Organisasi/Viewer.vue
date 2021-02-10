@@ -20,7 +20,7 @@
       </svg>
     </div>
     <!-- KODE UNTUK MENU ORGANISASI (MELAYANG) -->
-    <div class="fly-mn">
+    <div class="fly-mn" v-if="organisasis">
       <!-- <div v-bind:class="[isActive ? activeClass : '', errorClass]"></div> -->
       <!-- <div v-bind:class="{ active: isActive }"></div> -->
       <div class="fly-mn-left p-2" :class="[sideMenu ? 'fly-mn-80' : 'fly-mn-0']">
@@ -42,7 +42,7 @@
     </div>
     <!-- AKHIR DARI : KODE UNTUK MENU ORGANISASI (MELAYANG) -->
 
-    <div class="container">
+    <div class="container" v-if="organisasiItem">
       <div class="row align-items-center header">
         <div class="col-12">
           <h1 data-aos="fade-right">{{ organisasiItem.deskripsi | upperCase }}</h1>
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container" v-if="organisasiItem">
       <div class="row">
         <!-- <div v-if="organisasiItem.program"> -->
         <div
@@ -66,29 +66,49 @@
           :key="index"
         >
           <div class="program-avatar">
-            <img :src="urlImage + '/program/' + program.avatar" alt="" v-if="program.avatar"/>
+            <img
+              :src="urlImage + '/program/' + program.avatar"
+              alt=""
+              v-if="program.avatar"
+            />
             <img :src="urlImage + '/anything.jpg'" alt="" v-else />
           </div>
           <div class="program-text">
             <div class="program-caption">{{ program.nama | subStr12 }}..</div>
-            <div class="program-description">
-              {{ program.deskripsi | subStr150 }}...
-            </div>
+            <div class="program-description">{{ program.deskripsi | subStr150 }}...</div>
           </div>
         </div>
         <!-- </div> -->
-      <!-- <div v-else >Belum ada program</div> -->
+        <!-- <div v-else >Belum ada program</div> -->
       </div>
     </div>
-    <div class="container mb-5" style="margin-top: 50px;">
+    <div class="container mb-5" style="margin-top: 50px" v-if="organisasiItem">
       <div class="row trending-frame">
-        <div class="caption text-center">KEGIATAN TERBARU :</div>
+        <div class="caption text-center">INFORMASI :</div>
         <div class="col-md-12">
-          <div class="row">
-
-        <div v-for="(berita, index) in organisasiItem.berita" :key="index" class="trending-item">
-        <Trending :berita="berita"  />
-        </div>
+          <!-- <div class="row">
+            <div
+              v-for="(berita, index) in organisasiItem.berita"
+              :key="index"
+              class="trending-item"
+            >
+              <Trending :berita="berita" />
+            </div>
+          </div> -->
+          <div class="row" v-if="organisasiItem.berita">
+            <div
+              class="trending-item"
+              v-for="(berita, index) in organisasiItem.berita"
+              :key="index"
+            >
+              <Trending :berita="berita" />
+            </div>
+          </div>
+          <div class="row" v-else style="width: 100%">
+            <div class="col-md-12 align-middle text-center">
+              <h1><i class="icofont-worried"></i></h1>
+              <span>Belum ada INFORMASI apapun</span>
+            </div>
           </div>
         </div>
         <!-- <Trending />

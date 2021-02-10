@@ -20,7 +20,7 @@
       </svg>
     </div>
 
-    <div class="fly-mn">
+    <div class="fly-mn" v-if="jurusans">
       <!-- <div v-bind:class="[isActive ? activeClass : '', errorClass]"></div> -->
       <!-- <div v-bind:class="{ active: isActive }"></div> -->
       <div class="fly-mn-left p-2" :class="[sideMenu ? 'fly-mn-80' : 'fly-mn-0']">
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container" v-if="jurusanItem">
       <div class="row align-items-center">
         <div class="col-12 hero-text-image">
           <img
@@ -77,14 +77,25 @@
       </div>
     </div>
 
-    <div class="container mb-5" style="margin-top: 50px;">
+    <div class="container mb-5" style="margin-top: 50px;" v-if="jurusanItem">
       <div class="row trending-frame">
         <div class="caption text-center">INFORMASI :</div>
 
         <div class="col-md-12">
-          <div class="row">
+          <!-- <div class="row">
             <div v-for="(berita, index) in jurusanItem.berita" :key="index" class="trending-item">
             <Trending :berita="berita" />
+            </div>
+          </div> -->
+          <div class="row" v-if="jurusanItem.berita">
+            <div class="trending-item" v-for="(berita, index) in jurusanItem.berita" :key="index">
+              <Trending :berita="berita" />
+            </div>
+          </div>
+          <div class="row" v-else style="width:100%;">
+            <div class="col-md-12 align-middle text-center">
+              <h1><i class="icofont-worried"></i></h1>
+              <span>Belum ada INFORMASI apapun</span>
             </div>
           </div>
         </div>

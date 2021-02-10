@@ -1,10 +1,10 @@
 <template>
-  <section class="section">
+  <section class="section mb-5">
     <div class="container-fluid banner" height="50px"></div>
     <section class="site-section mb-4">
       <div class="container">
         <div class="row">
-          <div class="col-md-8 blog-content">
+          <div class="col-md-8 blog-content" v-if="getNews.berita">
             <div>
               <div v-html="getNews.berita.konten" class="ql-editor"></div>
             </div>
@@ -65,6 +65,12 @@
               </form>
             </div>
           </div>
+          <div class="col-md-8 blog-content" v-else>
+            <div class="col-md-12 align-middle text-center" style="margin-top:100px;margin-bottom:100px">
+              <h1><i class="icofont-worried"></i></h1>
+              <span>Belum ada INFORMASI apapun</span>
+            </div>
+          </div>
           <div class="col-md-4 sidebar">
             <!-- <div class="sidebar-box">
               <form action="#" class="search-form">
@@ -110,17 +116,32 @@
         </div>
       </div>
     </section>
-    <div class="container mb-5" style="margin-bottom:50px;">
+    <div class="container mb-5">
       <div class="row trending-frame" v-for="(kategori, index) in kategoris" :key="index">
         <div class="caption text-center">{{ kategori.nama }} TERBARU :</div>
         <div class="col-md-12">
-          <div class="row">
+          <!-- <div class="row">
             <div
               class="trending-item"
               v-for="(berita, index) in kategori.berita"
               :key="index"
             >
               <Trending :berita="berita" />
+            </div>
+          </div> -->
+          <div class="row" v-if="kategori.berita[0]">
+            <div
+              class="trending-item"
+              v-for="(berita, index) in kategori.berita"
+              :key="index"
+            >
+              <Trending :berita="berita" />
+            </div>
+          </div>
+          <div class="row" v-else style="width: 100%">
+            <div class="col-md-12 align-middle text-center">
+              <h1><i class="icofont-worried"></i></h1>
+              <span>Belum ada {{ kategori.nama }}</span>
             </div>
           </div>
         </div>

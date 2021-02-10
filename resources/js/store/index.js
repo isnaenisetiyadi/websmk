@@ -19,13 +19,18 @@ const vuexPersist = new VuexPersist({
 })
 
 export default new Vuex.Store({
-    plugins: [vuexPersist.plugin],
-    modules: {
-        auth,
-        news,
-        constant,
-        pendidikan,
-        pendidikanDialog,
-        addMode
-    },
-})
+        plugins: [vuexPersist.plugin],
+        modules: {
+            auth,
+            news,
+            constant,
+            pendidikan,
+            pendidikanDialog,
+            addMode
+        },
+    })
+    // export default new Vuex.Store({
+    //     modules: {
+    //         constant
+    //     }
+    // })

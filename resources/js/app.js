@@ -117,6 +117,7 @@ const router = new VueRouter({
 
 import App from './App.vue';
 import store from './store';
+import storeTemporary from './store/temporary';
 // import web from './effect/web';
 import VueNotifications from 'vue-notifications';
 Vue.use(App);
@@ -134,18 +135,45 @@ router.beforeEach((to, from, next) => {
         if (!store.state.auth.user) {
             next({ path: '/entry/login' });
         } else {
-            next()
+            if (to.matched.some(record => record.meta.super_user)) {
+                if (store.state.auth.user.role != "SUPER USER") {
+                    next({ path: '/error/access' });
+                } else {
+                    next()
+                }
+            } else if (to.matched.some(record => record.meta.admin)) {
+                // if (store.state.auth.user.role != "ADMIN") {
+                //     next({ path: '/error/access' });
+                // } else {
+                //     next()
+                // }
+                switch (store.state.auth.user.role) {
+                    case "SUPER USER":
+                        next();
+                        break;
+                    case "ADMIN":
+                        next();
+                        break;
+                    default:
+                        next({ path: '/error/access' });
+                }
+            } else {
+                next()
+
+            }
         }
 
         // NAVIGATION GUARD: 
         // Agar setelah login, tidak bisa mengakses halaman login lagi
-    } else if (to.matched.some(record => record.meta.guest)) {
-        if (store.state.auth.user) {
-            next({ path: '/' });
-        } else {
-            next()
-        }
-    } else {
+    }
+    // else if (to.matched.some(record => record.meta.guest)) {
+    //     if (store.state.auth.user) {
+    //         next({ path: '/' });
+    //     } else {
+    //         next()
+    //     }
+    // } 
+    else {
         next()
     }
 })
@@ -153,6 +181,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
     router,
     store,
+    storeTemporary,
     // web,
     data: {
         bus: bus

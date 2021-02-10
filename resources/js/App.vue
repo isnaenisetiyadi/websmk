@@ -25,11 +25,8 @@ import { mapActions, mapGetters } from "vuex";
 // mapActions
 export default {
   name: "app",
-  data(){
-    return {
-      
-      
-    }
+  data() {
+    return {};
   },
   components: {
     Navbar,
@@ -45,8 +42,8 @@ export default {
   mounted() {
     this.init();
     // this.setUrlImage("http://200.77.10.3:8000/images"); //jaringan rumah
-    // this.setUrlImage("http://127.0.0.1:8000/images"); //lokal
-    this.setUrlImage("http://www.smkn1mepanga.sch.id/images"); //hosting
+    this.setUrlImage("http://127.0.0.1:8000/images"); //lokal
+    // this.setUrlImage("http://www.smkn1mepanga.sch.id/images"); //hosting
     this.setPendidikanDialog(false);
     this.$refs.isAdd = true;
   },
@@ -56,7 +53,9 @@ export default {
         .then((response) => {
           // if (response.data.data.length>0) {
           this.setNews({});
-          this.setNews(response.data.data);
+          if (response.data.data) {
+            this.setNews(response.data.data);
+          }
 
           // }
         })

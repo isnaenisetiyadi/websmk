@@ -373,7 +373,8 @@ class PostController extends Controller
             $data = $post;
             $code = 200;
         } else {
-            $message = "BACKEND: Gagal mengambil data post paling hits";
+            $message = "BACKEND: belum ada postingan apapun";
+            $code = 200;
         }
         return response()->json([
             'status' => $status,
