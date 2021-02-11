@@ -281,6 +281,7 @@ export default {
             type: "success", //nilai lain, error dan success
           });
           this.edit = false;
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -289,14 +290,17 @@ export default {
             text: `ERROR ` + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
-      this.setSpinner(false);
     },
     reloadGuru() {
+      this.setSpinner(true);
       Axios.get("guru/show/" + this.guru.id)
+
         .then((response) => {
           // console.log(response.data.data);
           this.guru = response.data.data;
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -305,6 +309,7 @@ export default {
             text: `ERROR ` + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     onDelete() {
@@ -313,6 +318,7 @@ export default {
         button: { no: "Tidak", yes: "Iya" },
         callback: (confirm) => {
           if (confirm) {
+            this.setSpinner(true);
             Axios.post("guru/destroy/" + this.guru.id)
               .then((response) => {
                 this.$parent.loadGurus();
@@ -322,6 +328,7 @@ export default {
                   text: "Satu guru: " + response.data.data.nama + " sudah dihapus",
                   type: "warn", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               })
               .catch((error) => {
                 this.$notify({
@@ -330,6 +337,7 @@ export default {
                   text: error.message,
                   type: "error", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               });
           }
         },

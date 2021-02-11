@@ -22,6 +22,7 @@
 
 <script>
 import Axios from "axios";
+import { mapActions } from "vuex";
 export default {
   props: ["guru"],
   data() {
@@ -29,6 +30,9 @@ export default {
   },
   mounted() {},
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     onDelete() {
       this.$confirm({
         message: "Yakin " + this.guru.nama + " akan dikeluarkan dari jurusan ini?",
@@ -39,6 +43,7 @@ export default {
               guru_id: this.guru.pivot.guru_id,
               jurusan_id: this.guru.pivot.jurusan_id,
             };
+            this.setSpinner(true);
             Axios.post("guru/excludeJurusan/", data)
               .then((response) => {
                 this.$parent.loadGurus();
@@ -49,6 +54,7 @@ export default {
                   type: "warn", //nilai lain, error dan success
                 });
                 this.$parent.loadGurus();
+                this.setSpinner(false);
               })
               .catch((error) => {
                 this.$notify({
@@ -57,6 +63,7 @@ export default {
                   text: error.message,
                   type: "error", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               });
           }
         },

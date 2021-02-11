@@ -31,7 +31,9 @@
               <p data-aos="fade-right" data-aos-delay="200" data-aos-offset="-500">
                 <!-- <a href="#" class="btn btn-outline-white">Mulai</a> -->
                 <!-- <a href="#" class="btn btn-outline-white">Mulai</a> -->
-                <router-link to="/berita" class="btn btn-outline-white">Mulai</router-link>
+                <router-link to="/berita" class="btn btn-outline-white"
+                  >Mulai</router-link
+                >
               </p>
             </div>
             <div class="col-lg-4 text-center">
@@ -91,7 +93,6 @@
                 Mencetak tamatan yang memiliki karir di bidangnya serta memberi landasan
                 untuk melanjutkan pendidikan ke jenjang yang lebih tinggi
               </p>
-             
             </div>
           </div>
         </div>
@@ -214,16 +215,20 @@
     <div class="container mb-5">
       <div class="row trending-frame" v-for="(kategori, index) in kategoris" :key="index">
         <div class="caption text-center">{{ kategori.nama }} TERBARU :</div>
-        <div class="col-md-12" >
+        <div class="col-md-12">
           <div class="row" v-if="kategori.berita[0]">
-            <div class="trending-item" v-for="(berita, index) in kategori.berita" :key="index">
+            <div
+              class="trending-item"
+              v-for="(berita, index) in kategori.berita"
+              :key="index"
+            >
               <Trending :berita="berita" />
             </div>
           </div>
-          <div class="row" v-else style="width:100%;">
+          <div class="row" v-else style="width: 100%">
             <div class="col-md-12 align-middle text-center">
               <h1><i class="icofont-worried"></i></h1>
-              <span>Belum ada {{kategori.nama}}</span>
+              <span>Belum ada {{ kategori.nama }}</span>
             </div>
           </div>
         </div>
@@ -237,6 +242,7 @@
 
 <script>
 import Axios from "axios";
+import { mapActions } from "vuex";
 export default {
   components: {
     Trending: () => import("../components/Trending/Trending.vue"),
@@ -251,11 +257,16 @@ export default {
     this.loadKategoris();
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     loadKategoris() {
+      this.setSpinner(true);
       Axios.get("kategori/showBerita")
         .then((response) => {
           this.kategoris = response.data.data;
           // console.log(this.kategoris);
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -264,6 +275,7 @@ export default {
             text: "ERROR : " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
   },

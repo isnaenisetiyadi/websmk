@@ -122,6 +122,7 @@
 
 <script>
 import Axios from "axios";
+import { mapActions } from "vuex";
 export default {
   props: ["index"],
   data() {
@@ -135,10 +136,13 @@ export default {
 
       // DATA GAMBAR
       image: "",
-      avatar:null,
+      avatar: null,
     };
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     onSave() {
       // Menggunakan form-data (npm i form-data)
       // tidak bisa menggunakan data biasa,
@@ -151,15 +155,26 @@ export default {
       dataQ.set("password", this.password);
       dataQ.set("avatar", this.avatar);
       dataQ.set("role", this.role);
-
-      Axios.post("auth/register", dataQ).then((response) => {
-        this.$notify({
-          group: "auth",
-          title: "Sukses",
-          text: "User baru sudah ditambahkan",
+      this.setSpinner(true);
+      Axios.post("auth/register", dataQ)
+        .then((response) => {
+          this.$notify({
+            group: "auth",
+            title: "Sukses",
+            text: "User baru sudah ditambahkan",
+          });
+          this.setSpinner(false);
+          this.$router.push("/users");
+        })
+        .catch((error) => {
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: "ERROR : " + error.message,
+            type: "error", //nilai lain, error dan success
+          });
+          this.setSpinner(false);
         });
-        this.$router.push("/users");
-      });
     },
     onCancel() {
       this.$router.push("/users");
@@ -172,7 +187,6 @@ export default {
       if (files.length) {
         return this.createImage(files[0]);
       }
-      
     },
     createImage(file) {
       var image = new Image();

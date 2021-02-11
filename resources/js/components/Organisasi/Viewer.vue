@@ -145,11 +145,16 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     loadOrganisasis() {
+      this.setSpinner(true);
       Axios.get("organisasi/showAll")
         .then((response) => {
           this.organisasis = response.data.data;
           this.organisasiItem = this.organisasis[0];
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -158,6 +163,7 @@ export default {
             text: "ERROR : " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     pergike() {

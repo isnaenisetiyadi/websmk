@@ -221,7 +221,7 @@
 
 <script>
 // import { VueEditor } from "vue2-editor";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import Axios from "axios";
 // import Multiselect from '@vueform/multiselect';
 // import MultiSelect from '@vueform/multiselect'
@@ -272,6 +272,9 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     onAdd() {
       this.add = true;
     },
@@ -302,6 +305,7 @@ export default {
       dataQ.set("avatar", this.avatar);
 
       if (this.id === null) {
+        this.setSpinner(true);
         Axios.post("auth/berita/store", dataQ)
           .then((response) => {
             this.$notify({
@@ -311,6 +315,7 @@ export default {
               type: "success", //nilai lain, error dan success
             });
             this.add = false;
+            this.setSpinner(false);
             this.isiBerita();
           })
           .catch((error) => {
@@ -320,8 +325,10 @@ export default {
               text: error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
       } else {
+        this.setSpinner(true);
         Axios.post("auth/berita/update/" + this.id, dataQ)
           .then((response) => {
             this.$notify({
@@ -331,6 +338,7 @@ export default {
               type: "success", //nilai lain, error dan success
             });
             this.add = false;
+            this.setSpinner(false);
             this.kosongkanData();
             this.isiBerita();
           })
@@ -341,6 +349,7 @@ export default {
               text: error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
       }
     },
@@ -351,9 +360,11 @@ export default {
       this.isiOrganisasi();
     },
     isiKategori() {
+      this.setSpinner(true);
       Axios.get("kategoris")
         .then((response) => {
           this.kategoris = response.data.data;
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -362,6 +373,7 @@ export default {
             text: error.data,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     kosongkanData() {
@@ -378,9 +390,11 @@ export default {
       this.organisasiDipilih = [];
     },
     isiBerita() {
+      this.setSpinner(true);
       Axios.get("auth/berita")
         .then((response) => {
           this.beritas = response.data.data;
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -389,13 +403,16 @@ export default {
             text: error.message,
             type: "error", //nilai lain, warn, error dan success
           });
+          this.setSpinner(false);
         });
     },
     isiJurusan() {
+      this.setSpinner(true);
       Axios.get("jurusan/getAll")
         .then((response) => {
           this.jurusans = response.data;
           // console.log(this.jurusans);
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -404,12 +421,15 @@ export default {
             text: error.data,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     isiOrganisasi() {
+      this.setSpinner(true);
       Axios.get("organisasi/getall")
         .then((response) => {
           this.organisasis = response.data;
+          this.setSpinner(false);
           // console.log(this.jurusans);
         })
         .catch((error) => {
@@ -419,6 +439,7 @@ export default {
             text: error.data,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     onDeleteJurusan(value) {
@@ -429,6 +450,7 @@ export default {
           berita_id: this.id,
           jurusan_id: value,
         };
+        this.setSpinner(true);
         Axios.post("auth/berita/excludeJurusan", data)
           .then((response) => {
             this.$notify({
@@ -437,6 +459,7 @@ export default {
               text: response.data.message,
               type: "warn", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           })
           .catch((error) => {
             this.$notify({
@@ -445,6 +468,7 @@ export default {
               text: error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
       }
     },
@@ -456,6 +480,7 @@ export default {
           berita_id: this.id,
           organisasi_id: value,
         };
+        this.setSpinner(true);
         Axios.post("auth/berita/excludeOrganisasi", data)
           .then((response) => {
             this.$notify({
@@ -464,6 +489,7 @@ export default {
               text: response.data.message,
               type: "warn", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           })
           .catch((error) => {
             this.$notify({
@@ -472,11 +498,13 @@ export default {
               text: error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
       }
     },
     onView(id) {
       this.id = id;
+      this.setSpinner(true);
       Axios.get("auth/berita/show/" + id)
         .then((response) => {
           this.judul = response.data.data.judul;
@@ -500,6 +528,7 @@ export default {
             this.organisasiDipilih.push(element.id);
           });
           this.add = true;
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -508,6 +537,7 @@ export default {
             text: error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
           this.kosongkanData();
         });
     },
@@ -517,6 +547,7 @@ export default {
         button: { no: "Tidak", yes: "Iya" },
         callback: (confirm) => {
           if (confirm) {
+            this.setSpinner(true);
             Axios.post("auth/berita/destroy/" + id)
               .then((response) => {
                 this.isiBerita();
@@ -527,6 +558,7 @@ export default {
                   text: "Satu berita: " + response.data.data.judul + " sudah dihapus",
                   type: "warn", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               })
               .catch((error) => {
                 this.$notify({
@@ -535,6 +567,7 @@ export default {
                   text: error.message,
                   type: "error", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               });
           }
         },
@@ -545,6 +578,7 @@ export default {
         user_id: this.$store.state.auth.user.id,
         berita_id: id,
       };
+      this.setSpinner(true);
       Axios.post("auth/post/store", data)
         .then((response) => {
           if (this.add) {
@@ -556,6 +590,7 @@ export default {
             text: response.data.message,
             type: "success", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -564,6 +599,7 @@ export default {
             text: error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     // METHOD UNTUK GAMBAR

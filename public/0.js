@@ -26,14 +26,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "berita-list",
   props: ["berita"],
   data: function data() {
     return {
-      tanggalEntry: '',
-      jamEntry: ''
+      tanggalEntry: "",
+      jamEntry: ""
     };
   },
   mounted: function mounted() {
@@ -70,7 +71,7 @@ var render = function() {
     _c("td", [_vm._v(_vm._s(_vm.berita.deskripsi))]),
     _vm._v(" "),
     _c("td", [
-      _vm._v(_vm._s(_vm.tanggalEntry)),
+      _vm._v("\n    " + _vm._s(_vm.tanggalEntry)),
       _c("br"),
       _vm._v(" "),
       _c("span", [_vm._v(_vm._s(_vm.jamEntry))])

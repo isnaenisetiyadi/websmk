@@ -97,7 +97,6 @@ export default {
       this.modeAddPendidikan(null);
     },
     onSave() {
-      this.setSpinner(true);
       if (this.getAddPendidikan) {
         const data = {
           //   id: Math.random().toString(36).slice(10),
@@ -109,6 +108,7 @@ export default {
           tahun_lulus: this.tahun_lulus,
           //   Axios.
         };
+        this.setSpinner(true);
         Axios.post("pendidikan/simpan", data)
           .then((response) => {
             this.$notify({
@@ -118,6 +118,7 @@ export default {
               type: "success", //nilai lain, error dan success
             });
             // this.$parent.reloadGuru();
+            this.setSpinner(false);
           })
           .catch((error) => {
             this.$notify({
@@ -126,8 +127,8 @@ export default {
               text: error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
-        this.setSpinner(false);
       } else {
         const data = {
           id: Math.random().toString(36).slice(10),
@@ -139,7 +140,6 @@ export default {
           tahun_lulus: this.tahun_lulus,
         };
         this.addPendidikan(data);
-        this.setSpinner(false);
       }
       this.onCancel();
       //   this.$bus.$on('isAdd', true => {

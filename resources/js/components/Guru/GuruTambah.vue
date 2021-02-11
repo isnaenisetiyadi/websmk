@@ -275,6 +275,7 @@ export default {
             type: "success", //nilai lain, error dan success
           });
           this.$router.push("/gurus");
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -283,8 +284,8 @@ export default {
             text: "SINI Beo " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
-      this.setSpinner(false);
     },
   },
 };

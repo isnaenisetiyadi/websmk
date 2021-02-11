@@ -50,6 +50,7 @@ export default {
       Axios.get("gurus?page=" + page)
         .then((response) => {
           this.gurus = response.data;
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -58,8 +59,8 @@ export default {
             text: "ERROR : " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
-      this.setSpinner(false);
     },
     onAdd() {
       this.$router.push("/guru/tambah");

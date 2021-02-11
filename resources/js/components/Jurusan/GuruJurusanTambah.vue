@@ -59,7 +59,7 @@
 
 <script>
 import Axios from "axios";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: ["gurujurusan", "jurusan_id"],
   data() {
@@ -84,6 +84,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     loadGurus() {
       let list_id = [];
       this.gurujurusan.forEach((guru) => {
@@ -94,9 +97,11 @@ export default {
       let dataQ = new formData();
       dataQ.set("list_id", encodedlist_id);
       dataQ.set("keyword", this.keyword);
+      this.setSpinner(true);
       Axios.post("guru/getGuruJurusan", dataQ)
         .then((response) => {
           this.gurus = response.data.data;
+          this.setSpinner(false);
         })
         .catch((error) => {
           // code for catch here
@@ -106,6 +111,7 @@ export default {
             text: error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     onClose() {
@@ -122,6 +128,7 @@ export default {
         dataQ.set("jurusan_id", this.jurusan_id);
         dataQ.set("gurudipilih", encodedGuruDipilih);
         // console.log(dataQ);
+        this.setSpinner(true);
         Axios.post("guru/includeJurusan", dataQ)
           .then((response) => {
             this.$notify({
@@ -132,6 +139,7 @@ export default {
             });
             this.onClose();
             // this.$parent.loadJurusans();
+            this.setSpinner(false);
           })
           .catch((error) => {
             this.$notify({
@@ -140,12 +148,13 @@ export default {
               text: "SINI BRO " + error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
         this.onClose();
       } else {
         this.$confirm({
           message: "Tidak ada guru dipilih !",
-          button: { no: "OK"},
+          button: { no: "OK" },
         });
       }
     },

@@ -24,6 +24,7 @@
 import KategoriItem from "../../components/Kategori/KategoriItem.vue";
 import KategoriAdd from "../../components/Kategori/KategoriAdd.vue";
 import Axios from "axios";
+import { mapActions, mapGetters } from "vuex";
 export default {
   components: { KategoriItem, KategoriAdd },
   data() {
@@ -36,13 +37,18 @@ export default {
     this.loadKategoris();
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     onAdd() {
       this.kategoriAdd ? (this.kategoriAdd = false) : (this.kategoriAdd = true);
     },
     loadKategoris() {
+      this.setSpinner(true);
       Axios.get("kategori/showBerita")
         .then((response) => {
           this.kategoris = response.data.data;
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -51,6 +57,7 @@ export default {
             text: error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
   },

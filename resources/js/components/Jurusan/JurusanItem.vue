@@ -5,7 +5,7 @@
       <div :class="['guru-item', 'personal-item-' + warna]">
         <div>
           <h6>{{ jurusan.nama }}</h6>
-          <span>{{ jurusan.deskripsi | subStr23}}..</span>
+          <span>{{ jurusan.deskripsi | subStr23 }}..</span>
         </div>
       </div>
       <div class="jurusan-avatar">
@@ -61,7 +61,7 @@ import GuruJurusan from "../../components/Jurusan/GuruJurusan";
 import JurusanTambah from "../../components/Jurusan/JurusanTambah";
 export default {
   name: "jurusan-item",
-  props: ["jurusan", "loadGuruJurusan","warna"],
+  props: ["jurusan", "loadGuruJurusan", "warna"],
   components: { GuruJurusan, JurusanTambah },
   computed: {
     ...mapGetters({
@@ -78,6 +78,9 @@ export default {
     this.loadGurus();
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     onEdit() {
       this.$parent.addJurusan = true;
       this.$parent.jurusanEdit = this.jurusan;
@@ -89,6 +92,7 @@ export default {
         button: { no: "Tidak", yes: "Iya" },
         callback: (confirm) => {
           if (confirm) {
+            this.setSpinner(true);
             Axios.post("jurusan/destroy/" + this.jurusan.id)
               .then((response) => {
                 this.$parent.loadJurusans();
@@ -98,6 +102,7 @@ export default {
                   text: "Satu jurusan: " + response.data.data.nama + " sudah dihapus",
                   type: "warn", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               })
               .catch((error) => {
                 this.$notify({
@@ -106,6 +111,7 @@ export default {
                   text: error.message,
                   type: "error", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               });
           }
         },
@@ -118,9 +124,11 @@ export default {
       this.$parent.addGuruJurusan = true;
     },
     loadGurus() {
+      this.setSpinner(true);
       Axios.get("jurusan/show/" + this.jurusan.id)
         .then((response) => {
           this.gurus = response.data.data[0].guru;
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -129,6 +137,7 @@ export default {
             text: error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
   },

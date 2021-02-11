@@ -60,6 +60,7 @@
 
 <script>
 import Axios from "axios";
+import { mapActions } from "vuex";
 export default {
   name: "login",
   props: ["app"],
@@ -81,24 +82,30 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     onSubmit() {
       const data = {
         username: this.username,
-        password: this.password
-      }
-     Axios.post("auth/login", data)
-     .then((response) => {
-       this.$store.dispatch("auth/set", response.data);
-       this.$router.push("/");
-     })
-     .catch((error) => {
-        this.$notify({
-          group: "error",
-          title: "Gagal",
-          text: error.message,
-          type: "error", //nilai lain, error dan success
+        password: this.password,
+      };
+      this.setSpinner(true);
+      Axios.post("auth/login", data)
+        .then((response) => {
+          this.$store.dispatch("auth/set", response.data);
+          this.setSpinner(false);
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: error.message,
+            type: "error", //nilai lain, error dan success
+          });
+          this.$router.push("/");
         });
-     })
     },
   },
 };

@@ -77,7 +77,7 @@
       </div>
     </div>
 
-    <div class="container mb-5" style="margin-top: 50px;" v-if="jurusanItem">
+    <div class="container mb-5" style="margin-top: 50px" v-if="jurusanItem">
       <div class="row trending-frame">
         <div class="caption text-center">INFORMASI :</div>
 
@@ -88,11 +88,15 @@
             </div>
           </div> -->
           <div class="row" v-if="jurusanItem.berita">
-            <div class="trending-item" v-for="(berita, index) in jurusanItem.berita" :key="index">
+            <div
+              class="trending-item"
+              v-for="(berita, index) in jurusanItem.berita"
+              :key="index"
+            >
               <Trending :berita="berita" />
             </div>
           </div>
-          <div class="row" v-else style="width:100%;">
+          <div class="row" v-else style="width: 100%">
             <div class="col-md-12 align-middle text-center">
               <h1><i class="icofont-worried"></i></h1>
               <span>Belum ada INFORMASI apapun</span>
@@ -216,20 +220,23 @@ export default {
       jurusanItem: {},
       jurusans: {},
       sideMenu: true,
-      
     };
   },
   mounted() {
     this.loadGurus();
     this.loadJurusans();
-   
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     loadGurus() {
+      this.setSpinner(true);
       Axios.get("gurus")
         .then((response) => {
           this.gurus = response.data;
           // console.log(gurus);
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -238,13 +245,16 @@ export default {
             text: "ERROR : " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     loadJurusans() {
+      this.setSpinner(true);
       Axios.get("jurusan/showAll")
         .then((response) => {
           this.jurusans = response.data.data;
           this.jurusanItem = this.jurusans[0];
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -253,9 +263,10 @@ export default {
             text: "ERROR : " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
-    
+
     viewJurusan(jurusan) {
       this.jurusanItem = jurusan;
       // this.hideMenu();

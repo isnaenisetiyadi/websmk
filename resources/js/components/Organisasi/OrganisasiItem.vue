@@ -12,7 +12,7 @@
       <div :class="['guru-item', 'personal-item-' + warna]">
         <div>
           <h6>{{ organisasi.nama }}</h6>
-          <span>{{ organisasi.deskripsi |subStr33 }}..</span>
+          <span>{{ organisasi.deskripsi | subStr33 }}..</span>
         </div>
       </div>
       <div class="guru-avatar">
@@ -66,12 +66,16 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     onDelete() {
       this.$confirm({
         message: "Yakin " + this.organisasi.nama + " akan dihapus?",
         button: { no: "Tidak", yes: "Iya" },
         callback: (confirm) => {
           if (confirm) {
+            this.setSpinner(true);
             Axios.post("organisasi/destroy/" + this.organisasi.id)
               .then((response) => {
                 this.$parent.loadOrganisasi();
@@ -81,6 +85,7 @@ export default {
                   text: response.data.data.nama + " sudah dihapus",
                   type: "warn", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               })
               .catch((error) => {
                 this.$notify({
@@ -89,6 +94,7 @@ export default {
                   text: error.message,
                   type: "error", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               });
           }
         },

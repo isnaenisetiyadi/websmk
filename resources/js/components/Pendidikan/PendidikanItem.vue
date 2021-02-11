@@ -48,6 +48,7 @@
 
 <script>
 import Axios from "axios";
+import { mapActions } from "vuex";
 export default {
   name: "pendidikan-item",
   props: ["pendidikan"],
@@ -63,6 +64,9 @@ export default {
   },
   mounted() {},
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     onEdit() {
       this.isEdit = true;
       this.isiForm();
@@ -82,6 +86,7 @@ export default {
         tahun_lulus: this.tahun_lulus,
       };
       // console.log(data);
+      this.setSpinner(true);
       Axios.post("pendidikan/update/", data)
         .then((response) => {
           //   this.$parent.loadGurus();
@@ -92,6 +97,7 @@ export default {
             text: "Pendidikan sudah diedit",
             type: "success", //nilai lain, error dan success
           });
+          this.setSpinner(false);
           this.isEdit = false;
         })
         .catch((error) => {
@@ -101,6 +107,7 @@ export default {
             text: `ERROR ` + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     onDelete() {
@@ -109,6 +116,7 @@ export default {
         button: { no: "Tidak", yes: "Iya" },
         callback: (confirm) => {
           if (confirm) {
+            this.setSpinner(true);
             Axios.post("pendidikan/destroy/" + this.pendidikan.id)
               .then((response) => {
                 // this.$parent.loadGurus();
@@ -118,6 +126,7 @@ export default {
                   text: "Satu data pendidikan sudah dihapus",
                   type: "warn", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
                 this.$parent.reloadGuru();
               })
               .catch((error) => {
@@ -127,6 +136,7 @@ export default {
                   text: error.message,
                   type: "error", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               });
           }
         },

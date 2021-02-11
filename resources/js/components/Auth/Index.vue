@@ -8,6 +8,7 @@
 <script>
 import Userlist from "./Userlist";
 import Axios from "axios";
+import { mapActions } from "vuex";
 export default {
   name: "index",
   data() {
@@ -22,15 +23,27 @@ export default {
     this.init();
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     init() {
+      this.setSpinner(true);
       Axios.get("auth/users")
-      .then((response)=>{
-        this.users = response.data.data;
-        // console.log(this.users);
-      })
-      .catch((error) => {
-        alert(error.response.data.error);
-      })
+        .then((response) => {
+          this.users = response.data.data;
+          // console.log(this.users);
+          this.setSpinner(false);
+        })
+        .catch((error) => {
+          // alert(error.response.data.error);
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: "ERROR : " + error.message,
+            type: "error", //nilai lain, error dan success
+          });
+          this.setSpinner(false);
+        });
     },
   },
 };

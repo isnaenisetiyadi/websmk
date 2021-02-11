@@ -6,7 +6,9 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">{{jurusan.id? "Edit Jurusan" : "Jurusan Baru"}}</h5>
+                <h5 class="modal-title">
+                  {{ jurusan.id ? "Edit Jurusan" : "Jurusan Baru" }}
+                </h5>
               </div>
               <div class="modal-body">
                 <div class="form-group">
@@ -74,7 +76,7 @@
 
 <script>
 import Axios from "axios";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: ["jurusan"],
   data() {
@@ -96,6 +98,9 @@ export default {
     this.isUpdate();
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     // METHOD UNTUK GAMBAR
     getImage(image) {
       if (this.avatar) {
@@ -159,7 +164,7 @@ export default {
 
       if (this.jurusan.id) {
         //KODE UPDATE
-
+        this.setSpinner(true);
         Axios.post("jurusan/update/" + this.jurusan.id, dataQ)
           .then((response) => {
             this.$notify({
@@ -169,6 +174,7 @@ export default {
               type: "success", //nilai lain, error dan success
             });
             this.onClose();
+            this.setSpinner(false);
             this.$parent.loadJurusans();
           })
           .catch((error) => {
@@ -178,10 +184,12 @@ export default {
               text: "SINI Beo " + error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
         this.onClose();
       } else {
         //KODE TAMBAH(INSERT)
+        this.setSpinner(true);
         Axios.post("jurusan/store", dataQ)
           .then((response) => {
             this.$notify({
@@ -191,6 +199,7 @@ export default {
               type: "success", //nilai lain, error dan success
             });
             this.onClose();
+            this.setSpinner(false);
             this.$parent.loadJurusans();
           })
           .catch((error) => {
@@ -200,6 +209,7 @@ export default {
               text: "SINI Beo " + error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
         this.onClose();
       }

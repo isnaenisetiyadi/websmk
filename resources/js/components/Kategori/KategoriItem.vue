@@ -30,6 +30,7 @@
 </template>
 <script>
 import Axios from "axios";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -42,15 +43,19 @@ export default {
     this.nama = this.kategori.nama;
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     onEdit() {
       this.editKategori ? (this.editKategori = false) : (this.editKategori = true);
     },
-     onDelete() {
+    onDelete() {
       this.$confirm({
         message: "Yakin akan dihapus?",
         button: { no: "Tidak", yes: "Iya" },
         callback: (confirm) => {
           if (confirm) {
+            this.setSpinner(true);
             Axios.post("kategori/destroy/" + this.kategori.id)
               .then((response) => {
                 this.$parent.loadKategoris();
@@ -60,6 +65,7 @@ export default {
                   text: "Satu guru: " + response.data.data.nama + " sudah dihapus",
                   type: "warn", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               })
               .catch((error) => {
                 this.$notify({
@@ -68,6 +74,7 @@ export default {
                   text: error.message,
                   type: "error", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               });
           }
         },
@@ -78,6 +85,7 @@ export default {
         id: this.kategori.id,
         nama: this.nama,
       };
+      this.setSpinner(true);
       Axios.post("kategori/update", data)
         .then((response) => {
           this.$parent.loadKategoris();
@@ -88,6 +96,7 @@ export default {
             text: "Satu kategori  sudah diedit",
             type: "success", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -96,6 +105,7 @@ export default {
             text: "SINI Beo " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
   },

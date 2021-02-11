@@ -76,7 +76,7 @@
 
 <script>
 import Axios from "axios";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "organisasi-tambah",
   props: ["organisasi"],
@@ -99,6 +99,9 @@ export default {
     this.isUpdate();
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     // METHOD UNTUK GAMBAR
     getImage(image) {
       if (this.avatar) {
@@ -162,7 +165,7 @@ export default {
 
       if (this.organisasi.id) {
         //KODE UPDATE
-
+        this.setSpinner(true);
         Axios.post("organisasi/update/" + this.organisasi.id, dataQ)
           .then((response) => {
             this.$notify({
@@ -172,6 +175,7 @@ export default {
               type: "success", //nilai lain, error dan success
             });
             this.onClose();
+            this.setSpinner(false);
             this.$parent.loadOrganisasi();
           })
           .catch((error) => {
@@ -181,10 +185,12 @@ export default {
               text: "SINI Beo " + error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
         this.onClose();
       } else {
         //KODE TAMBAH(INSERT)
+        this.setSpinner(true);
         Axios.post("organisasi/store", dataQ)
           .then((response) => {
             this.$notify({
@@ -194,6 +200,7 @@ export default {
               type: "success", //nilai lain, error dan success
             });
             this.onClose();
+            this.setSpinner(false);
             this.$parent.loadOrganisasi();
           })
           .catch((error) => {
@@ -203,6 +210,7 @@ export default {
               text: "SINI BRO " + error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
         this.onClose();
       }

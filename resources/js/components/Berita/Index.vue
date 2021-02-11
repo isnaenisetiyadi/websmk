@@ -66,7 +66,10 @@
             </div>
           </div>
           <div class="col-md-8 blog-content" v-else>
-            <div class="col-md-12 align-middle text-center" style="margin-top:100px;margin-bottom:100px">
+            <div
+              class="col-md-12 align-middle text-center"
+              style="margin-top: 100px; margin-bottom: 100px"
+            >
               <h1><i class="icofont-worried"></i></h1>
               <span>Belum ada INFORMASI apapun</span>
             </div>
@@ -237,7 +240,7 @@
 import Axios from "axios";
 import KategoriBerita from "./components/KategoriBerita.vue";
 // import KomentarBerita from "./components/KomentarBerita";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import KomentarBerita from "./components/KomentarBerita.vue";
 import Trending from "../../components/Trending/Trending.vue";
 
@@ -272,6 +275,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     saveKomen() {
       var userId = null;
       if (this.getUsers) {
@@ -284,6 +290,7 @@ export default {
         komen: this.komentar,
         kategoris: {},
       };
+      this.setSpinner(true);
       Axios.post("komentar/store", data)
         .then((response) => {
           // console.log(response.data);
@@ -301,6 +308,7 @@ export default {
             text: "Komentar sudah terkirim (" + response.data.message + ")",
             type: "success", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -309,13 +317,16 @@ export default {
             text: "ERROR : " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     loadKategoris() {
+      this.setSpinner(true);
       Axios.get("kategori/showBerita")
         .then((response) => {
           this.kategoris = response.data.data;
           // console.log(this.kategoris);
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -324,6 +335,7 @@ export default {
             text: "ERROR : " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     // init() {

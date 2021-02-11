@@ -65,7 +65,6 @@
                 </div>
               </div>
             </div>
-
           </div>
           <div class="col-md-6 py-md-3">
             <div class="form-group" data-aos="fade-left" data-aos-delay="300">
@@ -260,7 +259,7 @@
 
 <script>
 import Axios from "axios";
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "user-list",
   props: ["users", "parent"],
@@ -277,24 +276,28 @@ export default {
 
       // DATA GAMBAR
       image: "",
-      avatar:null,
+      avatar: null,
     };
   },
   computed: {
     ...mapGetters({
       urlImage: "constant/urlImage",
-    })
+    }),
   },
   mounted() {
     // console.log(this.users);
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     onDelete(id) {
       this.$confirm({
         message: "Yakin akan dihapus?",
         button: { no: "Tidak", yes: "Iya" },
         callback: (confirm) => {
           if (confirm) {
+            this.setSpinner(true);
             Axios.post("auth/destroy/" + id)
               .then((response) => {
                 this.parent.init();
@@ -305,6 +308,7 @@ export default {
                   text: "Satu user: " + response.data.data.name + " sudah dihapus",
                   type: "warn", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               })
               .catch((error) => {
                 this.$notify({
@@ -313,6 +317,7 @@ export default {
                   text: error.message,
                   type: "error", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               });
           }
         },
@@ -322,17 +327,29 @@ export default {
       // this.$router.push("/entry/update/" + id);
       this.update = true;
       // this.$router.push({ name: "userupdate", params: { userId: id } });
-      Axios.get("auth/show/" + id).then((response) => {
-        this.id = response.data.data.id;
-        this.name = response.data.data.name;
-        this.username = response.data.data.username;
-        this.email = response.data.data.email;
-        // this.password = response.data.data.password;
-        this.role = response.data.data.role;
-        this.avatar = response.data.data.avatar;
-        this.image = response.data.data.avatar;
-        // console.log(this.avatar);
-      });
+      this.setSpinner(true);
+      Axios.get("auth/show/" + id)
+        .then((response) => {
+          this.id = response.data.data.id;
+          this.name = response.data.data.name;
+          this.username = response.data.data.username;
+          this.email = response.data.data.email;
+          // this.password = response.data.data.password;
+          this.role = response.data.data.role;
+          this.avatar = response.data.data.avatar;
+          this.image = response.data.data.avatar;
+          // console.log(this.avatar);
+          this.setSpinner(false);
+        })
+        .catch((error) => {
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: "ERROR : " + error.message,
+            type: "error", //nilai lain, error dan success
+          });
+          this.setSpinner(false);
+        });
     },
     onSave() {
       //Ini cara yg dipakai bila data
@@ -357,16 +374,28 @@ export default {
       dataQ.set("avatar", this.avatar);
       dataQ.set("role", this.role);
       // console.log(this.avatar);
-      Axios.post("auth/update/" + this.id, dataQ).then((response) => {
-        this.parent.init();
-        this.$notify({
-          group: "success",
-          title: "Sukses",
-          text: "Satu user: " + response.data.data.name + " sudah diedit",
-          type: "success", //nilai lain, error dan success
+      this.setSpinner(true);
+      Axios.post("auth/update/" + this.id, dataQ)
+        .then((response) => {
+          this.parent.init();
+          this.$notify({
+            group: "success",
+            title: "Sukses",
+            text: "Satu user: " + response.data.data.name + " sudah diedit",
+            type: "success", //nilai lain, error dan success
+          });
+          this.update = false;
+          this.setSpinner(false);
+        })
+        .catch((error) => {
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: "ERROR : " + error.message,
+            type: "error", //nilai lain, error dan success
+          });
+          this.setSpinner(false);
         });
-        this.update = false;
-      });
     },
     onCancel() {
       this.update = false;
@@ -386,7 +415,6 @@ export default {
       if (files.length) {
         return this.createImage(files[0]);
       }
-      
     },
     createImage(file) {
       var image = new Image();

@@ -35,7 +35,7 @@
 import Axios from "axios";
 import OrganisasiItem from "../../components/Organisasi/OrganisasiItem.vue";
 import OrganisasiTambah from "../../components/Organisasi/OrganisasiTambah.vue";
-
+import { mapActions } from "vuex";
 export default {
   components: { OrganisasiItem, OrganisasiTambah },
   data() {
@@ -53,10 +53,15 @@ export default {
   },
   computed: {},
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     loadOrganisasi(page) {
+      this.setSpinner(true);
       Axios.get("organisasis?page=" + page)
         .then((response) => {
           this.organisasis = response.data;
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -65,6 +70,7 @@ export default {
             text: "ERROR : " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     onAdd() {

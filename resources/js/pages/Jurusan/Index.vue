@@ -15,10 +15,10 @@
           v-for="(jurusan, index) in jurusans.data"
           :key="index"
         >
-          <JurusanItem 
-          :jurusan="jurusan" 
-          :loadGuruJurusan="addGuruJurusan" 
-          :warna="index"
+          <JurusanItem
+            :jurusan="jurusan"
+            :loadGuruJurusan="addGuruJurusan"
+            :warna="index"
           />
         </div>
       </div>
@@ -43,7 +43,7 @@ import Axios from "axios";
 import JurusanItem from "../../components/Jurusan/JurusanItem";
 import JurusanTambah from "../../components/Jurusan/JurusanTambah";
 import GuruJurusanTambah from "../../components/Jurusan/GuruJurusanTambah";
-
+import { mapActions } from "vuex";
 export default {
   components: { JurusanItem, JurusanTambah, GuruJurusanTambah },
 
@@ -62,17 +62,22 @@ export default {
       gurujurusan_id: null,
 
       // memanggil fungsi gurus di child juruan item
-    //   loadGuruJurusan: "",
+      //   loadGuruJurusan: "",
     };
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     loadJurusans(page) {
+      this.setSpinner(true);
       Axios.get("jurusans?page=" + page)
         .then((response) => {
           this.jurusans = response.data;
           this.meta = response.data.meta;
           // console.log(this.gurujurusan);
           // console.log(this.meta);
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -81,6 +86,7 @@ export default {
             text: "ERROR : " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     onAdd() {
@@ -89,14 +95,14 @@ export default {
       // console.log(this.addJurusan);
     },
   },
-//   watch: {
-//     addGuruJurusan: function () {
-//       if (this.loadGuruJurusan) {
-//         this.loadGuruJurusan = "";
-//       } else {
-//         this.loadGuruJurusan = "Load";
-//       }
-//     },
-//   },
+  //   watch: {
+  //     addGuruJurusan: function () {
+  //       if (this.loadGuruJurusan) {
+  //         this.loadGuruJurusan = "";
+  //       } else {
+  //         this.loadGuruJurusan = "Load";
+  //       }
+  //     },
+  //   },
 };
 </script>

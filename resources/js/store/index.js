@@ -15,7 +15,8 @@ import spinner from './stores/spinner';
 Vue.use(Vuex)
 
 const vuexPersist = new VuexPersist({
-    key: 'webSmk',
+    // key: 'webSmk', //developing
+    key: 'smkn1mepanga.sch.id', //deployment
     storage: localStorage
 })
 

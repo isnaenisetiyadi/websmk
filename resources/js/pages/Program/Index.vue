@@ -139,10 +139,15 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     loadOrganisasi() {
+      this.setSpinner(true);
       Axios.get("organisasi/getall")
         .then((response) => {
           this.organisasis = response.data;
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -151,6 +156,7 @@ export default {
             text: error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     loadPrograms() {
@@ -158,9 +164,11 @@ export default {
         organisasi_id: this.organisasi_id,
         keyword: this.keyword,
       };
+      this.setSpinner(true);
       Axios.post("program/showByOrganisasiSearch", data)
         .then((response) => {
           this.programs = response.data.data;
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -169,6 +177,7 @@ export default {
             text: error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
     onAdd() {
@@ -194,6 +203,7 @@ export default {
         button: { no: "Tidak", yes: "Iya" },
         callback: (confirm) => {
           if (confirm) {
+            this.setSpinner(true);
             Axios.post("program/destroy/" + id)
               .then((response) => {
                 this.loadPrograms();
@@ -203,6 +213,7 @@ export default {
                   text: nama + " sudah dihapus",
                   type: "warn", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               })
               .catch((error) => {
                 this.$notify({
@@ -211,6 +222,7 @@ export default {
                   text: error.message,
                   type: "error", //nilai lain, error dan success
                 });
+                this.setSpinner(false);
               });
           }
         },

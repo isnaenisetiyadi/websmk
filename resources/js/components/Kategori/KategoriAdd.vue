@@ -19,6 +19,7 @@
 </template>
 <script>
 import Axios from "axios";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -26,6 +27,9 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     onCancel() {
       this.$parent.kategoriAdd = false;
     },
@@ -33,7 +37,7 @@ export default {
       const data = {
         nama: this.nama,
       };
-
+      this.setSpinner(true);
       Axios.post("kategori/store", data)
         .then((response) => {
           this.$parent.kategoriAdd = false;
@@ -44,6 +48,7 @@ export default {
             text: "Satu kategori  sudah ditambahkan",
             type: "success", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -52,6 +57,7 @@ export default {
             text: "SINI Beo " + error.message,
             type: "error", //nilai lain, error dan success
           });
+          this.setSpinner(false);
         });
     },
   },
