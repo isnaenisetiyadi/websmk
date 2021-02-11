@@ -189,13 +189,13 @@ export default {
     ...mapGetters({
       pendidikans: "pendidikan/pendidikans",
       getUser: "auth/user",
-      setSpinner: "spinner/set",
     }),
   },
   methods: {
     ...mapActions({
       setPendidikanDialog: "pendidikanDialog/set",
       setPendidikan: "pendidikan/set",
+      setSpinner: "spinner/set",
     }),
     // METHOD UNTUK GAMBAR
     getImage(image) {
