@@ -67,7 +67,7 @@ Route::post('komentar/store','KomentarController@store');
 
 Route::get('gurus','GuruController@index');
 Route::get('guru/show/{id}','GuruController@show');
-Route::post('guru/update','GuruController@update');
+Route::post('guru/update/{id}','GuruController@update');
 Route::post('guru/destroy/{id}','GuruController@destroy');
 Route::post('guru/store','GuruController@store');
 Route::post('guru/excludeJurusan','GuruController@excludeJurusan');

@@ -262,7 +262,7 @@ export default {
       this.setSpinner(true);
       let formData = require("form-data");
       let dataQ = new formData();
-      dataQ.set("id", this.guru.id);
+      // dataQ.set("id", this.guru.id);
       dataQ.set("nama", this.nama);
       dataQ.set("nip", this.nip);
       dataQ.set("nuptk", this.nuptk);
@@ -271,7 +271,7 @@ export default {
       dataQ.set("kontak", this.kontak);
       dataQ.set("jabatan", this.jabatan);
       dataQ.set("avatar", this.avatar);
-      Axios.post("guru/update/", dataQ)
+      Axios.post("guru/update/" + this.guru.id, dataQ)
         .then((response) => {
           this.$parent.loadGurus();
           this.$notify({

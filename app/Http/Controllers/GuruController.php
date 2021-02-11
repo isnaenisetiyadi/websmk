@@ -233,7 +233,7 @@ class GuruController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         //
 
@@ -243,7 +243,7 @@ class GuruController extends Controller
         $data = null;
         $code = 400;
 
-        $guru = Guru::find($request->id);
+        $guru = Guru::find($id);
         $guru->nama = $request->nama;
         $guru->nip = $request->nip;
         $guru->nuptk = $request->nuptk;
