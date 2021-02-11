@@ -9,6 +9,7 @@ import constant from './stores/constant';
 import pendidikan from './stores/pendidikan';
 import pendidikanDialog from './stores/pendidikandialog';
 import addMode from './stores/addMode';
+import spinner from './stores/spinner';
 
 
 Vue.use(Vuex)
@@ -26,7 +27,8 @@ export default new Vuex.Store({
             constant,
             pendidikan,
             pendidikanDialog,
-            addMode
+            addMode,
+            spinner
         },
     })
     // export default new Vuex.Store({

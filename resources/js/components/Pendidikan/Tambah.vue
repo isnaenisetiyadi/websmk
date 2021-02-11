@@ -65,7 +65,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import Axios from 'axios';
+import Axios from "axios";
 export default {
   props: ["isAdd"],
   data() {
@@ -90,12 +90,14 @@ export default {
       setPendidikanDialog: "pendidikanDialog/set",
       addPendidikan: "pendidikan/add",
       modeAddPendidikan: "addMode/set",
+      setSpinner: "spinner/set",
     }),
     onCancel() {
       this.setPendidikanDialog(false);
       this.modeAddPendidikan(null);
     },
     onSave() {
+      this.setSpinner(true);
       if (this.getAddPendidikan) {
         const data = {
           //   id: Math.random().toString(36).slice(10),
@@ -125,6 +127,7 @@ export default {
               type: "error", //nilai lain, error dan success
             });
           });
+        this.setSpinner(false);
       } else {
         const data = {
           id: Math.random().toString(36).slice(10),
@@ -136,6 +139,7 @@ export default {
           tahun_lulus: this.tahun_lulus,
         };
         this.addPendidikan(data);
+        this.setSpinner(false);
       }
       this.onCancel();
       //   this.$bus.$on('isAdd', true => {

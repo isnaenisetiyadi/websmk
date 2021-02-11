@@ -28,7 +28,7 @@
 <script>
 import Axios from "axios";
 import GuruItem from "../../components/Guru/GuruItem.vue";
-
+import { mapActions, mapGetters } from "vuex";
 export default {
   components: { GuruItem },
   data() {
@@ -42,11 +42,14 @@ export default {
     this.loadGurus();
   },
   methods: {
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     loadGurus(page) {
+      this.setSpinner(true);
       Axios.get("gurus?page=" + page)
         .then((response) => {
           this.gurus = response.data;
-          
         })
         .catch((error) => {
           this.$notify({
@@ -56,6 +59,7 @@ export default {
             type: "error", //nilai lain, error dan success
           });
         });
+      this.setSpinner(false);
     },
     onAdd() {
       this.$router.push("/guru/tambah");

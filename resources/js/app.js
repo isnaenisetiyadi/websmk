@@ -13,6 +13,7 @@ import Notifications from 'vue-notification';
 import VueEditor from 'vue-quill-editor';
 import Moment from 'moment';
 import VueCompositionAPI from '@vue/composition-api';
+import PulseLoader from 'vue-spinner/src/DotLoader';
 // import Multiselect from '@vueform/multiselect';
 // import Pagination from 'v-pagination'
 // import Paginate from 'laravel-vue-pagination';
@@ -32,9 +33,11 @@ Vue.use(VueConfirmDialog);
 Vue.use(Notifications);
 Vue.use(VueEditor);
 Vue.use(VueCompositionAPI);
+Vue.use(PulseLoader);
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default);
 Vue.component('notifications', Notifications.default);
 Vue.component('pagination', require('laravel-vue-pagination'));
+Vue.component('vue-spinner', PulseLoader);
 
 // Vue.component('MultiSelect', Multiselect);
 

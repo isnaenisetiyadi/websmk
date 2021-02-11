@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Spinner v-if="showSpinner"/>
     <notifications group="auth" position="top left" />
     <notifications group="success" position="top left" />
     <notifications group="error" position="top left" />
@@ -10,7 +11,7 @@
 
     <router-view />
     <!-- <button @click="init()" class="btn btn-danger">Uji Init</button> -->
-    <!-- <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a> -->
+  <!-- <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a> -->
     <Footer :app="this"></Footer>
   </div>
 </template>
@@ -19,6 +20,7 @@
 import Navbar from "./components/Layouts/Navbar";
 import Footer from "./components/Layouts/Footer";
 import TambahPendidikan from "./components/Pendidikan/Tambah";
+import Spinner from "./components/Spinner.vue";
 import Axios from "axios";
 // import { mapActions } from 'vuex';
 import { mapActions, mapGetters } from "vuex";
@@ -32,18 +34,20 @@ export default {
     Navbar,
     Footer,
     TambahPendidikan,
+    Spinner
   },
   computed: {
     ...mapGetters({
       getNews: "news/post",
       showDialogTambah: "pendidikanDialog/showDialog",
+      showSpinner: "spinner/loading"
     }),
   },
   mounted() {
     this.init();
     // this.setUrlImage("http://200.77.10.3:8000/images"); //jaringan rumah
-    // this.setUrlImage("http://127.0.0.1:8000/images"); //lokal
-    this.setUrlImage("http://www.smkn1mepanga.sch.id/images"); //hosting
+    this.setUrlImage("http://127.0.0.1:8000/images"); //lokal
+    // this.setUrlImage("http://www.smkn1mepanga.sch.id/images"); //hosting
     this.setPendidikanDialog(false);
     this.$refs.isAdd = true;
   },

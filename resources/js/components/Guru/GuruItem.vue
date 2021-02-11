@@ -216,7 +216,7 @@ import { mapActions, mapGetters } from "vuex";
 import PendidikanItem from "../../components/Pendidikan/PendidikanItem.vue";
 export default {
   components: { PendidikanItem },
-  props: ["guru","warna"],
+  props: ["guru", "warna"],
   computed: {
     ...mapGetters({
       urlImage: "constant/urlImage",
@@ -243,6 +243,7 @@ export default {
       setPendidikanDialog: "pendidikanDialog/set",
       addPendidikan: "pendidikan/add",
       modeAddPendidikan: "addMode/set",
+      setSpinner: "spinner/set",
     }),
     onEdit() {
       if (this.edit) {
@@ -258,6 +259,7 @@ export default {
       this.modeAddPendidikan(this.guru.id);
     },
     onSave() {
+      this.setSpinner(true);
       let formData = require("form-data");
       let dataQ = new formData();
       dataQ.set("id", this.guru.id);
@@ -269,13 +271,13 @@ export default {
       dataQ.set("kontak", this.kontak);
       dataQ.set("jabatan", this.jabatan);
       dataQ.set("avatar", this.avatar);
-      Axios.post("/guru/update/", dataQ)
+      Axios.post("guru/update/", dataQ)
         .then((response) => {
           this.$parent.loadGurus();
           this.$notify({
             group: "success",
             title: "Sukses",
-            text: "Satu guru: " + response.data.data.name + " sudah diedit",
+            text: "Satu guru sudah diedit",
             type: "success", //nilai lain, error dan success
           });
           this.edit = false;
@@ -288,6 +290,7 @@ export default {
             type: "error", //nilai lain, error dan success
           });
         });
+      this.setSpinner(false);
     },
     reloadGuru() {
       Axios.get("guru/show/" + this.guru.id)

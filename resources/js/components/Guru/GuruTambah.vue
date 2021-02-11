@@ -146,7 +146,7 @@
           <div class="guru-btn-group text-right">
             <button @click="onCancel()" class="btn btn-primary btn-guru">
               <!-- <i class="icofont-arrow-left"></i> -->
-               <i class="icofont-reply"></i>
+              <i class="icofont-reply"></i>
             </button>
             <button @click="onSave()" class="btn btn-success btn-guru">
               <i class="icofont-save"></i>
@@ -189,6 +189,7 @@ export default {
     ...mapGetters({
       pendidikans: "pendidikan/pendidikans",
       getUser: "auth/user",
+      setSpinner: "spinner/set",
     }),
   },
   methods: {
@@ -250,6 +251,7 @@ export default {
       }
     },
     onSave() {
+      this.setSpinner(true);
       let formData = require("form-data");
       let dataQ = new formData();
       let encodedPendidikan = JSON.stringify(this.pendidikans);
@@ -282,6 +284,7 @@ export default {
             type: "error", //nilai lain, error dan success
           });
         });
+      this.setSpinner(false);
     },
   },
 };
