@@ -77,7 +77,6 @@ export default {
     },
     onSave() {
       let data = {
-        id: this.pendidikan.id,
         user_id: this.pendidikan.user_id,
         guru_id: this.pendidikan.guru_id,
         jenjang: this.jenjang,
@@ -87,7 +86,7 @@ export default {
       };
       // console.log(data);
       this.setSpinner(true);
-      Axios.post("pendidikan/update/", data)
+      Axios.post("pendidikan/update/" + this.pendidikan.id, data)
         .then((response) => {
           //   this.$parent.loadGurus();
           this.pendidikan = response.data.data;

@@ -123,7 +123,7 @@ class PendidikanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         //
         $status = "error";
@@ -131,7 +131,7 @@ class PendidikanController extends Controller
         $data = null;
         $code = 400;
 
-        $pendidikan = Pendidikan::find($request->id);
+        $pendidikan = Pendidikan::find($id);
         $pendidikan->user_id = $request->user_id;
         $pendidikan->guru_id = $request->guru_id;
         $pendidikan->jenjang = $request->jenjang;

@@ -74,7 +74,7 @@ Route::post('guru/excludeJurusan','GuruController@excludeJurusan');
 Route::post('guru/includeJurusan','GuruController@includeJurusan');
 Route::post('guru/getGuruJurusan','GuruController@getGuruJurusan');
 
-Route::post('pendidikan/update','PendidikanController@update');
+Route::post('pendidikan/update/{id}','PendidikanController@update');
 Route::post('pendidikan/destroy/{id}','PendidikanController@destroy');
 Route::post('pendidikan/simpan','PendidikanController@simpan');
 
