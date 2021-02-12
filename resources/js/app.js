@@ -14,10 +14,7 @@ import VueEditor from 'vue-quill-editor';
 import Moment from 'moment';
 import VueCompositionAPI from '@vue/composition-api';
 import PulseLoader from 'vue-spinner/src/DotLoader';
-// import Multiselect from '@vueform/multiselect';
-// import Pagination from 'v-pagination'
-// import Paginate from 'laravel-vue-pagination';
-// import Pagination from 'laravel-vue-pagination';
+
 
 
 Object.defineProperty(Vue.prototype, '$bus', {
@@ -39,9 +36,7 @@ Vue.component('notifications', Notifications.default);
 Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('vue-spinner', PulseLoader);
 
-// Vue.component('MultiSelect', Multiselect);
 
-// import moment from 'moment';
 Vue.filter('formatDate', function(value) {
     if (value) {
         return Moment(String(value)).format('DD MMMM YYYY')
@@ -120,7 +115,7 @@ const router = new VueRouter({
 
 import App from './App.vue';
 import store from './store';
-import storeTemporary from './store/temporary';
+// import storeTemporary from './store/temporary';
 // import web from './effect/web';
 import VueNotifications from 'vue-notifications';
 Vue.use(App);
@@ -168,15 +163,7 @@ router.beforeEach((to, from, next) => {
 
         // NAVIGATION GUARD: 
         // Agar setelah login, tidak bisa mengakses halaman login lagi
-    }
-    // else if (to.matched.some(record => record.meta.guest)) {
-    //     if (store.state.auth.user) {
-    //         next({ path: '/' });
-    //     } else {
-    //         next()
-    //     }
-    // } 
-    else {
+    } else {
         next()
     }
 })
@@ -184,12 +171,8 @@ router.beforeEach((to, from, next) => {
 new Vue({
     router,
     store,
-    storeTemporary,
-    // web,
     data: {
         bus: bus
     },
     render: h => h(App)
 }).$mount('#app');
-
-// console.log(store.getters.auth.not_login)

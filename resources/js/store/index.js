@@ -15,25 +15,20 @@ import spinner from './stores/spinner';
 Vue.use(Vuex)
 
 const vuexPersist = new VuexPersist({
-    // key: 'webSmk', //developing
-    key: 'smkn1mepanga.sch.id', //deployment
+    key: 'webSmk', //developing
+    // key: 'smkn1mepanga.sch.id', //deployment
     storage: localStorage
 })
 
 export default new Vuex.Store({
-        plugins: [vuexPersist.plugin],
-        modules: {
-            auth,
-            news,
-            constant,
-            pendidikan,
-            pendidikanDialog,
-            addMode,
-            spinner
-        },
-    })
-    // export default new Vuex.Store({
-    //     modules: {
-    //         constant
-    //     }
-    // })
+    plugins: [vuexPersist.plugin],
+    modules: {
+        auth,
+        news,
+        constant,
+        pendidikan,
+        pendidikanDialog,
+        addMode,
+        spinner
+    },
+})

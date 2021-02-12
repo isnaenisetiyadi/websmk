@@ -1,7 +1,7 @@
 export default {
     namespaced: true,
     state: {
-        urlImage: null,
+        urlImage: "",
         // urlImage: "http://127.0.0.1:8001/images",
 
     },
