@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username','email', 'password','role','remember_token','avatar'
+        'name', 'username', 'email', 'password', 'role', 'remember_token', 'avatar'
     ];
 
     /**
@@ -37,34 +37,56 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function berita(){
+    public function berita()
+    {
         return $this->hasMany("App\Berita");
     }
-    public function jurusan(){
+    public function jurusan()
+    {
         return $this->hasMany("App\Jurusan");
     }
-    public function kategori(){
+    public function kategori()
+    {
         return $this->hasMany("App\Kategori");
     }
-    public function guru(){
+    public function guru()
+    {
         return $this->hasMany("App\Guru");
     }
-    public function pendidikan(){
+    public function pendidikan()
+    {
         return $this->hasMany("App\Pendidikan");
     }
-    public function komentar(){
+    public function komentar()
+    {
         return $this->hasMany("App\Komentar");
     }
-    public function som(){
+    public function som()
+    {
         return $this->hasMany("App\Som");
     }
-    public function toy(){
+    public function toy()
+    {
         return $this->hasMany("App\Toy");
     }
-    public function program(){
+    public function program()
+    {
         return $this->hasMany("App\Program");
     }
-    public function organisasi(){
+    public function organisasi()
+    {
         return $this->hasMany("App\Organisasi");
+    }
+    public function sekolah()
+    {
+        return $this->hasMany("App\Sekolah");
+    }
+    public function misi()
+    {
+        return $this->hasMany("App\Misi");
+    }
+    public function log()
+    {
+        return $this->hasMany("App\Log");
     }
 }

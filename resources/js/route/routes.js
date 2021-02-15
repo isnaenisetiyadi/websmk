@@ -2,6 +2,7 @@ import Index from '../components/Index.vue';
 import HubungiKami from '../components/HubungiKami.vue';
 import Berita from '../components/Berita/Index.vue';
 import Kategori from '../components/Kategori/Index.vue';
+import Sekolah from '../components/Sekolah/Index.vue';
 import BeritaItem from '../components/Berita/BeritaItem.vue';
 import Pengumuman from '../components/Pengumuman/Index.vue';
 import Siswa from '../components/Awards/Siswa.vue';
@@ -68,6 +69,11 @@ export default [
     {
         path: '/organisasi/entry',
         component: OrganisasiEntry,
+        meta: { login: true, super_user: true }
+    },
+    {
+        path: '/sekolah',
+        component: Sekolah,
         meta: { login: true, super_user: true }
     },
     {

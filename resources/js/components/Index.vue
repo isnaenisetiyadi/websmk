@@ -24,193 +24,58 @@
         <div class="col-12 hero-text-image">
           <div class="row">
             <div class="col-lg-4 text-center text-lg-left">
-              <h1 data-aos="fade-right">Vocational High School</h1>
+              <h1 data-aos="fade-right">{{ sekolah.moto1 }}</h1>
               <p class="mb-5" data-aos="fade-right" data-aos-delay="100">
-                Sekolah Menengah Kejuruan
+                {{ sekolah.moto2 }}
               </p>
               <p data-aos="fade-right" data-aos-delay="200" data-aos-offset="-500">
                 <!-- <a href="#" class="btn btn-outline-white">Mulai</a> -->
                 <!-- <a href="#" class="btn btn-outline-white">Mulai</a> -->
                 <router-link to="/berita" class="btn btn-outline-white"
-                  >Mulai</router-link
+                  >Informasi</router-link
                 >
               </p>
             </div>
             <div class="col-lg-4 text-center">
               <img
-                src="images/logo/logo_smk.png"
+                :src="urlImage + '/sekolah/' + sekolah.logo"
                 alt="Image"
                 class="logo-smk"
                 data-aos="fade-down"
                 data-aos-delay="100"
+                v-if="sekolah.logo"
               />
               <img
-                src="images/logo/logo_atph.png"
+                @click="onViewJurusan(jurusan)"
+                :src="urlImage + '/jurusan/' + jurusan.logo"
                 alt="Image"
-                class="logo-atph"
-                data-aos="fade-up"
-                data-aos-delay="700"
-              />
-              <img
-                src="images/logo/logo_apat.png"
-                alt="Image"
-                class="logo-apat"
-                data-aos="fade-right"
-                data-aos-delay="900"
-              />
-              <img
-                src="images/logo/logo_akl.png"
-                alt="Image"
-                class="logo-akl"
-                data-aos="fade-left"
-                data-aos-delay="500"
-              />
-              <img
-                src="images/logo/logo_tkj.png"
-                alt="Image"
-                class="logo-tkj"
+                :class="'logo-' + index"
                 data-aos="fade-down"
-                data-aos-delay="1100"
+                data-aos-delay="100"
+                v-for="(jurusan, index) in jurusans"
+                :key="index"
               />
             </div>
             <div class="col-lg-4 text-center text-lg-right">
               <h3 class="mb-2 judul" style="color: white" data-aos="fade-up">Visi :</h3>
               <p class="visi" data-aos="fade-right" data-aos-delay="100">
-                Terampil, Cerdas, Terdidik berdasarkan iman dan taqwa
+                {{ sekolah.visi }}
               </p>
 
               <h3 class="mb-2 judul" style="color: white" data-aos="fade-up">Misi :</h3>
-              <p class="misi" data-aos="fade-right" data-aos-delay="100">
-                Mengembangkan iklim belajar berdasarkan norma budaya Indonesia
-              </p>
-              <p class="misi" data-aos="fade-right" data-aos-delay="100">
-                Mengembangkan sistem pendidikan yang fleksible
-              </p>
-              <p class="misi" data-aos="fade-right" data-aos-delay="100">
-                Menyiapkan tamatan yang memiliki keterampilan sesuai profesionalismenya
-              </p>
-              <p class="misi" data-aos="fade-right" data-aos-delay="100">
-                Mencetak tamatan yang memiliki karir di bidangnya serta memberi landasan
-                untuk melanjutkan pendidikan ke jenjang yang lebih tinggi
+              <p
+                class="misi"
+                data-aos="fade-right"
+                data-aos-delay="100"
+                v-for="(misi, index) in sekolah.misi"
+                :key="index"
+              >
+                {{ misi.text }}
               </p>
             </div>
           </div>
         </div>
-
-        <!-- <div class="row trending-frame">
-          <div class="caption text-center">PENGUMUMAN TERBARU :</div>
-          <Trending />
-          <Trending />
-          <Trending />
-        </div> -->
       </div>
-      <!-- <div class="row trending-frame align-item-center">
-        <div class="caption text-center">IMAGE TODAY</div>
-        <div
-          class="container"
-          style="
-             {
-              margin-left: 0;
-            }
-          "
-        >
-          <div class="row justify-content-center text-center">
-            <div class="col-md-12">
-              <div class="owl-carousel testimonial-carousel">
-                <div class="review text-center">
-                  <p class="stars">
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star muted"></span>
-                  </p>
-                  <h3>Excellent App!</h3>
-                  <blockquote>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius ea
-                      delectus pariatur, numquam aperiam dolore nam optio dolorem facilis
-                      itaque voluptatum recusandae deleniti minus animi, provident
-                      voluptates consectetur maiores quos.
-                    </p>
-                  </blockquote>
-
-                  <p class="review-user">
-                    <img
-                      src="img/person_1.jpg"
-                      alt="Image"
-                      class="img-fluid rounded-circle mb-3"
-                    />
-                    <span class="d-block">
-                      <span class="text-black">Jean Doe</span>, &mdash; App User
-                    </span>
-                  </p>
-                </div>
-
-                <div class="review text-center">
-                  <p class="stars">
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star muted"></span>
-                  </p>
-                  <h3>This App is easy to use!</h3>
-                  <blockquote>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius ea
-                      delectus pariatur, numquam aperiam dolore nam optio dolorem facilis
-                      itaque voluptatum recusandae deleniti minus animi, provident
-                      voluptates consectetur maiores quos.
-                    </p>
-                  </blockquote>
-
-                  <p class="review-user">
-                    <img
-                      src="img/person_2.jpg"
-                      alt="Image"
-                      class="img-fluid rounded-circle mb-3"
-                    />
-                    <span class="d-block">
-                      <span class="text-black">Johan Smith</span>, &mdash; App User
-                    </span>
-                  </p>
-                </div>
-
-                <div class="review text-center">
-                  <p class="stars">
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star"></span>
-                    <span class="icofont-star muted"></span>
-                  </p>
-                  <h3>Awesome functionality!</h3>
-                  <blockquote>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius ea
-                      delectus pariatur, numquam aperiam dolore nam optio dolorem facilis
-                      itaque voluptatum recusandae deleniti minus animi, provident
-                      voluptates consectetur maiores quos.
-                    </p>
-                  </blockquote>
-
-                  <p class="review-user">
-                    <img
-                      src="img/person_3.jpg"
-                      alt="Image"
-                      class="img-fluid rounded-circle mb-3"
-                    />
-                    <span class="d-block">
-                      <span class="text-black">Jean Thunberg</span>, &mdash; App User
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </div>
     <div class="container mb-5">
       <div class="row trending-frame" v-for="(kategori, index) in kategoris" :key="index">
@@ -225,16 +90,13 @@
               <Trending :berita="berita" />
             </div>
           </div>
-          <div class="row" v-else style="width: 100%">
-            <div class="col-md-12 align-middle text-center">
+          <div class="row text-center" v-else style="width: 100%">
+            <div class="align-middle text-center" style="width: 100%">
               <h1><i class="icofont-worried"></i></h1>
               <span>Belum ada {{ kategori.nama }}</span>
             </div>
           </div>
         </div>
-        <!-- <Trending />
-          <Trending />
-          <Trending /> -->
       </div>
     </div>
   </section>
@@ -242,7 +104,7 @@
 
 <script>
 import Axios from "axios";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
     Trending: () => import("../components/Trending/Trending.vue"),
@@ -251,14 +113,24 @@ export default {
   data() {
     return {
       kategoris: {},
+      sekolah: {},
+      jurusans: {},
     };
   },
   mounted() {
     this.loadKategoris();
+    this.loadSekolah();
+    this.loadJurusans();
+  },
+  computed: {
+    ...mapGetters({
+      urlImage: "constant/urlImage",
+    }),
   },
   methods: {
     ...mapActions({
       setSpinner: "spinner/set",
+      setPropJurusan: "jurusan/set",
     }),
     loadKategoris() {
       this.setSpinner(true);
@@ -277,6 +149,44 @@ export default {
           });
           this.setSpinner(false);
         });
+    },
+    loadSekolah() {
+      this.setSpinner(true);
+      Axios.get("sekolah/showAll")
+        .then((response) => {
+          this.sekolah = response.data.data;
+          this.setSpinner(false);
+        })
+        .catch((error) => {
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: "ERROR : " + error.message,
+            type: "error", //nilai lain, error dan success
+          });
+          this.setSpinner(false);
+        });
+    },
+    loadJurusans() {
+      this.setSpinner(true);
+      Axios.get("jurusan/showAll")
+        .then((response) => {
+          this.jurusans = response.data.data;
+          this.setSpinner(false);
+        })
+        .catch((error) => {
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: "ERROR : " + error.message,
+            type: "error", //nilai lain, error dan success
+          });
+          this.setSpinner(false);
+        });
+    },
+    onViewJurusan(jurusan) {
+      this.setPropJurusan(jurusan);
+      this.$router.push("/jurusan/viewer");
     },
   },
 };

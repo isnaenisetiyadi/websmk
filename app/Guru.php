@@ -9,20 +9,28 @@ class Guru extends Model
 {
     //
     protected $table = 'gurus';
-    protected $fillable = ['user_id','nip','nuptk','nama','email','alamat','kontak','avatar','jabatan','randomkey'];
+    protected $fillable = ['user_id', 'nip', 'nuptk', 'nama', 'email', 'alamat', 'kontak', 'avatar', 'jabatan', 'randomkey'];
 
-    public function user(){
+    public function user()
+    {
         return $this->BelongsTo("App\User");
     }
 
-    public function pendidikan(){
+    public function pendidikan()
+    {
         return $this->hasMany("App\Pendidikan");
     }
-    public function post(){
-        return $this->belongsToMany("App\Post","App\Toy","post_id");
+    public function post()
+    {
+        return $this->belongsToMany("App\Post", "App\Toy", "post_id");
     }
 
-    public function jurusan() {
+    public function jurusan()
+    {
         return $this->belongsToMany("App\Jurusan");
+    }
+    public function sekolah()
+    {
+        return $this->hasOne("App\Sekolah");
     }
 }

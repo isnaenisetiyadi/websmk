@@ -32,6 +32,12 @@ class GuruController extends Controller
         // return $guru;
     }
 
+    public function showAll()
+    {
+        $guru = Guru::all();
+
+        return $guru;
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -252,7 +258,7 @@ class GuruController extends Controller
         $guru->kontak = $request->kontak;
         $guru->jabatan = $request->jabatan;
 
-        $namaFile = "";
+        // $namaFile = "";
         if ($file = $request->file('avatar')) {
             $nameFile = $request->nama . \Carbon\Carbon::now()->format('Y-m-dH:i:s') . '.' . $file->getClientOriginalExtension();
             $guru->avatar = $nameFile;
@@ -273,7 +279,7 @@ class GuruController extends Controller
         ], $code);
     }
 
-   
+
     public function destroy($id)
     {
         //

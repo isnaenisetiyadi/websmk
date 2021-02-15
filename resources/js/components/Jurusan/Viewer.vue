@@ -212,6 +212,7 @@ export default {
   computed: {
     ...mapGetters({
       urlImage: "constant/urlImage",
+      propJurusan: "jurusan/jurusan",
     }),
   },
   data() {
@@ -223,6 +224,7 @@ export default {
     };
   },
   mounted() {
+    this.init();
     this.loadGurus();
     this.loadJurusans();
   },
@@ -230,6 +232,11 @@ export default {
     ...mapActions({
       setSpinner: "spinner/set",
     }),
+    init() {
+      if(this.propJurusan) {
+        this.jurusanItem = this.propJurusan;
+      }
+    },
     loadGurus() {
       this.setSpinner(true);
       Axios.get("gurus")
@@ -253,7 +260,9 @@ export default {
       Axios.get("jurusan/showAll")
         .then((response) => {
           this.jurusans = response.data.data;
-          this.jurusanItem = this.jurusans[0];
+          if (!this.jurusanItem.nama) {
+            this.jurusanItem = this.jurusans[0];
+          }
           this.setSpinner(false);
         })
         .catch((error) => {

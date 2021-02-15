@@ -10,13 +10,14 @@ import pendidikan from './stores/pendidikan';
 import pendidikanDialog from './stores/pendidikandialog';
 import addMode from './stores/addMode';
 import spinner from './stores/spinner';
+import jurusan from './stores/jurusan';
 
 
 Vue.use(Vuex)
 
 const vuexPersist = new VuexPersist({
-    key: 'webSmk', //developing
-    // key: 'smkn1mepanga.sch.id', //deployment
+    // key: 'webSmk', //developing
+    key: 'smkn1mepanga.sch.id', //deployment
     storage: localStorage
 })
 
@@ -29,6 +30,7 @@ export default new Vuex.Store({
         pendidikan,
         pendidikanDialog,
         addMode,
-        spinner
+        spinner,
+        jurusan
     },
 })

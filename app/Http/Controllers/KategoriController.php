@@ -86,13 +86,13 @@ class KategoriController extends Controller
             'data' => $data
         ], $code);
     }
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $status = "error";
         $message = "BACKEND: ";
         $data = null;
         $code = 400;
-        $kategori = Kategori::find($request->id);
+        $kategori = Kategori::find($id);
         if ($kategori) {
             $kategori->nama = $request->nama;
 

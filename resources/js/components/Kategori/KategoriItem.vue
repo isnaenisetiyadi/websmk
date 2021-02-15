@@ -86,7 +86,7 @@ export default {
         nama: this.nama,
       };
       this.setSpinner(true);
-      Axios.post("kategori/update", data)
+      Axios.post("kategori/update/" + this.kategori.id, data)
         .then((response) => {
           this.$parent.loadKategoris();
           this.editKategori = false;

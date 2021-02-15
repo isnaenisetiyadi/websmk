@@ -48,9 +48,9 @@ Route::prefix('auth')->group(function (){
     
     Route::post('post/store','PostController@store');
 });
+Route::get('kategori/showBerita','KategoriController@showBerita');
 Route::get('kategoris','KategoriController@index');
 Route::get('kategori/posts','KategoriController@posts');
-Route::get('kategori/showBerita','KategoriController@showBerita');
 Route::get('kategori/postbykategori','KategoriController@postbykategori');
 Route::get('postperkategori/{id}','PostController@postperkategori');
 Route::get('postperkategori2/{id}','PostController@postperkategori2');
@@ -66,6 +66,7 @@ Route::get('komentar/showbyberitaid/{berita_id}','KomentarController@showByBerit
 Route::post('komentar/store','KomentarController@store');
 
 Route::get('gurus','GuruController@index');
+Route::get('guru/showAll','GuruController@showAll');
 Route::get('guru/show/{id}','GuruController@show');
 Route::post('guru/update/{id}','GuruController@update');
 Route::post('guru/destroy/{id}','GuruController@destroy');
@@ -97,6 +98,13 @@ Route::post('program/showByOrganisasiSearch','ProgramController@showByOrganisasi
 Route::post('program/store','ProgramController@store');
 Route::post('program/update/{id}','ProgramController@update');
 Route::post('program/destroy/{id}','ProgramController@destroy');
+
+Route::get('sekolah/showAll','SekolahController@showAll');
+Route::post('sekolah/update/{id}','SekolahController@update');
+
+Route::post('misi/store','MisiController@store');
+Route::post('misi/update/{id}','MisiController@update');
+Route::post('misi/destroy/{id}','MisiController@destroy');
 
 Route::get('ujistr', function(){
     return $random = Str::random(64);

@@ -1,7 +1,10 @@
 <template>
   <section class="section">
     <div class="container-fluid banner" height="50px"></div>
-    <div class="container mb-5" style="min-height: 100px">
+    <div
+      class="container mb-5"
+      style="min-height: 100px; padding-bottom: 10px"
+    >
       <div class="row">
         <!-- <GuruItem /> -->
         <div class="guru-container" v-for="(guru, index) in gurus.data" :key="index">

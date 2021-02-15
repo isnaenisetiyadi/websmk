@@ -287,31 +287,31 @@
         margin-top: 50px;
         margin-bottom: 100px;
     }
-    .jurusan-section .logo-apat {
+    .jurusan-section .logo-atph {
         right: 10%;
         top: 0em;
     }
-    .jurusan-section .logo-tkj {
+    .jurusan-section .logo-apat {
         right: 10%;
         bottom: -25;
     }
-    .jurusan-section .logo-atph {
+    .jurusan-section .logo-akl {
         left: 10%;
         top: 0;
     }
-    .jurusan-section .logo-akl {
+    .jurusan-section .logo-tkj {
         left: 10%;
         bottom: -25;
     }
 }
 
 @media screen and (max-width: 768px) {
-    .jurusan-section .logo-apat,
-    .jurusan-section .logo-tkj {
+    .jurusan-section .logo-0,
+    .jurusan-section .logo-1 {
         width: 75px;
     }
-    .jurusan-section .logo-atph,
-    .jurusan-section .logo-akl {
+    .jurusan-section .logo-2,
+    .jurusan-section .logo-3 {
         width: 75px;
     }
     .jurusan-section h1 {

@@ -138,6 +138,9 @@
                     <li>
                       <router-link to="/program/entry">Program Organisasi</router-link>
                     </li>
+                    <li>
+                      <router-link to="/sekolah">Identitas Sekolah</router-link>
+                    </li>
                   </ul>
                 </li>
               </ul>
