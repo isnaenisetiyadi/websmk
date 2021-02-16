@@ -15,6 +15,33 @@ class BeritaController extends Controller
         $berita = Berita::paginate(10);
         return new BeritaResource($berita);
     }
+    public function showBySearch(Request $request)
+    {
+
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+
+        if ($request->user_id) {
+
+            $berita = Berita::where('user_id', '=', $request->user_id)
+                ->where('judul', 'like', '%' . $request->judul . '%')->paginate(10);
+        } else {
+            $berita = Berita::where('judul', 'like', '%' . $request->judul . '%')->paginate(10);
+        }
+
+
+        if ($berita) {
+            $status = "success";
+            $message = "BACKEND: Data berita dengan pencarian diperoleh";
+            $data = $berita->toArray();
+            $code = 200;
+        } else {
+            $message = "BACKEND: Data berita dengan pencarian TIDAK diperoleh";
+        }
+        return new BeritaResource($berita);
+    }
     public function store(Request $request)
     {
         // if (Auth::user()) {

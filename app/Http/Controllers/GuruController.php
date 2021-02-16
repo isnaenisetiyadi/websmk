@@ -32,6 +32,38 @@ class GuruController extends Controller
         // return $guru;
     }
 
+    public function showByName($nama)
+    {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+        if ($nama) {
+
+            $guru = Guru::where('nama', 'like', '%' . $nama . '%')
+                ->with(['pendidikan', 'jurusan']) //->get();
+                ->paginate(5);
+        } else {
+            $guru = Guru::with(['pendidikan', 'jurusan']) //->get();
+                ->paginate(5);
+        }
+        if ($guru) {
+            $status = "error";
+            $message = "BACKEND: Data guru diperoleh semuanya";
+            // $data = $guru->toArray();
+            $data = new GuruResource($guru);
+            $code = 200;
+        } else {
+            $message = "BACKEND: Data guru dengan kata kunci tersebut tidak ada";
+        }
+        // return response()->json([
+        //     'status' => $status,
+        //     'message' => $message,
+        //     'data' => new GuruResource($data)
+        // ], $code);
+        return new GuruResource($guru);
+    }
+
     public function showAll()
     {
         $guru = Guru::all();

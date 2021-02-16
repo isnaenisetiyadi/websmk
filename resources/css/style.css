@@ -797,6 +797,12 @@
     color: #306674;
 } */
 
+.ql-editor {
+    max-height: 300px;
+    overflow-y: scroll;
+    /* background-color: #c5f3fc; */
+}
+
 .ql-editor h1,
 .ql-editor h2,
 .ql-editor h3,
@@ -1607,3 +1613,28 @@ nav>div a.nav-item.nav-link:focus {
 
 
 /* END OF SPinner */
+
+
+/* custom */
+
+.span-btn {
+    /* background-color: inherit; */
+}
+
+.span-btn:hover {
+    background-color: #67aecf;
+    cursor: pointer;
+}
+
+.span-btn:active {
+    border: solid #05448d 2px;
+    color: #FFFFFF;
+}
+
+
+/* .span-btn: {
+    border: solid #05448d 2px;
+} */
+
+
+/* end of custom */

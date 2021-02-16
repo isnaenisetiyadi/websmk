@@ -31,6 +31,7 @@ Route::get('/', function () {
 Route::prefix('auth')->group(function (){
     Route::get('init','AppController@init');
     Route::get('users','AppController@users');
+    Route::get('noGuest','AppController@noGuest');
     Route::post('register','AppController@register');
     Route::post('login','AppController@login');
     Route::post('logout','AppController@logout');
@@ -40,6 +41,7 @@ Route::prefix('auth')->group(function (){
 
     Route::get('berita','BeritaController@index');
     Route::get('berita/show/{id}','BeritaController@show');
+    Route::post('berita/showBySearch','BeritaController@showBySearch');
     Route::post('berita/store','BeritaController@store');
     Route::post('berita/update/{id}','BeritaController@update');
     Route::post('berita/destroy/{id}','BeritaController@destroy');
@@ -67,6 +69,7 @@ Route::post('komentar/store','KomentarController@store');
 
 Route::get('gurus','GuruController@index');
 Route::get('guru/showAll','GuruController@showAll');
+Route::get('guru/showByName/{nama}','GuruController@showByName');
 Route::get('guru/show/{id}','GuruController@show');
 Route::post('guru/update/{id}','GuruController@update');
 Route::post('guru/destroy/{id}','GuruController@destroy');

@@ -1,10 +1,27 @@
 <template>
   <section class="section">
     <div class="container-fluid banner" height="50px"></div>
-    <div
-      class="container mb-5"
-      style="min-height: 100px; padding-bottom: 10px"
-    >
+    <div class="container">
+      <div class="input-group mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Cari dengan nama guru"
+          aria-label="Cari dengan nama guru"
+          aria-describedby="basic-addon2"
+          v-model="namaKeyword"
+          v-on:keyup="validasiKeyboard"
+        />
+        <span
+          class="input-group-text span-btn"
+          id="basic-addon2"
+          @click="loadGurus()"
+        >
+          <i class="icofont-search"></i>
+        </span>
+      </div>
+    </div>
+    <div class="container mb-5" style="min-height: 100px; padding-bottom: 10px">
       <div class="row">
         <!-- <GuruItem /> -->
         <div class="guru-container" v-for="(guru, index) in gurus.data" :key="index">
@@ -37,8 +54,16 @@ export default {
   data() {
     return {
       gurus: {},
-      page: "",
+      page: 1,
+      namaKeyword: "",
     };
+  },
+  watch: {
+    namaKeyword: function(){
+      if (!this.namaKeyword) {
+        this.loadGurus();
+      } 
+    }
   },
   name: "guru-page",
   mounted() {
@@ -48,22 +73,49 @@ export default {
     ...mapActions({
       setSpinner: "spinner/set",
     }),
+    validasiKeyboard: function(e) {
+      if (e.keyCode === 13) {
+        this.loadGurus();
+      } 
+    },
     loadGurus(page) {
       this.setSpinner(true);
-      Axios.get("gurus?page=" + page)
-        .then((response) => {
-          this.gurus = response.data;
-          this.setSpinner(false);
-        })
-        .catch((error) => {
-          this.$notify({
-            group: "error",
-            title: "Gagal",
-            text: "ERROR : " + error.message,
-            type: "error", //nilai lain, error dan success
+      // Axios.get("guru/showByName/?page=" + page + "/" + this.namaKeyword )
+      let keyword = "";
+      if (this.namaKeyword) {
+        keyword = "/" + this.namaKeyword;
+        Axios.get("guru/showByName" + keyword + "?page=" + page)
+          // Axios.get("gurus?page=" + page)
+          .then((response) => {
+            this.gurus = response.data;
+            this.setSpinner(false);
+          })
+          .catch((error) => {
+            this.$notify({
+              group: "error",
+              title: "Gagal",
+              text: "ERROR : " + error.message,
+              type: "error", //nilai lain, error dan success
+            });
+            this.setSpinner(false);
           });
-          this.setSpinner(false);
-        });
+      } else {
+        // Axios.get("guru/showByName" + keyword + "?page=" + page)
+          Axios.get("gurus?page=" + page)
+          .then((response) => {
+            this.gurus = response.data;
+            this.setSpinner(false);
+          })
+          .catch((error) => {
+            this.$notify({
+              group: "error",
+              title: "Gagal",
+              text: "ERROR : " + error.message,
+              type: "error", //nilai lain, error dan success
+            });
+            this.setSpinner(false);
+          });
+      }
     },
     onAdd() {
       this.$router.push("/guru/tambah");

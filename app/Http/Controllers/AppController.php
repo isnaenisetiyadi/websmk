@@ -14,14 +14,38 @@ class AppController extends Controller
     //
     public function users()
     {
-        $user = User::paginate(10);
-        return new UserResource($user);
+        if (Auth::user()) {
+            $user = User::paginate(10);
+            return new UserResource($user);
+        }
     }
 
     public function init()
     {
         $user = Auth::user();
         return response()->json(['user' => $user], 200);
+    }
+    public function noGuest()
+    {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+
+        $user = User::where('role', '<>', 'GUEST')->get();
+        if ($user) {
+            $status = "sucess";
+            $message = "BACKEND: data user berdasarkan admin";
+            $data = $user->toArray();
+            $code = 200;
+        } else {
+            $message = "BACKEND: tidak ada data user berdasarkan admin";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ], $code);
     }
     public function login(Request $request)
     {

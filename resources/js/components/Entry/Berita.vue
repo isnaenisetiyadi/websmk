@@ -1,7 +1,11 @@
 <template>
   <section class="section">
     <div class="container-fluid banner" height="50px"></div>
-    <div v-if="add" class="container">
+    <div
+      v-if="add"
+      class="container"
+      style="background-color: #c5f3fc; border-radius: 20px"
+    >
       <div class="row mb-5 align-items-end">
         <div class="col-md-12" data-aos="fade-down">
           <h2>Entry Berita</h2>
@@ -64,7 +68,7 @@
                           bottom-slots
                         />
                         <div v-else class="m-lg">
-                          <img :src="getImage(image)" style="width: 25%" alt="" />
+                          <img :src="getImage(image)" style="width: 100%" alt="" />
                           <div class="absolute-bottom-guru text-subtitle1 text-center">
                             <button @click="removeImage" class="button-image">
                               <i class="icofont-ui-delete"></i>
@@ -138,7 +142,17 @@
                 class="btn btn-success m-md-1"
                 data-aos="fade-left"
                 data-aos-delay="100"
-                v-if="id"
+                v-if="id && getUsers.role === 'SUPER USER'"
+              >
+                Post
+              </button>
+              <button
+                disabled
+                @click="onPost(id)"
+                class="btn btn-secondary m-md-1"
+                data-aos="fade-left"
+                data-aos-delay="100"
+                v-else
               >
                 Post
               </button>
@@ -161,15 +175,65 @@
     <div class="container">
       <div class="card mb-5">
         <div class="card-header">
-          <div class="float-left card-judul" data-aos="fade-left">Post List</div>
+          <!-- <div class="float-left card-judul" data-aos="fade-left">Post List</div>
 
           <div class="input-group-append float-right" data-aos="fade-right">
             <button @click="onAdd" class="btn btn-success">
               <i class="icofont-ui-add"></i>
             </button>
+          </div> -->
+          <div class="input-group mb-3">
+            <input
+              disabled
+              type="text"
+              class="form-control"
+              placeholder="Daftar Berita"
+              aria-label="Daftar Berita"
+              aria-describedby="basic-addon2"
+            />
+            <span class="input-group-text span-btn" id="basic-addon2" @click="onAdd"
+              ><i class="icofont-ui-add"></i
+            ></span>
           </div>
         </div>
         <div class="card-body">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col md-6">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Cari dengan judul"
+                    aria-label="Cari dengan judul"
+                    aria-describedby="basic-addon2"
+                    v-model="judulKeyword"
+                    v-on:keyup="validasiKeyboard"
+                  />
+                  <span
+                    class="input-group-text span-btn"
+                    id="basic-addon2"
+                    @click="isiBerita()"
+                  >
+                    <i class="icofont-search"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="col md-6" v-if="getUsers.role === 'SUPER USER'">
+                <select class="form-control" v-model="user_id">
+                  <option selected value="">Pilih Admin...</option>
+                  <option
+                    v-for="(user, index) in users"
+                    :key="index"
+                    v-bind:value="user.id"
+                  >
+                    {{ user.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <table class="table">
             <thead>
               <tr data-aos="fade-up">
@@ -182,7 +246,7 @@
             </thead>
             <tbody>
               <tr
-                v-for="(berita, index) in beritas"
+                v-for="(berita, index) in beritas.data"
                 :key="index"
                 data-aos="fade-up"
                 data-aos-delay="300"
@@ -211,6 +275,13 @@
           </table>
           <div class="d-flex justify-content-center">
             <!-- {{ this.users.links() }} -->
+          </div>
+          <div class="mb-5">
+            <pagination
+              :data="beritas"
+              @pagination-change-page="isiBerita"
+              align="center"
+            ></pagination>
           </div>
         </div>
       </div>
@@ -241,7 +312,7 @@ export default {
       konten: "",
       add: false,
       kategoris: {},
-      beritas: [],
+      beritas: {},
       editorOption: {
         debug: "info",
         placeholder: "Type your post...",
@@ -260,6 +331,15 @@ export default {
       // data image/avatar
       image: "",
       avatar: null,
+
+      // data untuk searching judul
+      judulKeyword: "",
+
+      // untuk options user tanpa guest
+      users: {},
+      user_id: "",
+      judulKeyword: "",
+      page:"",
     };
   },
   mounted() {
@@ -269,7 +349,18 @@ export default {
     ...mapGetters({
       // getUser: "auth/user",
       urlImage: "constant/urlImage",
+      getUsers: "auth/user",
     }),
+  },
+  watch: {
+    judulKeyword: function () {
+      if (!this.judulKeyword) {
+        this.isiBerita();
+      }
+    },
+    user_id: function () {
+      this.isiBerita();
+    },
   },
   methods: {
     ...mapActions({
@@ -281,6 +372,24 @@ export default {
     onCancel() {
       this.add = false;
       this.kosongkanData();
+    },
+    loadUserNoGuest() {
+      this.setSpinner(true);
+      Axios.get("auth/noGuest")
+        .then((response) => {
+          this.users = response.data.data;
+          // console.log(this.users);
+          this.setSpinner(false);
+        })
+        .catch((error) => {
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: error.message,
+            type: "error", //nilai lain, error dan success
+          });
+          this.setSpinner(false);
+        });
     },
     onSave() {
       // const data = {
@@ -317,6 +426,7 @@ export default {
             this.add = false;
             this.setSpinner(false);
             this.isiBerita();
+            this.kosongkanData();
           })
           .catch((error) => {
             this.$notify({
@@ -354,10 +464,19 @@ export default {
       }
     },
     init() {
+      if (this.getUsers.role === "ADMIN") {
+        this.user_id = this.getUsers.id;
+      }
       this.isiKategori();
+      this.loadUserNoGuest();
       this.isiBerita();
       this.isiJurusan();
       this.isiOrganisasi();
+    },
+    validasiKeyboard: function (e) {
+      if (e.keyCode === 13) {
+        this.isiBerita();
+      }
     },
     isiKategori() {
       this.setSpinner(true);
@@ -389,11 +508,21 @@ export default {
       this.jurusanDipilih = [];
       this.organisasiDipilih = [];
     },
-    isiBerita() {
+    isiBerita(page) {
+      // const data = {
+      //   user_id: this.user_id,
+      //   judul: this.judulKeyword
+      // };
+
+      let formData = require("form-data");
+      let dataQ = new formData();
+      dataQ.set("user_id", this.user_id);
+      dataQ.set("judul", this.judulKeyword);
+
       this.setSpinner(true);
-      Axios.get("auth/berita")
+      Axios.post("auth/berita/showBySearch?page=" + page, dataQ)
         .then((response) => {
-          this.beritas = response.data.data;
+          this.beritas = response.data;
           this.setSpinner(false);
         })
         .catch((error) => {
@@ -442,6 +571,7 @@ export default {
           this.setSpinner(false);
         });
     },
+
     onDeleteJurusan(value) {
       // console.log(value);
       // console.log(value);
