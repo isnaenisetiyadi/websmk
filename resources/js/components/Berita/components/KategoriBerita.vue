@@ -1,4 +1,4 @@
-<template>
+Í<template>
   <div class="sidebar-box" data-aos="fade-up" data-aos-delay="300">
     <div class="categories">
       <h3>Kategori</h3>
@@ -14,17 +14,17 @@
               <button
                 class="kategori-btn kategori-btn-link"
                 data-toggle="collapse"
-                :data-target="'#' + kategori.nama"
+                :data-target="'#kate' + kategori.id"
                 aria-expanded="false"
                 :aria-controls="kategori.nama"
               >
-                {{ kategori.nama }} ({{ kategori.berita.length }})
+                {{ kategori.nama }} <!--({{ kategori.berita.length }})-->
               </button>
             </h5>
           </div>
 
           <div
-            :id="kategori.nama"
+            :id="'kate' + kategori.id"
             class="collapse"
             aria-labelledby="headingOne"
             data-parent="#accordion"

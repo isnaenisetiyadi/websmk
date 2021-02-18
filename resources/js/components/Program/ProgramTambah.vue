@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Axios from "axios";
 export default {
   name: "program-tambah",
@@ -119,7 +119,7 @@ export default {
       //   organisasi_id: "",
       nama: "",
       deskripsi: "",
-    //   organisasi_id: "",
+      //   organisasi_id: "",
       image: "",
       avatar: null,
       konten: "",
@@ -144,15 +144,18 @@ export default {
   },
   methods: {
     onEdit() {
-        // console.log(this.program.nama);
+      // console.log(this.program.nama);
       if (this.program) {
         this.nama = this.program.nama;
-        this.deskripsi = this.program['deskripsi'];
+        this.deskripsi = this.program["deskripsi"];
         this.image = this.program.avatar;
         this.avatar = this.program.avatar;
         this.konten = this.program.konten;
       }
     },
+    ...mapActions({
+      setSpinner: "spinner/set",
+    }),
     // METHOD UNTUK GAMBAR
     getImage(image) {
       if (this.avatar) {
@@ -210,7 +213,7 @@ export default {
       dataQ.set("deskripsi", this.deskripsi);
       dataQ.set("avatar", this.avatar);
       dataQ.set("konten", this.konten);
-
+      this.setSpinner(true);
       if (this.program.id) {
         //   KODE here for update
         Axios.post("program/update/" + this.program.id, dataQ)
@@ -221,6 +224,7 @@ export default {
               text: "Satu Organisasi  sudah diupdate",
               type: "success", //nilai lain, error dan success
             });
+            this.setSpinner(false);
             this.$parent.loadPrograms();
             this.onClose();
           })
@@ -231,8 +235,10 @@ export default {
               text: "SINI BRO " + error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
       } else {
+        this.setSpinner(true);
         Axios.post("program/store", dataQ)
           .then((response) => {
             this.$notify({
@@ -242,6 +248,7 @@ export default {
               type: "success", //nilai lain, error dan success
             });
             this.$parent.loadPrograms();
+            this.setSpinner(false);
             this.onClose();
           })
           .catch((error) => {
@@ -251,6 +258,7 @@ export default {
               text: "SINI BRO " + error.message,
               type: "error", //nilai lain, error dan success
             });
+            this.setSpinner(false);
           });
       }
     },
