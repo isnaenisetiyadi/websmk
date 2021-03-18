@@ -16,8 +16,8 @@ import jurusan from './stores/jurusan';
 Vue.use(Vuex)
 
 const vuexPersist = new VuexPersist({
-    // key: 'webSmk', //developing
-    key: 'smkn1mepanga.sch.id', //deployment
+    key: 'webSmk', //developing
+    // key: 'smkn1mepanga.sch.id', //deployment
     storage: localStorage
 })
 

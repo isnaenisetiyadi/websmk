@@ -260,9 +260,11 @@ export default {
       kategoris: {},
     };
   },
+  
   mounted() {
     // this.init();
     // this.loadKategori();
+    this.loadBerita();
     this.loadKategoris();
   },
   watch: {
@@ -273,10 +275,14 @@ export default {
         this.loadKomentarChild = "Load Komenl";
       }
     },
+    '$route' (to, from) {
+      this.loadBerita();
+    }
   },
   methods: {
     ...mapActions({
       setSpinner: "spinner/set",
+      setNews: "news/set",
     }),
     saveKomen() {
       var userId = null;
@@ -336,6 +342,23 @@ export default {
             type: "error", //nilai lain, error dan success
           });
           this.setSpinner(false);
+        });
+    },
+    loadBerita() {
+      let { slug } = this.$route.params;
+      let url = "/post/slug/" + slug;
+      url = encodeURI(url);
+      Axios.get(url)
+        .then((response) => {
+          this.setNews(response.data.data);
+        })
+        .catch((error) => {
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: "ERROR : " + error.message,
+            type: "error", //nilai lain, error dan success
+          });
         });
     },
     // init() {

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+ 
 use App\Jurusan;
 
 class JurusanController extends Controller
@@ -80,6 +82,7 @@ class JurusanController extends Controller
         $jurusan->user_id = $request->user_id;
         $jurusan->nama = $request->nama;
         $jurusan->deskripsi = $request->deskripsi;
+        $jurusan->slug = Str::slug($request->nama);
 
         if ($file = $request->file('logo')) {
             $nameFile = $request->nama . \Carbon\Carbon::now()->format('Y-m-dH:i:s') . '.' . $file->getClientOriginalExtension();
@@ -133,6 +136,31 @@ class JurusanController extends Controller
             'data' => $data
         ], $code);
     }
+    public function slug($slug)
+    {
+        //
+        // if (Auth::user()) {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+
+        $jurusan = Jurusan::where('slug', '=', $slug)->with(['guru'])
+            ->get();
+        if ($jurusan) {
+            $status = "success";
+            $message = "BACKEND: data jurusan diperoleh";
+            $data = $jurusan->toArray();
+            $code = 200;
+        } else {
+            $message += "Gagal mengambil data jurusan";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ], $code);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -165,6 +193,7 @@ class JurusanController extends Controller
         $jurusan->user_id = $request->user_id;
         $jurusan->nama = $request->nama;
         $jurusan->deskripsi = $request->deskripsi;
+        $jurusan->slug = Str::slug($request->nama);
 
         if ($file = $request->file('logo')) {
             $nameFile = $request->nama . \Carbon\Carbon::now()->format('Y-m-dH:i:s') . '.' . $file->getClientOriginalExtension();

@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 // use App\Http\Controllers\DB;
 use App\Berita;
 use App\Jurusan;
 class PostController extends Controller
+
 {
     /**
      * Display a listing of the resource.
@@ -78,6 +80,7 @@ class PostController extends Controller
         $post = new Post();
         $post->user_id = $request->user_id;
         $post->berita_id = $request->berita_id;
+        $post->slug = Str::slug($request->berita_judul);
         $post->views = 0;
         $post->utama = 1;
 
@@ -172,6 +175,30 @@ class PostController extends Controller
         if ($post) {
             $this->addViews($post->id);
             $post = Post::where('id', '=', $id)->with(['berita.user'])->first();
+            $status = "success";
+            $message = "BACKEND: post->berita sudah diperoleh";
+            $data = $post->toArray();
+            $code = 200;
+        } else {
+            $message = "BACKEND: post->berita tidak dapat diperoleh";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data,
+        ], $code);
+    }
+    public function slug($slug)
+    {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+
+        $post = Post::where('slug', '=', $slug)->with(['berita.user'])->first();
+        if ($post) {
+            $this->addViews($post->id);
+            $post = Post::where('slug', '=', $slug)->with(['berita.user'])->first();
             $status = "success";
             $message = "BACKEND: post->berita sudah diperoleh";
             $data = $post->toArray();

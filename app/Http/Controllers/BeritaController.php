@@ -6,6 +6,7 @@ use App\Berita;
 use App\Http\Resources\Berita as BeritaResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class BeritaController extends Controller
 {
@@ -57,6 +58,7 @@ class BeritaController extends Controller
         $berita->judul = $request->judul;
         $berita->deskripsi = $request->deskripsi;
         $berita->konten = $request->konten;
+        $berita->slug = Str::slug($request->judul);
         if ($file = $request->file('avatar')) {
             $nameFile = $request->judul . \Carbon\Carbon::now()->format('Y-m-dH:i:s') . '.' . $file->getClientOriginalExtension();
             $berita->avatar = $nameFile;
@@ -109,6 +111,7 @@ class BeritaController extends Controller
         $berita->judul = $request->judul;
         $berita->deskripsi = $request->deskripsi;
         $berita->konten = $request->konten;
+        $berita->slug = Str::slug($request->judul);
         if ($file = $request->file('avatar')) {
             $nameFile = $request->judul . \Carbon\Carbon::now()->format('Y-m-dH:i:s') . '.' . $file->getClientOriginalExtension();
             $berita->avatar = $nameFile;

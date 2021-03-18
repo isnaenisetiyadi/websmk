@@ -291,11 +291,8 @@
 </template>
 
 <script>
-// import { VueEditor } from "vue2-editor";
 import { mapActions, mapGetters } from "vuex";
 import Axios from "axios";
-// import Multiselect from '@vueform/multiselect';
-// import MultiSelect from '@vueform/multiselect'
 import MultiSelect from "@vueform/multiselect/dist/multiselect.vue2.js";
 export default {
   components: {
@@ -707,6 +704,7 @@ export default {
       const data = {
         user_id: this.$store.state.auth.user.id,
         berita_id: id,
+        berita_judul: this.judul
       };
       this.setSpinner(true);
       Axios.post("auth/post/store", data)

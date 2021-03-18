@@ -99,19 +99,7 @@ const router = new VueRouter({
 })
 
 
-// import moment from 'moment';
 
-// Vue.filter('formatDate', function(value) {
-//     if (value) {
-//         return moment(String(value)).format('DD MMMM YYYY')
-//     }
-// });
-// Vue.filter('formatHour', function(value) {
-//     if (value) {
-//         return moment(String(value)).format('hh:mm')
-//     }
-// });
-// 
 
 import App from './App.vue';
 import store from './store';

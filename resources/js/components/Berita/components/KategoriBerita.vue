@@ -32,9 +32,14 @@
             <div class="kategori-body">
               <ul>
                 <li v-for="(berita, index) in kategori.berita" :key="index">
-                  <button @click="tampilBerita(berita.post.id)" v-if="berita.post" class="kategori-btn-berita kategori-btn-link">
+                  <router-link :to="'/berita/' + berita.post.slug" v-if="berita.post"  >
+                  
                     {{ berita.judul }}
-                  </button>
+                  
+                  </router-link>
+                  <!-- <button @click="tampilBerita(berita.post.slug)" v-if="berita.post" class="kategori-btn-berita kategori-btn-link">
+                    {{ berita.judul }}
+                  </button> -->
                   <!-- <ul>
                     <li @click="tampilBerita(berita.post.id)" v-if="berita.post"> {{ berita.judul }}</li>
                   </ul> -->
@@ -77,21 +82,24 @@ export default {
           console.log(error.message);
         });
     },
-    tampilBerita(post_id) {
-      if(post_id){
-        Axios.get("post/show/" + post_id)
-        .then((response) => {
-          // console.log(response.data.data)
-          this.setNews(response.data.data)
-        })
-        .catch((error) => {
-          this.$notify({
-            group: "error",
-            title: "Gagal",
-            text: "ERROR : " + error.message,
-            type: "error", //nilai lain, error dan success
-          });
-        })
+    tampilBerita(slug) {
+      if(slug){
+        // Axios.get("post/show/" + post_id)
+        // .then((response) => {
+        //   // console.log(response.data.data)
+        //   this.setNews(response.data.data)
+        // })
+        // .catch((error) => {
+        //   this.$notify({
+        //     group: "error",
+        //     title: "Gagal",
+        //     text: "ERROR : " + error.message,
+        //     type: "error", //nilai lain, error dan success
+        //   });
+        // })
+        this.$router.push("/berita/" + slug);
+        // this.$router.go()
+        // this.$router.go(this.$router.currentRoute)
       }
     },
   },

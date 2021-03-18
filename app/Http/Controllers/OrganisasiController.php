@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Organisasi;
 use App\Http\Resources\Organisasi as OrganisasiResource;
 
@@ -57,6 +58,7 @@ class OrganisasiController extends Controller
         $organisasi->user_id = $request->user_id;
         $organisasi->nama = $request->nama;
         $organisasi->deskripsi = $request->deskripsi;
+        $organisasi->slug = Str::slug($request->nama);
 
         if ($file = $request->file('avatar')) {
             $nameFile = $request->nama . \Carbon\Carbon::now()->format('Y-m-dH:i:s') . '.' . $file->getClientOriginalExtension();
@@ -103,6 +105,30 @@ class OrganisasiController extends Controller
             'data' => $data
         ], $code);
     }
+    public function slug($slug)
+    {
+        // if (Auth::user()) {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+
+        $organisasi = Organisasi::where('slug', '=', $slug)->with(['program'])
+            ->get();
+        if ($organisasi) {
+            $status = "success";
+            $message = "BACKEND: data organisasi diperoleh";
+            $data = $organisasi->toArray();
+            $code = 200;
+        } else {
+            $message += "Gagal mengambil data organisasi";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ], $code);
+    }
 
     public function update(Request $request, $id)
     {
@@ -116,6 +142,7 @@ class OrganisasiController extends Controller
         $organisasi->user_id = $request->user_id;
         $organisasi->nama = $request->nama;
         $organisasi->deskripsi = $request->deskripsi;
+        $organisasi->slug = Str::slug($request->nama);
 
         if ($file = $request->file('avatar')) {
             $nameFile = $request->nama . \Carbon\Carbon::now()->format('Y-m-dH:i:s') . '.' . $file->getClientOriginalExtension();

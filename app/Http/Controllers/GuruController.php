@@ -6,7 +6,6 @@ use App\Guru;
 use App\Pendidikan;
 use App\Http\Resources\Guru as GuruResource;
 use Illuminate\Http\Request;
-// use App\Http\Controllers\DB;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Http\Controllers\PendidikanController;
@@ -136,7 +135,7 @@ class GuruController extends Controller
         $guru->kontak = $request->kontak;
         $guru->jabatan = $request->jabatan;
         $guru->randomkey = $randomKey;
-
+        $guru->slug = Str::slug($request->nama);
         $namaFile = "";
 
         if ($file = $request->file('avatar')) {
@@ -226,6 +225,30 @@ class GuruController extends Controller
             'data' => $data
         ], $code);
     }
+    public function slug($slug)
+    {
+        //
+        // if (Auth::user()) {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+
+        $guru = Guru::where('slug', '=', $slug)->with(['pendidikan'])->get();
+        if ($guru) {
+            $status = "success";
+            $message = "BACKEND: data guru diperoleh";
+            $data = $guru->toArray();
+            $code = 200;
+        } else {
+            $message += "Gagal mengambil data guru";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ], $code);
+    }
     public function getGuruJurusan(Request $request)
     {
         // if (Auth::user()) {
@@ -289,7 +312,7 @@ class GuruController extends Controller
         $guru->email = $request->email;
         $guru->kontak = $request->kontak;
         $guru->jabatan = $request->jabatan;
-
+        $guru->slug = Str::slug($request->nama);
         // $namaFile = "";
         if ($file = $request->file('avatar')) {
             $nameFile = $request->nama . \Carbon\Carbon::now()->format('Y-m-dH:i:s') . '.' . $file->getClientOriginalExtension();

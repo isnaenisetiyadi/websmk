@@ -60,7 +60,7 @@
                 </li>
                 <li >
                   <!-- <a class="nav-link">INFO</a> -->
-                  <router-link to="/berita">INFORMASI</router-link>
+                  <router-link :to="'/berita/' + getNews.slug">INFORMASI</router-link>
 
                   <!-- <ul class="dropdown">
                     <li>
@@ -182,6 +182,7 @@ export default {
     ...mapGetters({
       getUsers: "auth/user",
       getUrl: "constant/urlImage",
+       getNews: "news/post",
     }),
   },
   mounted() {

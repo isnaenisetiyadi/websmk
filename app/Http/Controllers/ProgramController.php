@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Program;
+use Illuminate\Support\Str;
 
 class ProgramController extends Controller
 {
@@ -52,6 +53,7 @@ class ProgramController extends Controller
         $program->nama = $request->nama;
         $program->deskripsi = $request->deskripsi;
         $program->konten = $request->konten;
+        $program->slug = Str::slug($request->nama);
         if ($file = $request->file('avatar')) {
             $nameFile = $request->nama . \Carbon\Carbon::now()->format('Y-m-dH:i:s') . '.' . $file->getClientOriginalExtension();
             $program->avatar = $nameFile;
@@ -86,6 +88,7 @@ class ProgramController extends Controller
         $program->nama = $request->nama;
         $program->deskripsi = $request->deskripsi;
         $program->konten = $request->konten;
+        $program->slug = Str::slug($request->nama);
         // dd($request->avatar);
         if ($file = $request->file('avatar')) {
             $nameFile = $request->nama . \Carbon\Carbon::now()->format('Y-m-dH:i:s') . '.' . $file->getClientOriginalExtension();

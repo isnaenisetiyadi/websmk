@@ -62,6 +62,7 @@ Route::post('kategori/destroy/{id}','KategoriController@destroy');
 
 Route::get('post/hits','PostController@hits');
 Route::get('post/show/{id}','PostController@show');
+Route::get('post/slug/{slug}','PostController@slug');
 Route::get('post/showAll','PostController@showAll');
 
 Route::get('komentar/showbyberitaid/{berita_id}','KomentarController@showByBeritaId');
@@ -86,6 +87,7 @@ Route::get('jurusans','JurusanController@index');
 Route::get('jurusan/getAll','JurusanController@getAll');
 Route::get('jurusan/showAll','JurusanController@showAll');
 Route::get('jurusan/show/{id}','JurusanController@show');
+Route::get('jurusan/slug/{slug}','JurusanController@slug');
 Route::post('jurusan/store','JurusanController@store');
 Route::post('jurusan/update/{id}','JurusanController@update');
 Route::post('jurusan/destroy/{id}','JurusanController@destroy');
@@ -93,6 +95,7 @@ Route::post('jurusan/destroy/{id}','JurusanController@destroy');
 Route::get('organisasis','OrganisasiController@index');
 Route::get('organisasi/getall','OrganisasiController@getall');
 Route::get('organisasi/showAll','OrganisasiController@showAll');
+Route::get('organisasi/slug/{slug}','OrganisasiController@slug');
 Route::post('organisasi/store','OrganisasiController@store');
 Route::post('organisasi/update/{id}','OrganisasiController@update');
 Route::post('organisasi/destroy/{id}','OrganisasiController@destroy');
@@ -108,6 +111,8 @@ Route::post('sekolah/update/{id}','SekolahController@update');
 Route::post('misi/store','MisiController@store');
 Route::post('misi/update/{id}','MisiController@update');
 Route::post('misi/destroy/{id}','MisiController@destroy');
+
+Route::get('guru/slug/{slug}','GuruController@slug');
 
 Route::get('ujistr', function(){
     return $random = Str::random(64);

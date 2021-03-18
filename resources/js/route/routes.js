@@ -43,7 +43,7 @@ const userId = '';
 export default [
     { path: '/', component: Index },
     { path: '/error/access', component: AccessDenied },
-    { path: '/berita', component: Berita },
+    { path: '/berita/:slug', component: Berita },
     { path: '/beritaitem', component: BeritaItem },
     {
         path: '/kategori',

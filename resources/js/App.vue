@@ -47,10 +47,10 @@ export default {
     this.init();
     // this.setUrlImage("");
     // this.setUrlImage("http://200.77.10.3:8000/images"); //jaringan rumah
-    // this.setUrlImage("");
-    // this.setUrlImage("http://127.0.0.1:8000/images"); //lokal
     this.setUrlImage("");
-    this.setUrlImage("http://www.smkn1mepanga.sch.id/images"); //hosting
+    this.setUrlImage("http://127.0.0.1:8000/images"); //lokal
+    // this.setUrlImage("");
+    // this.setUrlImage("http://www.smkn1mepanga.sch.id/images"); //hosting
     this.setPendidikanDialog(false);
     this.$refs.isAdd = true;
   },
