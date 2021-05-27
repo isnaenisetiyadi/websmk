@@ -69,6 +69,12 @@ class GuruController extends Controller
 
         return $guru;
     }
+    public function showAllResource()
+    {
+        $guru = Guru::all();
+
+        return new GuruResource($guru);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -210,7 +216,7 @@ class GuruController extends Controller
         $data = null;
         $code = 400;
 
-        $guru = Guru::where('id', '=', $id)->with(['pendidikan'])->get();
+        $guru = Guru::where('id', '=', $id)->with(['pendidikan'])->first();
         if ($guru) {
             $status = "success";
             $message = "BACKEND: data guru diperoleh";
@@ -234,7 +240,7 @@ class GuruController extends Controller
         $data = null;
         $code = 400;
 
-        $guru = Guru::where('slug', '=', $slug)->with(['pendidikan'])->get();
+        $guru = Guru::where('slug', '=', $slug)->with(['pendidikan'])->first();
         if ($guru) {
             $status = "success";
             $message = "BACKEND: data guru diperoleh";
@@ -276,6 +282,7 @@ class GuruController extends Controller
             'data' => $data
         ], $code);
     }
+    
     /**
      * Show the form for editing the specified resource.
      *

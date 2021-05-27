@@ -1,5 +1,36 @@
 <template>
-  <div class="list-group-item">
+  <v-list-item class="py-0 my-0">
+    <v-list-item-action class="align-center mx-1">
+      <v-btn
+        plain
+        dark
+        icon
+        class="warning mt-3"
+        @click="disabled = !disabled"
+        v-show="disabled"
+      >
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+      <v-btn plain dark icon class="success mt-3" @click="onSave()" v-show="!disabled">
+        <v-icon>mdi-content-save</v-icon>
+      </v-btn>
+    </v-list-item-action>
+    <v-list-item-content class="mx-1">
+      <v-text-field
+        label="Kategori"
+        color="info"
+        v-model="nama"
+        :disabled="disabled"
+      ></v-text-field>
+    </v-list-item-content>
+    <v-list-item-action class="mx-1">
+      <v-btn plain dark icon class="error" @click="onDelete()">
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
+    </v-list-item-action>
+  </v-list-item>
+
+  <!-- <div class="list-group-item">
     <div v-if="!editKategori" class="input-group align-middle">
       <label for="" class="form-control">
         {{ kategori.nama }}
@@ -26,7 +57,7 @@
         <i class="icofont-save"></i>
       </button>
     </div>
-  </div>
+  </div> -->
 </template>
 <script>
 import Axios from "axios";
@@ -34,6 +65,7 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
+      disabled: true,
       editKategori: false,
       nama: "",
     };
@@ -58,14 +90,14 @@ export default {
             this.setSpinner(true);
             Axios.post("kategori/destroy/" + this.kategori.id)
               .then((response) => {
-                this.$parent.loadKategoris();
+                this.$emit("loadKategoris");
                 this.$notify({
                   group: "success",
                   title: "Sukses",
-                  text: "Satu guru: " + response.data.data.nama + " sudah dihapus",
+                  text: "Satu kategori: " + response.data.data.nama + " sudah dihapus",
                   type: "warn", //nilai lain, error dan success
                 });
-                this.setSpinner(false);
+                // this.setSpinner(false);
               })
               .catch((error) => {
                 this.$notify({
@@ -88,24 +120,24 @@ export default {
       this.setSpinner(true);
       Axios.post("kategori/update/" + this.kategori.id, data)
         .then((response) => {
-          this.$parent.loadKategoris();
-          this.editKategori = false;
+          // this.$parent.loadKategoris();
+          this.disabled = true;
           this.$notify({
             group: "success",
             title: "Sukses",
             text: "Satu kategori  sudah diedit",
             type: "success", //nilai lain, error dan success
           });
-          this.setSpinner(false);
+          // this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
             group: "error",
             title: "Gagal",
-            text: "SINI Beo " + error.message,
+            text: "BACKEND " + error.message,
             type: "error", //nilai lain, error dan success
           });
-          this.setSpinner(false);
+          // this.setSpinner(false);
         });
     },
   },

@@ -1,30 +1,26 @@
 <template>
-  <div>
-    <div class="col-md-12 py-2">
-      <div class="row">
-        <div class="col-md-8 px-0 d-flex align-items-center">
-          <div>
-            <div style="font-weight: bold; font-size: 8pt">{{ guru.nama }}</div>
-            <div style="font-size: 6pt">{{ guru.jabatan }}</div>
-          </div>
-        </div>
-        <div class="col-md-4 d-flex align-items-center text-center">
-          <button @click="onDelete()" class="btn btn-danger">
-            <!-- <i class="icofont-trash"></i> -->
-            <!-- <i class="icofont-close-circled"></i> -->
-            <i class="icofont-ui-close"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-layout row>
+    <v-flex xs12 sm4 class="mb-2 px-1" v-for="(guru, index) in gurus" :key="index">
+      <v-list-item router :to="'/guru/' + guru.slug" dark class="purple lighten-1">
+        <v-list-item-avatar>
+          <v-img :src="'/images/guru/' + guru.avatar"></v-img>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>{{ guru.nama }}</v-list-item-title>
+          <v-list-item-subtitle class="caption font-weight-thin">{{
+            guru.jabatan
+          }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
 import Axios from "axios";
 import { mapActions } from "vuex";
 export default {
-  props: ["guru"],
+  props: ["gurus"],
   data() {
     return {};
   },

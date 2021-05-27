@@ -9,7 +9,9 @@ use Illuminate\Support\Str;
 // use App\Http\Controllers\DB;
 use App\Berita;
 use App\Jurusan;
+
 class PostController extends Controller
+
 
 {
     /**
@@ -61,6 +63,27 @@ class PostController extends Controller
             $message = "BACKEND: gagal meng-unUtama data posting";
         }
         // dump($posts);
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ], $code);
+    }
+    public function findByBeritaId($id)
+    {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+        $post = Post::where('berita_id', '=', $id)->first();
+        if ($post) {
+            $status = "success";
+            $message = "BACKEND: Berita ini sudah diposting";
+            $data = $post->toArray();
+            $code = 200;
+        } else {
+            $message += "Berita ini belum diposting";
+        }
         return response()->json([
             'status' => $status,
             'message' => $message,
@@ -173,8 +196,56 @@ class PostController extends Controller
 
         $post = Post::where('id', '=', $id)->with(['berita.user'])->first();
         if ($post) {
-            $this->addViews($post->id);
+            // $this->addViews($post->id);
             $post = Post::where('id', '=', $id)->with(['berita.user'])->first();
+            $status = "success";
+            $message = "BACKEND: post->berita sudah diperoleh";
+            $data = $post->toArray();
+            $code = 200;
+        } else {
+            $message = "BACKEND: post->berita tidak dapat diperoleh";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data,
+        ], $code);
+    }
+    public function showUtama()
+    {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+
+        $post = Post::where('utama', '=', 1)->first();
+        if ($post) {
+            // $this->addViews($post->id);
+            $post = Post::where('utama', '=', 1)->with(['berita.user'])->first();
+            $status = "success";
+            $message = "BACKEND: post->berita sudah diperoleh";
+            $data = $post->toArray();
+            $code = 200;
+        } else {
+            $message = "BACKEND: post->berita tidak dapat diperoleh";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data,
+        ], $code);
+    }
+    public function showPostUtama()
+    {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+
+        $post = Post::where('utama', '=', 1)->first();
+        if ($post) {
+            // $this->addViews($post->id);
+            $post = Post::where('utama', '=', 1)->first();
             $status = "success";
             $message = "BACKEND: post->berita sudah diperoleh";
             $data = $post->toArray();
@@ -233,28 +304,28 @@ class PostController extends Controller
         //         $q->where('jurusan_id','=', $id);
         //     }])->get();
 
-            // ->groupBy('posts.id')->get();
-            
-            // $post = Post::with(['berita' => function ($q) use ($id) {
-            //     $q->with(['jurusan' =>function ($q) use ($id) {
-            //         $q->where('jurusans.id','=',$id);
-            //         // ->groupBy('jurusans.id');
-            //     }]);
-            // }])->get();
-            $post = Post::with(['berita' => function ($q){
-                $q->with(['jurusan']);
-            }])->get();
+        // ->groupBy('posts.id')->get();
 
-            // $post = Post::where
-            // $post = Berita::join('post')
-            // ->join(['jurusan' => function ($q) use ($id) {
-            //     $q->where('id','=',$id);
-            // }])->get();
-            // $post = DB::table('posts')
-            // ->rightJoin('beritas','id','=','posts.berita_id')
-            // ->join('berita_jurusan','berita_id','=','beritas.id')
-            // ->where('berita_jurusan.jurusan_id','=',$id)
-            // ->get();
+        // $post = Post::with(['berita' => function ($q) use ($id) {
+        //     $q->with(['jurusan' =>function ($q) use ($id) {
+        //         $q->where('jurusans.id','=',$id);
+        //         // ->groupBy('jurusans.id');
+        //     }]);
+        // }])->get();
+        $post = Post::with(['berita' => function ($q) {
+            $q->with(['jurusan']);
+        }])->get();
+
+        // $post = Post::where
+        // $post = Berita::join('post')
+        // ->join(['jurusan' => function ($q) use ($id) {
+        //     $q->where('id','=',$id);
+        // }])->get();
+        // $post = DB::table('posts')
+        // ->rightJoin('beritas','id','=','posts.berita_id')
+        // ->join('berita_jurusan','berita_id','=','beritas.id')
+        // ->where('berita_jurusan.jurusan_id','=',$id)
+        // ->get();
 
         if ($post) {
             $status = "success";
@@ -263,6 +334,64 @@ class PostController extends Controller
             $code = 200;
         } else {
             $message = "BACKEND: post->berita tidak dapat diperoleh";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data,
+        ], $code);
+    }
+    public function showRandom()
+    {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+        // $post = Post::with(['berita'])
+        //     ->andWith(['jurusan' => function ($q) use ($id) {
+        //         $q->where('id', $id);
+        //     }])->get();
+
+        // $post = DB::table('posts')
+        // ->leftJoin('beritas','beritas.id','=','posts.berita_id')
+        // ->join('berita_jurusan','berita_id','=','beritas.id')
+        // ->where('berita_jurusan.jurusan_id','=',$id)->get();
+
+        // $post = Berita::with('post')
+        //     ->with(['jurusan' => function ($q) use ($id) {
+        //         $q->where('jurusan_id','=', $id);
+        //     }])->get();
+
+        // ->groupBy('posts.id')->get();
+
+        // $post = Post::with(['berita' => function ($q) use ($id) {
+        //     $q->with(['jurusan' =>function ($q) use ($id) {
+        //         $q->where('jurusans.id','=',$id);
+        //         // ->groupBy('jurusans.id');
+        //     }]);
+        // }])->get();
+        $post = Post::with(['berita' => function ($q) {
+            $q->with(['jurusan']);
+        }])->inRandomOrder(5)->get();
+
+        // $post = Post::where
+        // $post = Berita::join('post')
+        // ->join(['jurusan' => function ($q) use ($id) {
+        //     $q->where('id','=',$id);
+        // }])->get();
+        // $post = DB::table('posts')
+        // ->rightJoin('beritas','id','=','posts.berita_id')
+        // ->join('berita_jurusan','berita_id','=','beritas.id')
+        // ->where('berita_jurusan.jurusan_id','=',$id)
+        // ->get();
+
+        if ($post) {
+            $status = "success";
+            $message = "BACKEND: post->berita secara RANDOM sudah diperoleh";
+            $data = $post->toArray();
+            $code = 200;
+        } else {
+            $message = "BACKEND: post->berita secara RANDOM tidak dapat diperoleh";
         }
         return response()->json([
             'status' => $status,

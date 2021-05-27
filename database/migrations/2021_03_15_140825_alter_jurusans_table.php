@@ -15,6 +15,7 @@ class AlterJurusansTable extends Migration
     {
         Schema::table('jurusans', function (Blueprint $table) {
             //
+            $table->string("kepanjangan")->nullable();
             $table->string("slug")->unique();
         });
     }

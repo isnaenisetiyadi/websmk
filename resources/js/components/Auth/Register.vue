@@ -1,123 +1,89 @@
 <template>
-  <div>
-    <div class="container-fluid banner" height="50px"></div>
-    <div class="container">
-      <div class="row mb-5 align-items-end">
-        <div class="col-md-12" data-aos="fade-up">
-          <h2>Registrasi User</h2>
-        </div>
-      </div>
-
-      <div class="col-md-12 mb-5" data-aos="fade-down">
-        <!-- <div class="card-body"> -->
-        <div class="row border">
-          <div class="col-md-6 py-md-3">
-            <div class="alert alert-danger" v-if="errors.length">
-              <ul class="mb-0">
-                <li v-for="(error, index) in errors" :key="index">
-                  {{ error }}
-                </li>
-              </ul>
-            </div>
-
-            <div class="form-group" data-aos="fade-left">
-              <Label>Nama</Label>
-              <input
-                class="form-control"
-                placeholder="Nama..."
-                type="text"
+  <v-row justify="center">
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn class="mt-3 mb-5" color="info" outlined rounded v-bind="attrs" v-on="on">
+          <v-icon>mdi-account-plus-outline</v-icon>
+          <span>Tambah User</span>
+        </v-btn>
+      </template>
+      <v-card>
+        <v-toolbar dark color="info">
+          <v-btn icon dark @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>User Baru</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn plain @click="onSave()">
+              <v-icon small>mdi-content-save</v-icon>
+              <span>Simpan</span>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-form ref="form">
+          <v-layout row class="ma-3" justify-center>
+            <v-flex xs12 sm6 md4 class="pa-2">
+              <v-text-field
+                color="info"
                 v-model="name"
-              />
-            </div>
-            <div class="form-group" data-aos="fade-right">
-              <Label>Username</Label>
-              <input
-                class="form-control"
-                placeholder="Username..."
-                type="text"
+                label="Nama"
+                required
+                :rules="role.required"
+                clearable
+              ></v-text-field>
+              <v-text-field
+                color="info"
                 v-model="username"
-              />
-            </div>
-            <div class="form-group" data-aos="fade-right">
-              <Label>Foto Profil</Label>
-              <input
-                v-if="!image"
-                class="form-controll"
-                type="file"
-                bg-color="white"
-                @change="onImageChange"
-                filled
-                label="Foto Profil"
-                multiple
-                accept=".jpg, image/*"
-                name="avatar"
-                @rejected="onRejected"
-                bottom-slots
-              />
-              <div v-else class="text-center m-lg">
-                <img :src="image" class="image-avatar" alt="" />
-                <div class="absolute-bottom text-subtitle1 text-center">
-                  <button @click="removeImage" class="button-image">
-                    <i class="icofont-ui-delete"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 py-md-3">
-            <div class="form-group" data-aos="fade-left" data-aos-delay="300">
-              <Label>Email</Label>
-              <input
-                class="form-control"
-                placeholder="Email..."
-                type="email"
-                v-model="email"
-              />
-            </div>
-            <div class="form-group" data-aos="fade-right" data-aos-delay="200">
-              <Label>Password</Label>
-              <input
-                class="form-control"
-                placeholder="Password..."
-                type="password"
+                block
+                label="Username"
+                required
+                :rules="role.required"
+                clearable
+              ></v-text-field>
+              <v-text-field
                 v-model="password"
-              />
-            </div>
-            <div class="form-group" data-aos="fade-left" data-aos-delay="100">
-              <Label>Level Akses</Label>
-              <!-- <select class="custom-select" v-model="role"> -->
-              <select class="form-control" v-model="role">
-                <option selected>Choose...</option>
-                <option value="SUPER_USER">SUPER_USER</option>
-                <option value="ADMIN">ADMIN</option>
-                <option value="GUEST">GUEST</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-12 p-md-2">
-            <button
-              @click="onSave()"
-              class="btn btn-success m-md-1"
-              data-aos="fade-left"
-              data-aos-delay="100"
-            >
-              Simpan
-            </button>
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showPassword ? 'text' : 'password'"
+                clearable
+                label="Password"
+                counter
+                @click:append="showPassword = !showPassword"
+              ></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6 md4 class="pa-2">
+              <v-text-field
+                color="info"
+                v-model="email"
+                block
+                label="Email"
+                required
+                :rules="role.email"
+                clearable
+              ></v-text-field>
+              <v-select :items="rules" v-model="role" label="Level Akses"> </v-select>
+              <v-file-input
+                :rules="role.avatar"
+                accept="image/png, image/jpeg, image/bmp"
+                prepend-icon="mdi-camera"
+                label="Avatar"
+                v-model="avatar"
+              ></v-file-input>
+            </v-flex>
 
-            <button
-              @click="onCancel()"
-              class="btn btn-warning m-md-1"
-              data-aos="fade-left"
-              data-aos-delay="300"
-            >
-              Tutup
-            </button>
-          </div>
-        </div>
-        <!-- </div> -->
-      </div>
-    </div>
-  </div>
+            <!-- <v-img
+              width="100"
+              :src="createImage(image)"></v-img> -->
+          </v-layout>
+        </v-form>
+      </v-card>
+    </v-dialog>
+  </v-row>
 </template>
 
 <script>
@@ -127,16 +93,31 @@ export default {
   props: ["index"],
   data() {
     return {
+      dialog: false,
+      showPassword: false,
       errors: [],
       name: "",
       username: "",
       password: "",
       email: "",
-      role: "",
+      role: {
+        required: [(value) => !!value || "Harus diisi."],
+        email: [
+          (value) => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return pattern.test(value) || "e-mail tidak valid";
+          },
+        ],
+        avatar: [
+          (value) =>
+            !value || value.size < 200000 || "Ukuran file tidak boleh lebih dari 2 MB!",
+        ],
+      },
 
       // DATA GAMBAR
       image: "",
       avatar: null,
+      rules: ["SUPER USER", "ADMIN", "GUEST"],
     };
   },
   methods: {
@@ -155,7 +136,7 @@ export default {
       dataQ.set("password", this.password);
       dataQ.set("avatar", this.avatar);
       dataQ.set("role", this.role);
-      this.setSpinner(true);
+
       Axios.post("auth/register", dataQ)
         .then((response) => {
           this.$notify({
@@ -163,8 +144,9 @@ export default {
             title: "Sukses",
             text: "User baru sudah ditambahkan",
           });
-          this.setSpinner(false);
-          this.$router.push("/users");
+          // this.$parent.loadUsers();
+          this.$emit("loadUsers");
+          this.dialog = false;
         })
         .catch((error) => {
           this.$notify({
@@ -173,11 +155,7 @@ export default {
             text: "ERROR : " + error.message,
             type: "error", //nilai lain, error dan success
           });
-          this.setSpinner(false);
         });
-    },
-    onCancel() {
-      this.$router.push("/users");
     },
 
     // METHOD UNTUK GAMBAR
@@ -196,6 +174,7 @@ export default {
         vm.image = e.target.result;
         // this.image = e.target.result;
       };
+      // reader.readAsDataURL(file);
       reader.readAsDataURL(file);
     },
     removeImage() {

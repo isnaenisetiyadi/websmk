@@ -1,126 +1,136 @@
 <template>
-  <section class="hero-section" id="hero">
-    <div class="wave">
-      <svg
-        width="100%"
-        height="355px"
-        viewBox="0 0 1920 355"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-      >
-        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-          <g id="Apple-TV" transform="translate(0.000000, -402.000000)" fill="#FFFFFF">
-            <path
-              d="M0,439.134243 C175.04074,464.89273 327.944386,477.771974 458.710937,477.771974 C654.860765,477.771974 870.645295,442.632362 1205.9828,410.192501 C1429.54114,388.565926 1667.54687,411.092417 1920,477.771974 L1920,757 L1017.15166,757 L0,757 L0,439.134243 Z"
-              id="Path"
-            ></path>
-          </g>
-        </g>
-      </svg>
-    </div>
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-12 hero-text-image">
-          <div class="row">
-            <div class="col-lg-4 text-center text-lg-left">
-              <h1 data-aos="fade-right">{{ sekolah.moto1 }}</h1>
-              <p class="mb-5" data-aos="fade-right" data-aos-delay="100">
-                {{ sekolah.moto2 }}
-              </p>
-              <p data-aos="fade-right" data-aos-delay="200" data-aos-offset="-500">
-                <!-- <a href="#" class="btn btn-outline-white">Mulai</a> -->
-                <!-- <a href="#" class="btn btn-outline-white">Mulai</a> -->
-                <router-link to="/berita" class="btn btn-outline-white"
-                  >Informasi</router-link
-                >
-              </p>
-            </div>
-            <div class="col-lg-4 text-center">
-              <img
-                :src="urlImage + '/sekolah/' + sekolah.logo"
-                alt="Image"
-                class="logo-smk"
-                data-aos="fade-down"
-                data-aos-delay="100"
-                v-if="sekolah.logo"
-              />
-              <img
-                @click="onViewJurusan(jurusan)"
-                :src="urlImage + '/jurusan/' + jurusan.logo"
-                alt="Image"
-                :class="'logo-' + index"
-                data-aos="fade-down"
-                data-aos-delay="100"
-                v-for="(jurusan, index) in jurusans"
-                :key="index"
-              />
-            </div>
-            <div class="col-lg-4 text-center text-lg-right">
-              <h3 class="mb-2 judul" style="color: white" data-aos="fade-up">Visi :</h3>
-              <p class="visi" data-aos="fade-right" data-aos-delay="100">
-                {{ sekolah.visi }}
-              </p>
+  <div>
+    <v-container class="pa-5">
+      <v-layout row>
+        <v-flex xs12 sm6 md4 class="mb-2 px-1">
+          <v-card color="#385F73" height="150" dark>
+            <div class="d-flex flex-no-wrap justify-space-between">
+              <div>
+                <v-card-title class="headline">
+                  <strong class="subtitle-1 font-weight-bold">
+                    {{ sekolah.moto1 }}
+                  </strong>
+                </v-card-title>
+                <v-card-subtitle class="subtitle">{{ sekolah.moto2 }}</v-card-subtitle>
 
-              <h3 class="mb-2 judul" style="color: white" data-aos="fade-up">Misi :</h3>
-              <p
-                class="misi"
-                data-aos="fade-right"
-                data-aos-delay="100"
-                v-for="(misi, index) in sekolah.misi"
-                :key="index"
+                <v-card-actions>
+                  <v-btn
+                    class="ml-2 mt-5"
+                    outlined
+                    rounded
+                    small
+                    router
+                    :to="'/berita/' + PostUtama.slug"
+                  >
+                    info
+                  </v-btn>
+                </v-card-actions>
+              </div>
+              <v-avatar
+                class="ma-3"
+                size="100"
+                tile
+                outlined
+                elevation="2"
+                v-if="sekolah.logo"
               >
-                {{ misi.text }}
-              </p>
+                <v-img :src="'images/sekolah/' + sekolah.logo"></v-img>
+              </v-avatar>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container mb-5">
-      <div class="row trending-frame" v-for="(kategori, index) in kategoris" :key="index">
-        <div class="caption text-center">{{ kategori.nama }} TERBARU :</div>
-        <div class="col-md-12">
-          <div class="row" v-if="kategori.berita[0]">
-            <div
-              class="trending-item"
-              v-for="(berita, index) in kategori.berita"
-              :key="index"
+            <!-- </v-img> -->
+          </v-card>
+        </v-flex>
+        <v-flex xs12 sm6 md4 class="mb-2 px-1">
+          <v-card color="#1F7087" height="150" v-if="sekolah.avatar">
+            <v-img
+              dark
+              class="white--text align-end"
+              height="150"
+              :src="'images/sekolah/' + sekolah.avatar"
             >
-              <Trending :berita="berita" />
-            </div>
-          </div>
-          <div class="row text-center" v-else style="width: 100%">
-            <div class="align-middle text-center" style="width: 100%">
-              <h1><i class="icofont-worried"></i></h1>
-              <span>Belum ada {{ kategori.nama }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+             
+              <div class="transparent-background">
+                <v-card-text>
+                  {{ sekolah.visi }}
+                </v-card-text>
+              </div>
+            </v-img>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 sm6 md4 class="mb-2 px-1">
+          <v-card color="#1F7087" dark height="150">
+            <v-card-title class="py-1">
+              <v-icon large left color="info"> mdi-circle-multiple </v-icon>
+              <span class="title font-weight-light overline">Misi Sekolah</span>
+            </v-card-title>
+            <v-card-text>
+              <v-carousel
+                cycle
+                height="100"
+                hide-delimiter-background
+                show-arrows-on-hover
+              >
+                <v-carousel-item v-for="(misi, index) in sekolah.misi" :key="index">
+                  <v-row class="fill-height px-4" align="center" justify="center">
+                    <div class="caption">{{ misi.text }}</div>
+                  </v-row>
+                </v-carousel-item>
+              </v-carousel>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+      <v-layout row>
+        <v-flex xs12 sm4 class="mb-2 px-1">
+          <BeritaRandom />
+        </v-flex>
+        <v-flex xs12 sm8 class="mb-2 px-1">
+          <BeritaUtama />
+        </v-flex>
+      </v-layout>
+      <v-divider></v-divider>
+      <h1 class="subtitle overline mt-5 mb-3">Arsip Berita</h1>
+      <!-- <v-subheader>Arsip Berita</v-subheader> -->
+      <!-- <v-layout row> -->
+      <BeritaArsip />
+      <!-- </v-layout> -->
+    </v-container>
+  </div>
 </template>
 
 <script>
 import Axios from "axios";
 import { mapActions, mapGetters } from "vuex";
+
 export default {
   components: {
     Trending: () => import("../components/Trending/Trending.vue"),
     // KoplakItem: () => import("components/KoplakItem.vue"),
+    BeritaRandom: () => import("./Berita/BeritaListView.vue"),
+    BeritaUtama: () => import("./Berita/BeritaUtamaView.vue"),
+    BeritaArsip: () => import("./Berita/BeritaArsip.vue"),
   },
   data() {
     return {
+      PostUtama: {},
       kategoris: {},
       sekolah: {},
       jurusans: {},
+      colors: [
+        "indigo",
+        "warning",
+        "pink darken-2",
+        "red lighten-1",
+        "deep-purple accent-4",
+      ],
+      slides: ["First", "Second", "Third", "Fourth", "Fifth"],
     };
   },
   mounted() {
     this.loadKategoris();
     this.loadSekolah();
     this.loadJurusans();
+    this.showPostUtama();
   },
   computed: {
     ...mapGetters({
@@ -132,6 +142,20 @@ export default {
       setSpinner: "spinner/set",
       setPropJurusan: "jurusan/set",
     }),
+    showPostUtama() {
+      Axios.get("post/showPostUtama")
+        .then((response) => {
+          this.PostUtama = response.data.data;
+        })
+        .catch((error) => {
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: error.message,
+            type: "error", //nilai lain, error dan success
+          });
+        });
+    },
     loadKategoris() {
       this.setSpinner(true);
       Axios.get("kategori/showBerita")
@@ -191,3 +215,8 @@ export default {
   },
 };
 </script>
+<style>
+.transparent-background {
+  background-color: rgba(0, 0, 0, 0.445);
+}
+</style>

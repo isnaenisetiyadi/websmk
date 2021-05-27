@@ -1,304 +1,29 @@
 <template>
-  <section class="section">
-    <div class="container-fluid banner" height="50px"></div>
-    <div
-      v-if="add"
-      class="container"
-      style="background-color: #c5f3fc; border-radius: 20px"
-    >
-      <div class="row mb-5 align-items-end">
-        <div class="col-md-12" data-aos="fade-down">
-          <h2>Entry Berita</h2>
-          <p class="mb-0">
-            Fasilitas entry pengumuman, berita dan informasi lain untuk siswa, guru dan
-            civitas akademik lainnya.
-          </p>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-12 mb-5 mb-md-0" data-aos="fade-down">
-          <div class="row">
-            <div class="col-md-6 form-group">
-              <label for="name">Judul</label>
-              <input
-                type="text"
-                v-model="judul"
-                class="form-control"
-                data-rule="minlen:4"
-                data-msg="Please enter at least 4 chars"
-              />
-              <div class="validate"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <label for="name">Kategori</label>
-
-              <select class="form-control" v-model="kategori_id">
-                <option selected value="">Kategori...</option>
-                <option
-                  v-for="(kategori, index) in kategoris"
-                  :key="index"
-                  v-bind:value="kategori.id"
-                >
-                  {{ kategori.nama }}
-                </option>
-              </select>
-              <div class="validate"></div>
-            </div>
-
-            <div class="col-md-12 form-group">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="row">
-                    <div class="col-md">
-                      <div class="form-group">
-                        <Label>Gambar Tumbnail</Label>
-                        <input
-                          v-if="!image"
-                          class="form-controll"
-                          type="file"
-                          bg-color="white"
-                          @change="onImageChange"
-                          filled
-                          label="Foto Profil"
-                          multiple
-                          accept=".jpg, image/*"
-                          name="avatar"
-                          @rejected="onRejected"
-                          bottom-slots
-                        />
-                        <div v-else class="m-lg">
-                          <img :src="getImage(image)" style="width: 100%" alt="" />
-                          <div class="absolute-bottom-guru text-subtitle1 text-center">
-                            <button @click="removeImage" class="button-image">
-                              <i class="icofont-ui-delete"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <small class="text-danger"> </small>
-                      </div>
-                    </div>
-                    <div class="col-md">
-                      <label for="name">Deskripsi</label>
-                      <textarea
-                        class="form-control"
-                        v-model="deskripsi"
-                        cols="30"
-                        rows="5"
-                        data-rule="required"
-                        data-msg="Please write something for us"
-                      ></textarea>
-                      <div class="validate"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Tampil juga di Jurusan</label>
-                    <MultiSelect
-                      placeholder="Pilih..."
-                      v-model="jurusanDipilih"
-                      mode="tags"
-                      valueProp="id"
-                      label="nama"
-                      berit
-                      :searchable="true"
-                      :options="jurusans"
-                      @deselect="onDeleteJurusan"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label>Tampil juga di Organisasi</label>
-                    <MultiSelect
-                      placeholder="Pilih..."
-                      v-model="organisasiDipilih"
-                      mode="tags"
-                      valueProp="id"
-                      label="nama"
-                      :searchable="true"
-                      :options="organisasis"
-                      @deselect="onDeleteOrganisasi"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-12 form-group">
-              <label for="name">Isi Berita</label>
-              <quill-editor v-model="konten" :options="editorOption" class="editor" />
-            </div>
-
-            <div class="col-md-12 form-group">
-              <button
-                @click="onSave()"
-                class="btn btn-success m-md-1"
-                data-aos="fade-left"
-                data-aos-delay="100"
-              >
-                Simpan
-              </button>
-              <button
-                @click="onPost(id)"
-                class="btn btn-success m-md-1"
-                data-aos="fade-left"
-                data-aos-delay="100"
-                v-if="id && getUsers.role === 'SUPER USER'"
-              >
-                Post
-              </button>
-              <button
-                disabled
-                @click="onPost(id)"
-                class="btn btn-secondary m-md-1"
-                data-aos="fade-left"
-                data-aos-delay="100"
-                v-else
-              >
-                Post
-              </button>
-
-              <button
-                @click="onCancel()"
-                class="btn btn-warning m-md-1"
-                data-aos="fade-left"
-                data-aos-delay="300"
-              >
-                Tutup
-              </button>
-            </div>
-          </div>
-          <!-- </form> -->
-        </div>
-      </div>
-    </div>
-    <!-- KODE UNTUK MENAMPILKAN DATA USER DALAM BENTUK TABEL -->
-    <div class="container">
-      <div class="card mb-5">
-        <div class="card-header">
-          <!-- <div class="float-left card-judul" data-aos="fade-left">Post List</div>
-
-          <div class="input-group-append float-right" data-aos="fade-right">
-            <button @click="onAdd" class="btn btn-success">
-              <i class="icofont-ui-add"></i>
-            </button>
-          </div> -->
-          <div class="input-group mb-3">
-            <input
-              disabled
-              type="text"
-              class="form-control"
-              placeholder="Daftar Berita"
-              aria-label="Daftar Berita"
-              aria-describedby="basic-addon2"
-            />
-            <span class="input-group-text span-btn" id="basic-addon2" @click="onAdd"
-              ><i class="icofont-ui-add"></i
-            ></span>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col md-6">
-                <div class="input-group mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Cari dengan judul"
-                    aria-label="Cari dengan judul"
-                    aria-describedby="basic-addon2"
-                    v-model="judulKeyword"
-                    v-on:keyup="validasiKeyboard"
-                  />
-                  <span
-                    class="input-group-text span-btn"
-                    id="basic-addon2"
-                    @click="isiBerita()"
-                  >
-                    <i class="icofont-search"></i>
-                  </span>
-                </div>
-              </div>
-              <div class="col md-6" v-if="getUsers.role === 'SUPER USER'">
-                <select class="form-control" v-model="user_id">
-                  <option selected value="">Pilih Admin...</option>
-                  <option
-                    v-for="(user, index) in users"
-                    :key="index"
-                    v-bind:value="user.id"
-                  >
-                    {{ user.name }}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <table class="table">
-            <thead>
-              <tr data-aos="fade-up">
-                <!-- <th scope="col">#</th> -->
-                <th scope="col">Judul</th>
-                <th scope="col">Deskripsi</th>
-                <th scope="col">Tanggal</th>
-                <th scope="col">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(berita, index) in beritas.data"
-                :key="index"
-                data-aos="fade-up"
-                data-aos-delay="300"
-              >
-                <!-- <berita-list :berita="berita"/> -->
-                <!-- <td scope="row">{{index+1}}</td> -->
-                <td>{{ berita.judul }}</td>
-                <td>{{ berita.deskripsi }}</td>
-                <td>
-                  {{ berita.created_at | formatDate }} <br />
-                  {{ berita.created_at | formatTime }}
-                </td>
-
-                <td>
-                  <i
-                    class="icofont-eye-alt text-success link-i"
-                    @click="onView(berita.id)"
-                  ></i>
-                  <i
-                    class="icofont-trash link-i text-danger"
-                    @click="onDelete(berita.id)"
-                  ></i>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="d-flex justify-content-center">
-            <!-- {{ this.users.links() }} -->
-          </div>
-          <div class="mb-5">
-            <pagination
-              :data="beritas"
-              @pagination-change-page="isiBerita"
-              align="center"
-            ></pagination>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- AKHIR DARI KODE UNTUK MENAMPILKAN DATA USER DALAM BENTUK TABEL -->
-  </section>
+  <v-container>
+    <h1 class="subtitle overline mt-1 mb-2">Berita</h1>
+    <BeritaAdd />
+    <v-layout row class="px-1">
+      <v-flex xs12 sm6 md4 class="pa-2" v-for="(berita, index) in beritas.data" :key="index">
+        <BeritaList :beritaParent="berita" @isiBerita="isiBerita" />
+      </v-flex>
+     
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Axios from "axios";
 import MultiSelect from "@vueform/multiselect/dist/multiselect.vue2.js";
+import BeritaList from "./BeritaList";
+import BeritaAdd from "./BeritaAdd";
 export default {
   components: {
     // VueEditor,
     BeritaList: () => import("./BeritaList"),
     MultiSelect,
+    BeritaList,
+    BeritaAdd
   },
   data() {
     return {
@@ -533,12 +258,12 @@ export default {
         });
     },
     isiJurusan() {
-      this.setSpinner(true);
+      // this.setSpinner(true);
       Axios.get("jurusan/getAll")
         .then((response) => {
           this.jurusans = response.data;
           // console.log(this.jurusans);
-          this.setSpinner(false);
+          // this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -547,15 +272,15 @@ export default {
             text: error.data,
             type: "error", //nilai lain, error dan success
           });
-          this.setSpinner(false);
+          // this.setSpinner(false);
         });
     },
     isiOrganisasi() {
-      this.setSpinner(true);
-      Axios.get("organisasi/getall")
+      // this.setSpinner(true);
+      Axios.get("organisasi/getAll")
         .then((response) => {
           this.organisasis = response.data;
-          this.setSpinner(false);
+          // this.setSpinner(false);
           // console.log(this.jurusans);
         })
         .catch((error) => {
@@ -565,7 +290,7 @@ export default {
             text: error.data,
             type: "error", //nilai lain, error dan success
           });
-          this.setSpinner(false);
+          // this.setSpinner(false);
         });
     },
 

@@ -1,56 +1,34 @@
 <template>
-  <section class="section">
-    <div class="container-fluid banner" height="50px"></div>
-    <div class="container">
-      <div class="input-group mb-3">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Cari dengan nama guru"
-          aria-label="Cari dengan nama guru"
-          aria-describedby="basic-addon2"
-          v-model="namaKeyword"
-          v-on:keyup="validasiKeyboard"
-        />
-        <span
-          class="input-group-text span-btn"
-          id="basic-addon2"
-          @click="loadGurus()"
-        >
-          <i class="icofont-search"></i>
-        </span>
-      </div>
-    </div>
-    <div class="container mb-5" style="min-height: 100px; padding-bottom: 10px">
-      <div class="row">
-        <!-- <GuruItem /> -->
-        <div class="guru-container" v-for="(guru, index) in gurus.data" :key="index">
-          <GuruItem :guru="guru" :warna="index" />
+  <v-container>
+    <h1 class="subtitle overline mt-1 mb-2">Guru</h1>
+    <GuruAdd @loadGurus="loadGurus" />
+    <v-layout row>
+      <v-flex xs12 sm6 md4 class="pa-2" v-for="guru in gurus.data" :key="guru.nama">
+        <GuruItem :guruParent="guru" />
+      </v-flex>
+    </v-layout>
+    <v-layout row>
+      <v-flex xs12>
+        <div class="text-center">
+          <v-pagination
+            v-model="page"
+            @input="loadGurus"
+            :length="gurus.meta.last_page"
+            v-if="gurus.data"
+          ></v-pagination>
         </div>
-      </div>
-      <!-- <button @click="ujiStrVue()" class="btn btn-primary">Uji Random Str</button> -->
-      <div class="mb-5">
-        <pagination
-          :data="gurus"
-          @pagination-change-page="loadGurus"
-          align="center"
-        ></pagination>
-      </div>
-      <div class="sticky top-right">
-        <button @click="onAdd()">
-          <i class="icofont-ui-add"></i>
-        </button>
-      </div>
-    </div>
-  </section>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 import Axios from "axios";
 import GuruItem from "../../components/Guru/GuruItem.vue";
+import GuruAdd from "../../components/Guru/GuruAdd";
 import { mapActions, mapGetters } from "vuex";
 export default {
-  components: { GuruItem },
+  components: { GuruItem, GuruAdd },
   data() {
     return {
       gurus: {},
@@ -59,28 +37,31 @@ export default {
     };
   },
   watch: {
-    namaKeyword: function(){
+    namaKeyword: function () {
       if (!this.namaKeyword) {
         this.loadGurus();
-      } 
-    }
+      }
+    },
   },
   name: "guru-page",
   mounted() {
-    this.loadGurus();
+    this.loadGurus(this.page);
   },
   methods: {
     ...mapActions({
       setSpinner: "spinner/set",
     }),
-    validasiKeyboard: function(e) {
+    validasiKeyboard: function (e) {
       if (e.keyCode === 13) {
         this.loadGurus();
-      } 
+      }
     },
     loadGurus(page) {
-      this.setSpinner(true);
+      // this.setSpinner(true);
       // Axios.get("guru/showByName/?page=" + page + "/" + this.namaKeyword )
+      // if (this.gurus.data) {
+      //   page = this.gurus.meta.last_page;
+      // }
       let keyword = "";
       if (this.namaKeyword) {
         keyword = "/" + this.namaKeyword;
@@ -88,7 +69,8 @@ export default {
           // Axios.get("gurus?page=" + page)
           .then((response) => {
             this.gurus = response.data;
-            this.setSpinner(false);
+            // this.setSpinner(false);
+            // console.log(this.gurus)
           })
           .catch((error) => {
             this.$notify({
@@ -97,14 +79,15 @@ export default {
               text: "ERROR : " + error.message,
               type: "error", //nilai lain, error dan success
             });
-            this.setSpinner(false);
+            // this.setSpinner(false);
           });
       } else {
         // Axios.get("guru/showByName" + keyword + "?page=" + page)
-          Axios.get("gurus?page=" + page)
+        Axios.get("gurus?page=" + page)
           .then((response) => {
             this.gurus = response.data;
-            this.setSpinner(false);
+            // this.setSpinner(false);
+            // console.log(this.gurus);
           })
           .catch((error) => {
             this.$notify({
@@ -113,7 +96,7 @@ export default {
               text: "ERROR : " + error.message,
               type: "error", //nilai lain, error dan success
             });
-            this.setSpinner(false);
+            // this.setSpinner(false);
           });
       }
     },

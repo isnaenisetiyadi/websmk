@@ -1,5 +1,5 @@
 <template>
-  <section class="section">
+  <!-- <section class="section">
     <div class="container-fluid banner" height="50px"></div>
     <div class="container">
       <div class="row">
@@ -18,7 +18,37 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
+  <v-container>
+    <h1 class="subtitle overline mt-1 mb-2">Kategori Berita</h1>
+    <div v-if="kategoris">
+      <v-list class="ma-0 pa-0">
+        <v-row class="ma-0 pa-0">
+          <v-flex
+            xs12
+            sm6
+            v-for="kategori in kategoris"
+            :key="kategori.nama"
+            class="pa-2"
+          >
+            <v-card class="pa-0 ma-0">
+              <KategoriItem :kategori="kategori" @loadKategoris="loadKategoris" />
+            </v-card>
+          </v-flex>
+          <v-flex xs12 sm6 class="pa-2">
+            <v-card class="pa-0 ma-0" v-show="add">
+              <KategoriAdd @onAdd="onAdd" @loadKategoris="loadKategoris"/>
+            </v-card>
+            <v-card class="pa-0 ma-0" v-show="!add">
+              <v-btn @click="add = !add" block class="success pa-5">
+                <v-icon large>mdi-plus</v-icon>
+              </v-btn>
+            </v-card>
+          </v-flex>
+        </v-row>
+      </v-list>
+    </div>
+  </v-container>
 </template>
 <script>
 import KategoriItem from "../../components/Kategori/KategoriItem.vue";
@@ -29,7 +59,7 @@ export default {
   components: { KategoriItem, KategoriAdd },
   data() {
     return {
-      kategoriAdd: false,
+      add: false,
       kategoris: {},
     };
   },
@@ -41,14 +71,15 @@ export default {
       setSpinner: "spinner/set",
     }),
     onAdd() {
-      this.kategoriAdd ? (this.kategoriAdd = false) : (this.kategoriAdd = true);
+      this.add ? (this.add = false) : (this.add = true);
     },
     loadKategoris() {
-      this.setSpinner(true);
+      // this.setSpinner(true);
       Axios.get("kategori/showBerita")
         .then((response) => {
           this.kategoris = response.data.data;
-          this.setSpinner(false);
+          // this.setSpinner(false);
+
         })
         .catch((error) => {
           this.$notify({
@@ -57,9 +88,11 @@ export default {
             text: error.message,
             type: "error", //nilai lain, error dan success
           });
-          this.setSpinner(false);
+          // this.setSpinner(false);
         });
     },
+    
   },
+
 };
 </script>

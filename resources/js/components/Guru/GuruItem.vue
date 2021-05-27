@@ -1,222 +1,98 @@
 <template>
-  <div>
-    <div
-      class="guru"
-      data-toggle="collapse"
-      data-aos="fade-down"
-      data-aos-delay="300"
-      aria-expanded="false"
-      :data-target="'#gu' + guru.id"
-      :id="guru.id"
-    >
-      <div :class="['guru-item', 'personal-item-' + warna]">
-        <div v-if="!edit">
-          <h6>{{ guru.nama }}</h6>
-          <span>{{ guru.jabatan }}</span>
-        </div>
-        <div v-else>
-          <h6>Edit Data Guru</h6>
-          <span>{{ guru.nama }}</span>
-        </div>
-      </div>
-      <div class="guru-avatar">
-        <div v-if="!edit">
-          <div v-if="guru.avatar">
-            <img :src="urlImage + '/guru/' + guru.avatar" alt="" />
-          </div>
-        </div>
-        <div v-else>
-          <i class="icofont-edit"></i>
-        </div>
-      </div>
-    </div>
-    <div
-      class="guru-body-container collapse"
-      :id="'gu' + guru.id"
-      :aria-labelledby="guru.id"
-    >
-      <div class="guru-body">
-        <div v-if="!edit">
-          <table class="table guru-table">
-            <tr>
-              <td>Nip</td>
-              <td>{{ guru.nip }}</td>
-            </tr>
-            <tr>
-              <td>Nuptk</td>
-              <td>{{ guru.nuptk }}</td>
-            </tr>
-            <tr>
-              <td>Alamat</td>
-              <td>{{ guru.alamat }}</td>
-            </tr>
-            <tr>
-              <td>Email</td>
-              <td>{{ guru.email }}</td>
-            </tr>
-            <tr>
-              <td>HP</td>
-              <td>{{ guru.kontak }}</td>
-            </tr>
-          </table>
-          <div class="guru-btn-group text-right">
-            <button @click="onEdit()" class="btn btn-success btn-guru">
-              <i class="icofont-edit"></i>
-            </button>
-            <button @click="onDelete()" class="btn btn-danger btn-guru">
-              <i class="icofont-trash"></i>
-            </button>
-          </div>
-        </div>
-        <div v-else>
-          <table class="table guru-table">
-            <tr>
-              <td class="align-middle">Nama</td>
-              <td>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Nama"
-                  v-model="nama"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">Nip</td>
-              <td>
-                <input type="text" class="form-control" placeholder="Nip" v-model="nip" />
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">Nuptk</td>
-              <td>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Nuptk"
-                  v-model="nuptk"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">Alamat</td>
-              <td>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="alamat"
-                  v-model="alamat"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">Email</td>
-              <td>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Email"
-                  v-model="email"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">HP</td>
-              <td>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Kontak"
-                  v-model="kontak"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">Jabatan</td>
-              <td>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Jabatan"
-                  v-model="jabatan"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">Foto</td>
-              <td>
-                <div>
-                  <input
-                    v-if="!image"
-                    class="form-controll"
-                    type="file"
-                    bg-color="white"
-                    @change="onImageChange"
-                    filled
-                    label="Foto Profil"
-                    multiple
-                    accept=".jpg, image/*"
-                    name="avatar"
-                    @rejected="onRejected"
-                    bottom-slots
-                  />
-                  <div v-else class="m-lg">
-                    <img :src="getImage(image)" class="image-avatar" alt="" />
-                    <div class="absolute-bottom-guru text-subtitle1 text-center">
-                      <button @click="removeImage" class="button-image">
-                        <i class="icofont-ui-delete"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
+  <v-card class="mx-auto" max-width="344" v-if="guru">
+    <v-card-title class="white--text transparent-background py-1">
+      <span class="caption font-weight-bold">{{ guru.nama }}</span>
 
-            <!-- <tr>
-            </tr> -->
-          </table>
-          <div class="col-md-12">
-            <div class="row mb-5">
-              <div class="ml-3 text-dark">Pendidikan</div>
-              <div class="sticky top-right">
-                <button @click="onAdd()">
-                  <i class="icofont-ui-add"></i>
-                </button>
-              </div>
-            </div>
-            <div class="row mb-5">
-              <div
-                class="col-md-12"
-                v-for="(pendidikan, index) in guru.pendidikan"
-                :key="index"
-              >
-                <PendidikanItem :pendidikan="pendidikan" />
-              </div>
-            </div>
-            <div class="guru-btn-group text-right">
-              <button @click="onEdit()" class="btn btn-primary btn-guru">
-                <!-- <i class="icofont-arrow-left"></i> -->
-                <i class="icofont-reply"></i>
-              </button>
-              <button @click="onSave()" class="btn btn-success btn-guru">
-                <i class="icofont-save"></i>
-              </button>
-            </div>
+      <v-spacer></v-spacer>
+
+      <v-menu bottom left color="rgba(0, 0, 0, 0.445)" offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn dark icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list class="pa-0">
+          <v-list-item class="pa-0 ma-0">
+            <!-- <BeritaEdit :berita="berita" @isiBerita="isiBeritaLagi" /> -->
+            <GuruEdit :guru="guru" @isiGuruLagi="isiGuruLagi" />
+          </v-list-item>
+          <v-divider></v-divider>
+          <v-list-item class="pa-0 ma-0">
+            <v-btn color="error" plain @click="onDelete()">
+              <v-icon>mdi-delete-outline</v-icon>
+              <span>Hapus</span>
+            </v-btn>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-card-title>
+    <v-list-item three-line>
+      <v-list-item-avatar size="80" color="grey">
+        <img :src="'/images/guru/' + guru.avatar" v-if="guru.avatar" />
+        <img src="/img/person-1.png" v-else />
+      </v-list-item-avatar>
+      <v-list-item-content three-line>
+        <!-- <div class="overline mb-4">{{ guru.jabatan }}</div> -->
+        <v-list-item-title class="overline">{{guru.jabatan}}</v-list-item-title>
+        <v-list-item-title class="caption">
+          {{ guru.nip }} / {{ guru.nuptk }}
+        </v-list-item-title>
+        <v-list-item-subtitle class="caption font-weight-thin"
+          >{{ guru.alamat }} <br />
+          <v-icon small>mdi-phone</v-icon>{{ guru.kontak }}</v-list-item-subtitle
+        >
+        <!-- <div class="overline mb-4">{{ guru.jabatan }}</div>
+        <v-list-item-title class="caption mb-1">
+          {{ guru.nip }} / {{ guru.nuptk }}
+        </v-list-item-title>
+        <v-list-item-subtitle class="caption font-weight-thin"
+          >{{ guru.alamat }} <br />
+          <v-icon small>mdi-phone</v-icon>{{ guru.kontak }}</v-list-item-subtitle
+        > -->
+      </v-list-item-content>
+    </v-list-item>
+    <v-card-actions class="py-0 my-0 info">
+      <v-btn color="white darken-1" text @click="show = !show"> Pendidikan </v-btn>
+      <v-spacer></v-spacer>
+        <PendidikanAdd :guru="guru" @isiGuruLagi="isiGuruLagi" v-show="show" />
+      <v-btn icon @click="show = !show">
+        <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
+      </v-btn>
+    </v-card-actions>
+
+    <v-expand-transition>
+      <div v-show="show">
+        <!-- <v-divider></v-divider> -->
+
+        <div v-if="guru.pendidikan[0]">
+          <div v-for="pendidikan in guru.pendidikan" :key="pendidikan.index">
+            <PendidikanItem :pendidikanParent="pendidikan" @isiGuruLagi="isiGuruLagi"/>
           </div>
         </div>
+        <div v-else>
+          <v-list>
+            <v-list-item class="text-center">
+              <v-list-item-subtitle class="caption font-weight-thin"
+                >Tidak ada data Pendidikan</v-list-item-subtitle
+              >
+            </v-list-item>
+          </v-list>
+        </div>
       </div>
-    </div>
-    <!-- batas -->
-  </div>
+    </v-expand-transition>
+  </v-card>
 </template>
 
 <script>
 import Axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 import PendidikanItem from "../../components/Pendidikan/PendidikanItem.vue";
+import PendidikanAdd from "../Pendidikan/PendidikanAdd";
+import GuruEdit from "./GuruEdit";
 export default {
-  components: { PendidikanItem },
-  props: ["guru", "warna"],
+  components: { PendidikanItem, GuruEdit, PendidikanAdd },
+  props: ["guruParent"],
   computed: {
     ...mapGetters({
       urlImage: "constant/urlImage",
@@ -224,18 +100,12 @@ export default {
   },
   data() {
     return {
-      edit: false,
-
-      nama: "",
-      nip: "",
-      nuptk: "",
-      alamat: "",
-      email: "",
-      kontak: "",
-      jabatan: "",
-      avatar: null,
-      image: "",
+      show: false,
+      guru: undefined,
     };
+  },
+  mounted() {
+    this.guru = this.guruParent;
   },
 
   methods: {
@@ -245,14 +115,7 @@ export default {
       modeAddPendidikan: "addMode/set",
       setSpinner: "spinner/set",
     }),
-    onEdit() {
-      if (this.edit) {
-        this.edit = false;
-      } else {
-        this.isiData();
-        this.edit = true;
-      }
-    },
+
     onAdd() {
       this.setPendidikanDialog(true);
       // this.$refs.isAdd = false;
@@ -293,14 +156,14 @@ export default {
           this.setSpinner(false);
         });
     },
-    reloadGuru() {
-      this.setSpinner(true);
+    isiGuruLagi() {
+      // this.setSpinner(true);
       Axios.get("guru/show/" + this.guru.id)
 
         .then((response) => {
           // console.log(response.data.data);
           this.guru = response.data.data;
-          this.setSpinner(false);
+          // this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -309,7 +172,7 @@ export default {
             text: `ERROR ` + error.message,
             type: "error", //nilai lain, error dan success
           });
-          this.setSpinner(false);
+          // this.setSpinner(false);
         });
     },
     onDelete() {
@@ -343,56 +206,6 @@ export default {
         },
       });
     },
-    isiData() {
-      this.nama = this.guru.nama;
-      this.nip = this.guru.nip;
-      this.nuptk = this.guru.nuptk;
-      this.alamat = this.guru.alamat;
-      this.email = this.guru.email;
-      this.kontak = this.guru.kontak;
-      this.jabatan = this.guru.jabatan;
-      this.avatar = this.guru.avatar;
-      this.image = this.guru.avatar;
-    },
-    // METHOD UNTUK GAMBAR
-    getImage(image) {
-      if (this.avatar != "" && this.avatar.length > 0 && this.avatar != null) {
-        return this.urlImage + "/guru/" + image;
-      } else {
-        return image;
-      }
-    },
-    onImageChange(e) {
-      var files = e.target.files || e.dataTransfer.files;
-      this.avatar = files[0];
-      if (files.length) {
-        return this.createImage(files[0]);
-      }
-    },
-    createImage(file) {
-      var image = new Image();
-      var reader = new FileReader();
-      var vm = this;
-      reader.onload = (e) => {
-        vm.image = e.target.result;
-        // this.image = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    },
-    removeImage() {
-      // console.log(this.image);
-      this.image = "";
-      this.avatar = "";
-    },
-    onRejected(rejectedEntries) {
-      this.$notify({
-        group: "error",
-        title: "Gagal",
-        text: `${rejectedEntries.length} file(s) did not pass validation constraints`,
-        type: "error", //nilai lain, error dan success
-      });
-    },
-    // AKHIR METHOD GAMBAR
   },
 };
 </script>

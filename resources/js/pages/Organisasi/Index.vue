@@ -1,11 +1,26 @@
 <template>
-  <section class="section">
+  <v-container>
+    <h1 class="subtitle overline mt-1 mb-2">Organisasi</h1>
+    <OrganisasiTambah />
+    <v-layout row>
+      <v-flex
+        xs12
+        sm6
+        md4
+        class="pa-2"
+        v-for="organisasi in organisasis.data"
+        :key="organisasi.id"
+      >
+        <organisasi-item :organisasiParent="organisasi" />
+      </v-flex>
+    </v-layout>
+  </v-container>
+  <!-- <section class="section">
     <div class="container-fluid banner" height="50px"></div>
     <organisasi-tambah v-if="addOrganisasi" :organisasi="organisasiEdit" />
     <div class="container mb-5" style="min-height: 100px">
       <div class="row">
-        <!-- <GuruItem /> -->
-
+      
         <div
           class="guru-container"
           v-for="(organisasi, index) in organisasis.data"
@@ -14,7 +29,6 @@
           <organisasi-item :organisasi="organisasi" :warna="index" />
         </div>
       </div>
-      <!-- <button @click="ujiStrVue()" class="btn btn-primary">Uji Random Str</button> -->
       <div class="mb-5">
         <pagination
           :data="organisasis"
@@ -28,7 +42,7 @@
         </button>
       </div>
     </div>
-  </section>
+  </section> -->
 </template>
 
 <script>

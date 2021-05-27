@@ -12,11 +12,12 @@ class OrganisasiController extends Controller
     //
     public function index()
     {
-        $organisasi = Organisasi::paginate(5);
+        $organisasi = Organisasi::with(['program'])
+        ->paginate(5);
         // return $organisasi;
         return new OrganisasiResource($organisasi);
     }
-    public function getall()
+    public function getAll()
     {
         $organisasi = Organisasi::all();
         return $organisasi;
@@ -46,6 +47,7 @@ class OrganisasiController extends Controller
             'data' => $data,
         ], $code);
     }
+    
     public function store(Request $request)
     {
         // if (Auth::user()) {
@@ -90,7 +92,7 @@ class OrganisasiController extends Controller
         $code = 400;
 
         $organisasi = Organisasi::where('id', '=', $id)->with(['program'])
-            ->get();
+            ->first();
         if ($organisasi) {
             $status = "success";
             $message = "BACKEND: data organisasi diperoleh";
@@ -114,7 +116,7 @@ class OrganisasiController extends Controller
         $code = 400;
 
         $organisasi = Organisasi::where('slug', '=', $slug)->with(['program'])
-            ->get();
+            ->first();
         if ($organisasi) {
             $status = "success";
             $message = "BACKEND: data organisasi diperoleh";

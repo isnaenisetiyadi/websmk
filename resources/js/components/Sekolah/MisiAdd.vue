@@ -1,142 +1,118 @@
 <template>
-  <div class="list-group-item">
-    <div class="input-group" style="margin-top: 0; margin-bottom: 0">
-      <span class="input-group-text">
-        <!-- <img :src="urlImage + '/guru/' + guru.avatar" alt="" /> -->
-        <input
-                    v-if="!image"
-                    class="form-controll"
-                    type="file"
-                    bg-color="white"
-                    @change="onImageChange"
-                    filled
-                    multiple
-                    accept=".jpg, image/*"
-                    name="avatar"
-                    @rejected="onRejected"
-                    bottom-slots
-                  />
-        <img :src="getImage(image)" style="width: 30px" v-else />
-      </span>
+  <div class="text-center">
+    <v-btn plain dark @click="sheet = !sheet">
+      <v-icon>mdi-plus</v-icon>
+      <!-- <span class="caption">Berkomentar</span> -->
+    </v-btn>
+    <v-bottom-sheet v-model="sheet" class="primary" hide-overlay>
+      <v-sheet>
+        <v-toolbar dark color="info">
+          <v-btn icon dark @click="sheet = !sheet">
+            <v-icon x-large>mdi-menu-down</v-icon>
+          </v-btn>
+          <h1 class="overline">Tambah Misi</h1>
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn plain @click="onSave()" :disabled="!text">
+              <v-icon small>mdi-content-save</v-icon>
+              <span>Simpan</span>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
 
-      <textarea class="form-control" aria-label="With textarea" v-model="text"></textarea>
-      <span class="input-group-text">
-        <button @click="onCancel()" class="btn btn-outline-primary" type="button">
-          <i class="icofont-reply"></i>
-        </button>
-        <button @click="onSave()" class="btn btn-outline-primary" type="button">
-          <i class="icofont-save"></i>
-        </button>
-      </span>
-      <!-- <input
-        type="text"
-        class="form-control"
-        placeholder="Misi"
-        aria-label="Recipient's username with two button addons"
-        v-model="text"
-      /> -->
-    </div>
+        <v-layout row class="ma-3" justify-center>
+          <v-flex xs12 sm6 class="pa-2">
+            <v-textarea label="Misi" v-model="text" color="info"></v-textarea>
+          </v-flex>
+          <v-flex xs12 sm6 class="pa-2">
+            <v-card>
+              <h3 class="subtitle-1">Avatar</h3>
+              <UploadAvatar
+                :max="1"
+                fileError="Jenis file tidak didukung"
+                uploadMsg="Tab atau Klik untuk memilih file"
+                @change="rubahAvatar"
+              />
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-sheet>
+    </v-bottom-sheet>
   </div>
 </template>
 <script>
 import Axios from "axios";
-import { mapActions, mapGetters } from "vuex";
+import UploadAvatar from "vue-upload-drop-images";
 export default {
   data() {
     return {
+      sheet: false,
+
       text: "",
-      image: "",
-      avatar: "",
+      avatar: undefined,
+
+      role: {
+        required: [(value) => !!value || "Harus diisi."],
+        email: [
+          (value) => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return pattern.test(value) || "e-mail tidak valid";
+          },
+        ],
+        avatar: [
+          (value) =>
+            !value || value.size < 500000 || "Ukuran file tidak boleh lebih dari 2 MB!",
+        ],
+      },
     };
   },
-  computed: {
-    ...mapGetters({
-      getUser: "auth/user",
-      urlImage: "constant/urlImage",
-    }),
-  },
+  components: { UploadAvatar },
+  mounted() {},
   methods: {
-    ...mapActions({
-      setSpinner: "spinner/set",
-    }),
-    onCancel() {
-      this.$parent.kategoriAdd = false;
+    rubahAvatar(files) {
+      //   console.log(files[0]);
+      if (files) {
+        this.avatar = files[0];
+      } else {
+        this.avatar = null;
+      }
+      //   console.log(this.avatar);
     },
     onSave() {
-      // const data = {
-      //   user_id: this.getUser.id,
-      //   sekolah_id: this.$parent.sekolah.id,
-      //   text: this.text,
-      // };
       let formData = require("form-data");
       let dataQ = new formData();
-      dataQ.set("user_id", this.getUser.id);
-      dataQ.set("sekolah_id", this.$parent.sekolah.id);
-      dataQ.set("avatar", this.avatar);
+      dataQ.set("user_id", this.$store.state.auth.user.id);
+      dataQ.set("sekolah_id", 1);
       dataQ.set("text", this.text);
+      dataQ.set("avatar", this.avatar);
 
-      this.setSpinner(true);
+      // this.setSpinner(true);
       Axios.post("misi/store", dataQ)
         .then((response) => {
-          this.$parent.kategoriAdd = false;
-          this.$parent.loadSekolah();
           this.$notify({
             group: "success",
             title: "Sukses",
-            text: "Satu misi  sudah ditambahkan",
+            text: response.data.message,
             type: "success", //nilai lain, error dan success
           });
-          this.setSpinner(false);
+          this.sheet = false;
+          // this.setSpinner(false);
+          this.$emit("loadSekolah");
+          this.kosongkanData();
         })
         .catch((error) => {
           this.$notify({
             group: "error",
             title: "Gagal",
-            text: "BACKEND " + error.message,
+            text: error.message,
             type: "error", //nilai lain, error dan success
           });
-          this.setSpinner(false);
+          // this.setSpinner(false);
         });
     },
-    // METHOD UNTUK GAMBAR
-    getImage(image) {
-      if (this.avatar != "" && this.avatar.length > 0 && this.avatar != null) {
-        return this.urlImage + "/sekolah/" + image;
-      } else {
-        return image;
-      }
+    kosongkanData() {
+      this.text = "";
     },
-    onImageChange(e) {
-      var files = e.target.files || e.dataTransfer.files;
-      this.avatar = files[0];
-      if (files.length) {
-        return this.createImage(files[0]);
-      }
-    },
-    createImage(file) {
-      var image = new Image();
-      var reader = new FileReader();
-      var vm = this;
-      reader.onload = (e) => {
-        vm.image = e.target.result;
-        // this.image = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    },
-    removeImage() {
-      // console.log(this.image);
-      this.image = "";
-      this.avatar = "";
-    },
-    onRejected(rejectedEntries) {
-      this.$notify({
-        group: "error",
-        title: "Gagal",
-        text: `${rejectedEntries.length} file(s) did not pass validation constraints`,
-        type: "error", //nilai lain, error dan success
-      });
-    },
-    // AKHIR METHOD GAMBAR
   },
 };
 </script>

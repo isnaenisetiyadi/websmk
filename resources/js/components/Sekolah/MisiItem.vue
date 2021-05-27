@@ -1,75 +1,36 @@
 <template>
-  <div class="list-group-item">
-    <div v-if="!editKategori" class="input-group align-middle">
-      <span class="input-group-text">
-        <img :src="urlImage + '/anything.jpg'" v-if="!image" style="width: 30px" />
-        <img :src="getImage(image)" style="width: 30px" v-else />
-      </span>
+  <!-- <v-card> -->
+  <v-list class="py-0 my-0">
+    <v-list-item class="py-0 my-0">
+      <v-list-item-action>
+        <!-- <v-btn dark icon class="warning">
+            <v-icon>mdi-pencil</v-icon>
+          </v-btn> -->
+        <MisiEdit :misi="misi" @isiMisiLagi="isiMisiLagi" v-if="misi" />
+      </v-list-item-action>
+      <!-- <v-list-item-avatar tile v-if="misi.avatar" class="mr-2">
+        <v-img :src="'images/sekolah/' + misi.avatar"></v-img>
+      </v-list-item-avatar> -->
+      <v-list-item-content>
+        <!-- <v-list-item-title>Judul</v-list-item-title> -->
 
-      <textarea
-        disabled
-        class="form-control"
-        aria-label="With textarea"
-        :value="misi.text"
-      ></textarea>
-      <span class="input-group-text">
-        <button @click="onEdit()" class="btn btn-outline-primary" type="button">
-          <i class="icofont-edit"></i>
-        </button>
-        <button @click="onDelete()" class="btn btn-outline-danger" type="button">
-          <i class="icofont-trash"></i>
-        </button>
-      </span>
-    </div>
-    <div v-if="editKategori" class="input-group align-middle">
-      <span class="input-group-text">
-        <!-- <img :src="urlImage + '/guru/' + guru.avatar" alt="" /> -->
-        <!-- <img :src="urlImage + '/anything.jpg'" style="width: 30px" /> -->
-        <input
-          v-if="!image"
-          class="form-controll"
-          type="file"
-          bg-color="white"
-          @change="onImageChange"
-          filled
-          multiple
-          accept=".jpg, image/*"
-          name="avatar"
-          @rejected="onRejected"
-          bottom-slots
-        />
-        <img
-          @click="removeImage"
-          :src="getImage(image)"
-          style="width: 30px; cursor: pointer"
-          v-else
-        />
-        <div class="absolute-bottom-misi text-subtitle1 text-center">
-          <!-- <button @click="removeImage" class="button-image">
-            <i class="icofont-ui-delete"></i>
-          </button> -->
-        </div>
-      </span>
+        <!-- <v-list-item-subtitle>{{misi.text}}</v-list-item-subtitle> -->
+        <div class="caption" v-if="misi">{{ misi.text }}</div>
+      </v-list-item-content>
 
-      <textarea
-        class="form-control"
-        aria-label="With textarea"
-        :value="misi.text"
-      ></textarea>
-      <span class="input-group-text">
-        <button @click="onEdit()" class="btn btn-outline-primary" type="button">
-          <i class="icofont-reply"></i>
-        </button>
-        <button @click="onSave()" class="btn btn-outline-primary" type="button">
-          <i class="icofont-save"></i>
-        </button>
-      </span>
-    </div>
-  </div>
+      <v-list-item-action>
+        <v-btn plain dark icon class="error" @click="onDelete()">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </v-list-item-action>
+    </v-list-item>
+  </v-list>
+  <!-- </v-card> -->
 </template>
 <script>
 import Axios from "axios";
 import { mapActions, mapGetters } from "vuex";
+import MisiEdit from "./MisiEdit";
 export default {
   data() {
     return {
@@ -77,11 +38,14 @@ export default {
       text: "",
       image: "",
       avatar: "",
+
+      misi: undefined,
     };
   },
-  props: ["misi"],
+  components: { MisiEdit },
+  props: ["misiParent"],
   mounted() {
-    this.init();
+    this.misi = this.misiParent;
   },
   computed: {
     ...mapGetters({
@@ -98,10 +62,19 @@ export default {
       this.image = "";
       this.avatar = "";
     },
-    init() {
-      this.text = this.misi.text;
-      this.image = this.misi.avatar;
-      this.avatar = this.misi.avatar;
+    isiMisiLagi() {
+      Axios.get("misi/show/" + this.misi.id)
+        .then((response) => {
+          this.misi = response.data.data;
+        })
+        .catch((error) => {
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: `ERROR ` + error.message,
+            type: "error", //nilai lain, error dan success
+          });
+        });
     },
     onEdit() {
       this.editKategori ? (this.editKategori = false) : (this.editKategori = true);
@@ -115,17 +88,17 @@ export default {
         button: { no: "Tidak", yes: "Iya" },
         callback: (confirm) => {
           if (confirm) {
-            this.setSpinner(true);
+            // this.setSpinner(true);
             Axios.post("misi/destroy/" + this.misi.id)
               .then((response) => {
-                this.$parent.loadSekolah();
+                this.$emit("loadSekolah");
                 this.$notify({
                   group: "success",
                   title: "Sukses",
                   text: "Satu misi sudah dihapus",
                   type: "warn", //nilai lain, error dan success
                 });
-                this.setSpinner(false);
+                // this.setSpinner(false);
               })
               .catch((error) => {
                 this.$notify({
@@ -134,7 +107,7 @@ export default {
                   text: error.message,
                   type: "error", //nilai lain, error dan success
                 });
-                this.setSpinner(false);
+                // this.setSpinner(false);
               });
           }
         },

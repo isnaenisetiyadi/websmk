@@ -84,6 +84,26 @@ class MisiController extends Controller
     public function show($id)
     {
         //
+        // if (Auth::user()) {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+
+        $misi = Misi::where('id', '=', $id)->first();
+        if ($misi) {
+            $status = "success";
+            $message = "BACKEND: data misi diperoleh";
+            $data = $misi->toArray();
+            $code = 200;
+        } else {
+            $message = "BACKEND: Gagal mengambil data misi";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ], $code);
     }
 
     /**
@@ -153,7 +173,7 @@ class MisiController extends Controller
         $code = 400;
 
         $misi = Misi::find($id);
-       
+
         if ($misi) {
 
             if ($misi->delete()) {
@@ -164,7 +184,7 @@ class MisiController extends Controller
             } else {
                 $message = "BACKEND: GAGAL menghapus misi sekolah";
             }
-        }else {
+        } else {
             $message = "Tidak ada misi dengan id itu yang akan dihapus";
         }
         return response()->json([

@@ -33,7 +33,7 @@ class PendidikanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Pendidikan $pendidikan)
+    public function storeBackup(Pendidikan $pendidikan)
     {
         //
         $status = "error";
@@ -63,7 +63,7 @@ class PendidikanController extends Controller
             'data' => $data
         ], $code);
     }
-    public function simpan(Request $request)
+    public function store(Request $request)
     {
         //
         $status = "error";
@@ -102,7 +102,25 @@ class PendidikanController extends Controller
      */
     public function show($id)
     {
-        //
+        // if (Auth::user()) {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+        $pendidikan = Pendidikan::where('id', '=', $id)->first();
+        if ($pendidikan) {
+            $status = "success";
+            $message = "BACKEND: data pendidikan diperoleh";
+            $data = $pendidikan->toArray();
+            $code = 200;
+        } else {
+            $message = "BACKEND: Gagal mengambil data misi";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ], $code);
     }
 
     /**
@@ -152,7 +170,6 @@ class PendidikanController extends Controller
             'message' => $message,
             'data' => $data
         ], $code);
-
     }
 
     /**

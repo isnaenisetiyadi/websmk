@@ -134,4 +134,27 @@ class ProgramController extends Controller
             'data' => $data,
         ], $code);
     }
+    public function show($id)
+    {
+        // if (Auth::user()) {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+
+        $program = Program::where('id', '=', $id)->first();
+        if ($program) {
+            $status = "success";
+            $message = "BACKEND: data program diperoleh";
+            $data = $program->toArray();
+            $code = 200;
+        } else {
+            $message = "BACKEND: data tidak program diperoleh";
+        }
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ], $code);
+    }
 }

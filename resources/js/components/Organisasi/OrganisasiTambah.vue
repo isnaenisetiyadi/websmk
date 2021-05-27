@@ -1,84 +1,68 @@
 <template>
-  <div>
-    <transition name="modal">
-      <div class="modal-mask">
-        <div class="modal-wrapper">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">
-                  {{ organisasi.id ? "Edit Organisasi" : "Organisasi Baru" }}
-                </h5>
-              </div>
-              <div class="modal-body">
-                <div class="form-group">
-                  <Label>Nama</Label>
-                  <input
-                    class="form-control"
-                    placeholder="Organisasi..."
-                    type="text"
-                    v-model="nama"
+  <v-container>
+    <v-row justify="center">
+      <v-dialog
+        v-model="dialog"
+        fullscreen
+        hide-overlay
+        transition="dialog-bottom-transition"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn class="mt-3 mb-5" color="info" outlined rounded v-bind="attrs" v-on="on">
+            <v-icon>mdi-wallet-plus-outline</v-icon>
+            <span>Tambah Organisasi</span>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-toolbar dark color="info">
+            <v-btn icon dark @click="dialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Organisasi Baru</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn plain @click="onSave()" :disabled="!nama">
+                <v-icon small>mdi-content-save</v-icon>
+                <span>Simpan</span>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-form ref="form">
+            <v-layout row class="ma-3" justify-center>
+              <v-flex xs12 sm6 md4 class="pa-2">
+                <v-text-field label="Nama" color="info" v-model="nama"> </v-text-field>
+                <v-textarea
+                  label="Deskripsi"
+                  v-model="deskripsi"
+                  color="info"
+                ></v-textarea>
+              </v-flex>
+              <v-flex xs12 sm6 md4 class="pa-2">
+                <v-card>
+                  <h3 class="subtitle-1">Gambar/ Tumbnail</h3>
+                  <UploadAvatar
+                    :max="1"
+                    fileError="Jenis file tidak didukung"
+                    uploadMsg="Tab atau Klik untuk memilih file"
+                    @change="rubahAvatar"
                   />
-                  <small class="text-danger"> </small>
-                </div>
-                <div class="form-group">
-                  <Label>Deskripsi</Label>
-                  <input
-                    class="form-control"
-                    placeholder="Deskripsi..."
-                    type="text"
-                    v-model="deskripsi"
-                  />
-                  <small class="text-danger"> </small>
-                </div>
-                <div class="form-group">
-                  <Label>Logo Organisasi</Label>
-                  <input
-                    v-if="!image"
-                    class="form-controll"
-                    type="file"
-                    bg-color="white"
-                    @change="onImageChange"
-                    filled
-                    label="Logo Organisasi"
-                    multiple
-                    accept=".jpg, image/*"
-                    name="avatar"
-                    @rejected="onRejected"
-                    bottom-slots
-                  />
-                  <div v-else class="m-lg">
-                    <img :src="getImage(image)" class="image-avatar" alt="" />
-                    <div class="absolute-bottom-guru text-subtitle1 text-center">
-                      <button @click="removeImage" class="button-image">
-                        <i class="icofont-ui-delete"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <small class="text-danger"> </small>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" @click="onClose()">
-                  Tutup
-                </button>
-                <button v-on:click="onSave()" type="button" class="btn btn-success">
-                  Simpan
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
-  </div>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-form>
+        </v-card>
+      </v-dialog>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import Axios from "axios";
 import { mapActions, mapGetters } from "vuex";
+import UploadAvatar from "vue-upload-drop-images";
 export default {
   name: "organisasi-tambah",
+  components: { UploadAvatar },
   props: ["organisasi"],
   data() {
     return {
@@ -87,6 +71,8 @@ export default {
       //data gambar
       image: "",
       avatar: null,
+
+      dialog: false,
     };
   },
   computed: {
@@ -102,6 +88,16 @@ export default {
     ...mapActions({
       setSpinner: "spinner/set",
     }),
+
+    rubahAvatar(files) {
+      //   console.log(files[0]);
+      if (files) {
+        this.avatar = files[0];
+      } else {
+        this.avatar = null;
+      }
+      //   console.log(this.avatar);
+    },
     // METHOD UNTUK GAMBAR
     getImage(image) {
       if (this.avatar) {
@@ -163,58 +159,39 @@ export default {
       dataQ.set("deskripsi", this.deskripsi);
       dataQ.set("avatar", this.avatar);
 
-      if (this.organisasi.id) {
-        //KODE UPDATE
-        this.setSpinner(true);
-        Axios.post("organisasi/update/" + this.organisasi.id, dataQ)
-          .then((response) => {
-            this.$notify({
-              group: "success",
-              title: "Sukses",
-              text: "Satu Organisasi  sudah diupdate",
-              type: "success", //nilai lain, error dan success
-            });
-            this.onClose();
-            this.setSpinner(false);
-            this.$parent.loadOrganisasi();
-          })
-          .catch((error) => {
-            this.$notify({
-              group: "error",
-              title: "Gagal",
-              text: "SINI Beo " + error.message,
-              type: "error", //nilai lain, error dan success
-            });
-            this.setSpinner(false);
+      //KODE TAMBAH(INSERT)
+      // this.setSpinner(true);
+      Axios.post("organisasi/store", dataQ)
+        .then((response) => {
+          this.$notify({
+            group: "success",
+            title: "Sukses",
+            text: "Satu Organisasi  sudah ditambah",
+            type: "success", //nilai lain, error dan success
           });
-        this.onClose();
-      } else {
-        //KODE TAMBAH(INSERT)
-        this.setSpinner(true);
-        Axios.post("organisasi/store", dataQ)
-          .then((response) => {
-            this.$notify({
-              group: "success",
-              title: "Sukses",
-              text: "Satu Organisasi  sudah ditambah",
-              type: "success", //nilai lain, error dan success
-            });
-            this.onClose();
-            this.setSpinner(false);
-            this.$parent.loadOrganisasi();
-          })
-          .catch((error) => {
-            this.$notify({
-              group: "error",
-              title: "Gagal",
-              text: "SINI BRO " + error.message,
-              type: "error", //nilai lain, error dan success
-            });
-            this.setSpinner(false);
+          // this.onClose();
+          // this.setSpinner(false);
+          this.dialog = false;
+          this.kosongkanData();
+          this.$parent.loadOrganisasi();
+        })
+        .catch((error) => {
+          this.$notify({
+            group: "error",
+            title: "Gagal",
+            text: "SINI BRO " + error.message,
+            type: "error", //nilai lain, error dan success
           });
-        this.onClose();
-      }
+          this.setSpinner(false);
+        });
+      this.onClose();
     },
+    kosongkanData() {
+      this.nama = "",
+      this.deskripsi = "",
+      this.avatar = null
+
+    }
   },
 };
 </script>

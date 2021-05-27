@@ -1,19 +1,30 @@
 <template>
-  <div>
-    <Spinner v-if="showSpinner"/>
-    <notifications group="auth" position="top left" />
-    <notifications group="success" position="top left" />
-    <notifications group="error" position="top left" />
-    <notifications group="alert" position="top left" />
+  <v-app color="grey lighten-4">
+    <!-- <Spinner v-if="showSpinner" /> -->
+    <notifications group="auth" position="top center" />
+    <notifications group="success" position="top center" />
+    <notifications group="error" position="top center" />
+    <notifications group="alert" position="top center" />
     <vue-confirm-dialog></vue-confirm-dialog>
-    <Navbar :app="this"></Navbar>
-    <TambahPendidikan v-if="showDialogTambah" ref="isAdd" />
-
-    <router-view />
-    <!-- <button @click="init()" class="btn btn-danger">Uji Init</button> -->
-  <!-- <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a> -->
+    <Navbar />
+    <v-main class="grey lighten-4 my-2">
+      <router-view></router-view>
+    </v-main>
     <Footer :app="this"></Footer>
-  </div>
+    <v-btn
+      v-scroll="onScroll"
+      v-show="fab"
+      fab
+      dark
+      fixed
+      bottom
+      right
+      color="primary"
+      @click="toTop"
+    >
+      <v-icon>mdi-chevron-up</v-icon>
+    </v-btn>
+  </v-app>
 </template>
 
 <script>
@@ -22,25 +33,25 @@ import Footer from "./components/Layouts/Footer";
 import TambahPendidikan from "./components/Pendidikan/Tambah";
 import Spinner from "./components/Spinner.vue";
 import Axios from "axios";
-// import { mapActions } from 'vuex';
 import { mapActions, mapGetters } from "vuex";
-// mapActions
 export default {
-  name: "app",
+  name: "App",
   data() {
-    return {};
+    return {
+      fab: false,
+    };
   },
   components: {
     Navbar,
     Footer,
     TambahPendidikan,
-    Spinner
+    Spinner,
   },
   computed: {
     ...mapGetters({
       getNews: "news/post",
       showDialogTambah: "pendidikanDialog/showDialog",
-      showSpinner: "spinner/loading"
+      showSpinner: "spinner/loading",
     }),
   },
   mounted() {
@@ -80,6 +91,14 @@ export default {
       setUrlImage: "constant/set",
       setPendidikanDialog: "pendidikanDialog/set",
     }),
+    onScroll(e) {
+      if (typeof window === "undefined") return;
+      const top = window.pageYOffset || e.target.scrollTop || 0;
+      this.fab = top > 20;
+    },
+    toTop() {
+      this.$vuetify.goTo(0);
+    },
   },
 };
 </script>

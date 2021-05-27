@@ -1,5 +1,5 @@
 <template>
-  <div class="list-group-item">
+  <!-- <div class="list-group-item">
     <div class="input-group" style="margin-top: 0; margin-bottom: 0">
       <input
         type="text"
@@ -15,7 +15,28 @@
         <i class="icofont-save"></i>
       </button>
     </div>
-  </div>
+  </div> -->
+  <v-list-item class="py-0 my-0">
+    <v-list-item-action class="align-center mx-1">
+      
+      <v-btn plain dark icon class="success mt-3" @click="onSave()">
+        <v-icon>mdi-content-save</v-icon>
+      </v-btn>
+    </v-list-item-action>
+    <v-list-item-content class="mx-1">
+      <v-text-field
+        label="Kategori"
+        color="info"
+        v-model="nama"
+       
+      ></v-text-field>
+    </v-list-item-content>
+    <v-list-item-action class="mx-1">
+      <v-btn plain dark icon class="error" @click="onAdd()">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </v-list-item-action>
+  </v-list-item>
 </template>
 <script>
 import Axios from "axios";
@@ -33,22 +54,27 @@ export default {
     onCancel() {
       this.$parent.kategoriAdd = false;
     },
+    onAdd() {
+      this.$emit("onAdd");
+    },
     onSave() {
       const data = {
         nama: this.nama,
       };
-      this.setSpinner(true);
+      // this.setSpinner(true);
       Axios.post("kategori/store", data)
         .then((response) => {
-          this.$parent.kategoriAdd = false;
-          this.$parent.loadKategoris();
+          // this.$parent.kategoriAdd = false;
+          this.$emit("loadKategoris");
+          this.$emit("onAdd");
+          this.nama = "";
           this.$notify({
             group: "success",
             title: "Sukses",
             text: "Satu kategori  sudah ditambahkan",
             type: "success", //nilai lain, error dan success
           });
-          this.setSpinner(false);
+          // this.setSpinner(false);
         })
         .catch((error) => {
           this.$notify({
@@ -57,7 +83,7 @@ export default {
             text: "SINI Beo " + error.message,
             type: "error", //nilai lain, error dan success
           });
-          this.setSpinner(false);
+          // this.setSpinner(false);
         });
     },
   },

@@ -31,6 +31,8 @@ import OrganisasiViewer from '../components/Organisasi/Viewer.vue';
 
 import Gurus from '../pages/Guru/Index.vue';
 import GuruTambah from '../components/Guru/GuruTambah.vue';
+import GuruViewer from '../components/Guru/Viewer.vue';
+import Gtk from '../components/Guru/Index.vue';
 
 import Jurusans from '../pages/Jurusan/Index.vue';
 
@@ -44,6 +46,7 @@ export default [
     { path: '/', component: Index },
     { path: '/error/access', component: AccessDenied },
     { path: '/berita/:slug', component: Berita },
+    // { path: '/berita', component: Berita },
     { path: '/beritaitem', component: BeritaItem },
     {
         path: '/kategori',
@@ -55,7 +58,7 @@ export default [
     { path: '/awards/siswa', component: Siswa },
     { path: '/awards/guru', component: Guru },
     { path: '/jurusan', component: Jurusan },
-    { path: '/jurusan/viewer', component: JurusanViewer },
+    { path: '/jurusan/viewer/:slug', component: JurusanViewer },
     { path: '/jurusan/atph', component: Atph },
     { path: '/jurusan/apat', component: Apat },
     { path: '/jurusan/akl', component: Akl },
@@ -63,9 +66,11 @@ export default [
     { path: '/organisasi/osis', component: Osis },
     { path: '/organisasi/pramuka', component: Pramuka },
     { path: '/organisasi/jujitsu', component: Jujitsu },
-    { path: '/organisasi/viewer', component: OrganisasiViewer },
+    { path: '/organisasi/viewer/:slug', component: OrganisasiViewer },
     { path: '/organisasi/psht', component: Psht },
     { path: '/organisasi/multimedia', component: Multimedia },
+    { path: '/guru/:slug', component: GuruViewer },
+    { path: '/gtk', component: Gtk },
     {
         path: '/organisasi/entry',
         component: OrganisasiEntry,

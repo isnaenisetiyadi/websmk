@@ -102,7 +102,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Axios from "axios";
-import ProgramTambah from "../../components/Program/ProgramTambah";
+import ProgramTambah from "../../components/Program/ProgramAdd";
 export default {
   components: { ProgramTambah },
   data() {

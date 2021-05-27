@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Berita;
+use App\Post;
 use App\Http\Resources\Berita as BeritaResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+
 
 class BeritaController extends Controller
 {
@@ -29,7 +31,9 @@ class BeritaController extends Controller
             $berita = Berita::where('user_id', '=', $request->user_id)
                 ->where('judul', 'like', '%' . $request->judul . '%')->paginate(10);
         } else {
-            $berita = Berita::where('judul', 'like', '%' . $request->judul . '%')->paginate(10);
+            $berita = Berita::where('judul', 'like', '%' . $request->judul . '%')
+                ->with('post')
+                ->with(['jurusan', 'organisasi'])->paginate(10);
         }
 
 
@@ -40,6 +44,27 @@ class BeritaController extends Controller
             $code = 200;
         } else {
             $message = "BACKEND: Data berita dengan pencarian TIDAK diperoleh";
+        }
+        return new BeritaResource($berita);
+    }
+    public function slug($slug)
+    {
+        $status = "error";
+        $message = "BACKEND: ";
+        $data = null;
+        $code = 400;
+
+        $berita = Berita::where('slug', '=', $slug)
+            // ->with(['post','jurusan','organisasi'])->first();
+            ->with('post')
+            ->with(['jurusan', 'organisasi'])->paginate(10);
+        if ($berita) {
+            $status = "success";
+            $message = "BACKEND: Data berita dengan pencarian slug diperoleh";
+            $data = $berita->toArray();
+            $code = 200;
+        } else {
+            $message = "BACKEND: Data berita dengan pencarian slug TIDAK diperoleh";
         }
         return new BeritaResource($berita);
     }
@@ -106,7 +131,7 @@ class BeritaController extends Controller
         DB::beginTransaction();
 
         $berita = Berita::find($id);
-        $berita->user_id = $request->user_id;
+        // $berita->user_id = $request->user_id;
         $berita->kategori_id = $request->kategori_id;
         $berita->judul = $request->judul;
         $berita->deskripsi = $request->deskripsi;
@@ -144,6 +169,18 @@ class BeritaController extends Controller
         } else {
             $message += "Gagal mengupdate berita";
         }
+
+        $post = Post::where('berita_id', '=', $id)->first();
+        // dd($post);
+        if ($post) {
+            $post->slug = Str::slug($request->judul);
+            if ($post->save()) {
+                // $message = $message + ", data posting juga diedit";
+            }
+        }
+
+
+
         DB::commit();
         return response()->json([
             'status' => $status,
@@ -157,7 +194,7 @@ class BeritaController extends Controller
         $message = "BACKEND: ";
         $data = null;
         $code = 400;
-
+        DB::beginTransaction();
         $berita = Berita::find($id);
         if ($berita->delete()) {
             $status = "success";
@@ -167,6 +204,16 @@ class BeritaController extends Controller
         } else {
             $message += "Gagal menghapus berita";
         }
+
+        $post = Post::where('berita_id', '=', $id)->first();
+        // dd($post);
+        if ($post) {
+            if ($post->delete()) {
+                // $message = $message + ", data posting juga diedit";
+            }
+        }
+
+        DB::commit();
         return response()->json([
             'status' => $status,
             'message' => $message,
@@ -261,7 +308,7 @@ class BeritaController extends Controller
         $code = 400;
 
         $berita = Berita::where('id', $id)
-            ->with(['jurusan', 'organisasi'])->first();
+            ->with(['post', 'jurusan', 'organisasi'])->first();
 
         if ($berita) {
             $status = "success";

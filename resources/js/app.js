@@ -1,5 +1,5 @@
-require('./bootstrap');
-import 'bootstrap';
+// require('./bootstrap');
+// import 'bootstrap';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
@@ -14,6 +14,9 @@ import VueEditor from 'vue-quill-editor';
 import Moment from 'moment';
 import VueCompositionAPI from '@vue/composition-api';
 import PulseLoader from 'vue-spinner/src/DotLoader';
+import SocialSharing from "vue-social-sharing";
+// import vuetify from "./plugins/vuetify";
+import vuetify from "./plugins/vuetify";
 
 
 
@@ -31,15 +34,23 @@ Vue.use(Notifications);
 Vue.use(VueEditor);
 Vue.use(VueCompositionAPI);
 Vue.use(PulseLoader);
+Vue.use(SocialSharing);
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default);
 Vue.component('notifications', Notifications.default);
 Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('vue-spinner', PulseLoader);
+Vue.component('social-sharing', SocialSharing);
 
 
 Vue.filter('formatDate', function(value) {
     if (value) {
         return Moment(String(value)).format('DD MMMM YYYY')
+            // return Moment(String(value)).format('hh:mm')
+    }
+})
+Vue.filter('formatMonth', function(value) {
+    if (value) {
+        return Moment(String(value)).format('MMM YY')
             // return Moment(String(value)).format('hh:mm')
     }
 })
@@ -103,15 +114,9 @@ const router = new VueRouter({
 
 import App from './App.vue';
 import store from './store';
-// import storeTemporary from './store/temporary';
-// import web from './effect/web';
 import VueNotifications from 'vue-notifications';
 Vue.use(App);
-// const app = new Vue({
-//     router,
-//     store,
-//     render: h => h(App)
-// }).$mount('#app');
+
 
 router.beforeEach((to, from, next) => {
     // NAVIGATION GUARD: 
@@ -159,6 +164,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
     router,
     store,
+    vuetify,
     data: {
         bus: bus
     },

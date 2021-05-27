@@ -1,251 +1,81 @@
 <template>
-  <section class="section mb-5">
-    <div class="container-fluid banner" height="50px"></div>
-    <section class="site-section mb-4">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-8 blog-content" v-if="getNews.berita">
-            <div>
-              <div v-html="getNews.berita.konten" class="ql-editor"></div>
-            </div>
-            <hr />
-            <div class="meta">
-              <i class="icofont-ui-calendar"></i> {{ getNews.created_at | formatDate }} |
-              <i class="icofont-ui-clock"></i> {{ getNews.created_at | formatTime }}
-            </div>
-            <span> <i class="icofont-ui-edit"></i> {{ getNews.berita.user.name }}</span>
-            <span> <i class="icofont-eye-alt"></i> {{ getNews.views }}</span>
-            <!-- <div class="pt-5">
-              <p>
-                Kategori : <a href="#">Design</a>, <a href="#">Events</a> Tags:
-                <a href="#">#html</a>, <a href="#">#trends</a>
-              </p>
-            </div> -->
-
-            <!-- DIsini tempat komponen komentar -->
-            <komentar-berita
-              :post="getNews.berita"
-              :komenDariParent="loadKomentarChild"
-            />
-            <div class="comment-form-wrap pt-5">
-              <h3 class="mb-5">Ikut berkomentar</h3>
-              <form action="#" class="">
-                <!-- <div class="form-group">
-          <label for="name">Name *</label>
-          <input type="text" class="form-control" id="name" />
-        </div> -->
-                <!-- <div class="form-group">
-          <label for="email">Email *</label>
-          <input type="email" class="form-control" id="email" />
-        </div> -->
-                <!-- <div class="form-group">
-          <label for="website">Website</label>
-          <input type="url" class="form-control" id="website" />
-        </div> -->
-
-                <div class="form-group">
-                  <label for="message">Pesan</label>
-                  <textarea
-                    name=""
-                    id="message"
-                    v-model="komentar"
-                    cols="30"
-                    rows="10"
-                    class="form-control"
-                  ></textarea>
-                </div>
-                <div class="form-group">
-                  <input
-                    @click="saveKomen()"
-                    type="button"
-                    value="Kirim Komentar"
-                    class="btn btn-primary"
-                  />
-                </div>
-              </form>
-            </div>
-          </div>
-          <div class="col-md-8 blog-content" v-else>
-            <div
-              class="col-md-12 align-middle text-center"
-              style="margin-top: 100px; margin-bottom: 100px"
-            >
-              <h1><i class="icofont-worried"></i></h1>
-              <span>Belum ada INFORMASI apapun</span>
-            </div>
-          </div>
-          <div class="col-md-4 sidebar">
-            <!-- <div class="sidebar-box">
-              <form action="#" class="search-form">
-                <div class="form-group">
-                  <span class="icon fa fa-search"></span>
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Ketik kata kunci"
-                  />
-                </div>
-              </form>
-            </div> -->
-
-            <kategori-berita />
-
-            <!-- <div class="sidebar-box">
-              <img
-                src="img/person_1.jpg"
-                alt="Image placeholder"
-                class="img-fluid mb-4"
-              />
-              <h3>Student of the month</h3>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque,
-                autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat
-                nam vero culpa sapiente consectetur similique, inventore eos fugit
-                cupiditate numquam!
-              </p>
-              <p><a href="#" class="btn btn-primary btn-sm">Lebih Banyak</a></p>
-            </div>
-
-            <div class="sidebar-box">
-              <h3>Paragraph</h3>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque,
-                autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat
-                nam vero culpa sapiente consectetur similique, inventore eos fugit
-                cupiditate numquam!
-              </p>
-            </div> -->
-          </div>
-        </div>
-      </div>
-    </section>
-    <div class="container mb-5">
-      <div class="row trending-frame" v-for="(kategori, index) in kategoris" :key="index">
-        <div class="caption text-center">{{ kategori.nama }} TERBARU :</div>
-        <div class="col-md-12">
-          <!-- <div class="row">
-            <div
-              class="trending-item"
-              v-for="(berita, index) in kategori.berita"
-              :key="index"
-            >
-              <Trending :berita="berita" />
-            </div>
-          </div> -->
-          <div class="row" v-if="kategori.berita[0]">
-            <div
-              class="trending-item"
-              v-for="(berita, index) in kategori.berita"
-              :key="index"
-            >
-              <Trending :berita="berita" />
-            </div>
-          </div>
-          <div class="row" v-else style="width: 100%">
-            <div class="col-md-12 align-middle text-center">
-              <h1><i class="icofont-worried"></i></h1>
-              <span>Belum ada {{ kategori.nama }}</span>
-            </div>
-          </div>
-        </div>
-        <!-- <Trending />
-          <Trending />
-          <Trending /> -->
-      </div>
+  <div>
+    <div class="v-speed-dial mt-50 d-flex d-sm-none">
+      <BeritaMenuSticky floating />
     </div>
-    <!-- <div class="container">
-      <div class="row justify-content-center text-center mb-5">
-        <div class="col-md-5" data-aos="fade-up">
-          <h2 class="section-heading">Layanan Kami</h2>
-        </div>
-      </div>
+    <v-container class="pa-5">
+      <v-layout row>
+        <v-flex xs12 sm7 md9>
+          <v-card flat tile v-if="post.berita" class="pa-5">
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-title class="subheading font-weight-bold">
+                  {{ post.berita.judul }}
+                </v-list-item-title>
+                <v-list-item-subtitle class="caption font-weight-thin">
+                  {{ post.created_at | formatDate }}
+                  <v-chip x-small class="mb-0" color="warning" pill>
+                    {{ post.views }}
+                    <!-- User Account -->
+                    <!-- <v-icon right> mdi-account-outline </v-icon> -->
+                    <v-icon small right>mdi-eye-outline</v-icon>
+                  </v-chip>
+                  {{ post.berita.user.name }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action>
+                <ShareIt 
+                :url="'berita/' + post.berita.slug"
+                :title="post.berita.judul"
+                :description="post.berita.deskripsi"
+                />
+              </v-list-item-action>
+            </v-list-item>
+            <v-divider></v-divider>
 
-      <div class="row">
-        <div class="col-md-4" data-aos="fade-up" data-aos-delay>
-          <div class="feature-1 text-center">
-            <router-link to="/layananitem">
-              <div class="wrap-icon icon-1">
-                <span class="icon la la-globe"></span>
-              </div>
-            </router-link>
-            <h3 class="mb-3">Web Profil</h3>
-            <p style="text-decoration: none">
-              Cocok untuk kantor/ instansi/ sekolah, perusahan swasta, BUMN, dan lain-lain
-            </p>
-          </div>
-        </div>
-        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-          <div class="feature-1 text-center">
-            <router-link to="/layananitem">
-              <div class="wrap-icon icon-1">
-                <span class="icon la la-laptop"></span>
-              </div>
-            </router-link>
-            <h3 class="mb-3">Web Apps</h3>
-            <p>Aplikasi web untuk administrasi toko, sekolah, dan lain-lain</p>
-          </div>
-        </div>
-        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-          <div class="feature-1 text-center">
-            <router-link to="/layananitem">
-              <div class="wrap-icon icon-1">
-                <span class="icon la la-file-video-o"></span>
-              </div>
-            </router-link>
-            <h3 class="mb-3">Digital Promotion</h3>
-            <p>
-              Layanan pembuatan video promosi, animasi, sampai publikasi ke media sosial
-            </p>
-          </div>
-        </div>
-        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-          <div class="feature-1 text-center">
-            <router-link to="/layananitem">
-              <div class="wrap-icon icon-1">
-                <span class="icon la la-print"></span>
-              </div>
-            </router-link>
-            <h3 class="mb-3">Digital Printing</h3>
-            <p>Desain, cetak dan publikasi pada space iklan kami</p>
-          </div>
-        </div>
-        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-          <div class="feature-1 text-center">
-            <router-link to="/layananitem">
-              <div class="wrap-icon icon-1">
-                <span class="icon la la-paste"></span>
-              </div>
-            </router-link>
-            <h3 class="mb-3">Copier</h3>
-            <p>Gandakan dokumen dengan hasil maksimal</p>
-          </div>
-        </div>
-        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-          <div class="feature-1 text-center">
-            <router-link to="/layananitem">
-              <div class="wrap-icon icon-1">
-                <span class="icon la la-list-ul"></span>
-              </div>
-            </router-link>
-            <h3 class="mb-3">Retail</h3>
-            <p>Kebutuhan harian ecer, online maupun offline</p>
-          </div>
-        </div>
-      </div>
-    </div> -->
-  </section>
+            <!-- <v-card-content> -->
+            <div v-html="post.berita.konten" class="ql-editor caption"></div>
+            <!-- </v-card-content> -->
+            <v-divider></v-divider>
+            <v-card-actions>
+              <KomentarBerita :post="post.berita" :komenDariParent="loadKomentarChild" />
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 sm5 md3>
+          <v-card flat tile class="pa-5 z-back">
+            <!-- <v-text overline>UJI MENU</v-text> -->
+            <!-- <v-card-text oveline>UJI MENU</v-card-text> -->
+            <h1 class="subtitle overline mt-5 mb-3">Kategori Berita</h1>
+            <KategoriBerita />
+            <h1 class="subtitle overline mt-5 mb-3">Arsip Berita</h1>
+            <BeritaArsip />
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
 import Axios from "axios";
 import KategoriBerita from "./components/KategoriBerita.vue";
+import ShareIt from "../ShareNetwork/Share";
 // import KomentarBerita from "./components/KomentarBerita";
 import { mapActions, mapGetters } from "vuex";
 import KomentarBerita from "./components/KomentarBerita.vue";
 import Trending from "../../components/Trending/Trending.vue";
-
+import BeritaArsip from "./BeritaArsipSidemenu";
+import BeritaMenuSticky from "./BeritaMenuSticky";
 export default {
-  components: { KategoriBerita, KomentarBerita, Trending },
+  components: {
+    KategoriBerita,
+    KomentarBerita,
+    Trending,
+    BeritaArsip,
+    BeritaMenuSticky,
+    ShareIt,
+  },
   computed: {
     ...mapGetters({
       getNews: "news/post",
@@ -254,13 +84,14 @@ export default {
   },
   data() {
     return {
+      post: {},
       berita: {},
       komentar: "",
       loadKomentarChild: "",
       kategoris: {},
     };
   },
-  
+
   mounted() {
     // this.init();
     // this.loadKategori();
@@ -268,16 +99,16 @@ export default {
     this.loadKategoris();
   },
   watch: {
-    getNews: function () {
+    post: function () {
       if (this.loadKomentarChild) {
         this.loadKomentarChild = "";
       } else {
         this.loadKomentarChild = "Load Komenl";
       }
     },
-    '$route' (to, from) {
+    $route(to, from) {
       this.loadBerita();
-    }
+    },
   },
   methods: {
     ...mapActions({
@@ -350,7 +181,8 @@ export default {
       url = encodeURI(url);
       Axios.get(url)
         .then((response) => {
-          this.setNews(response.data.data);
+          this.post = response.data.data;
+          this.$vuetify.goTo(0);
         })
         .catch((error) => {
           this.$notify({
@@ -361,36 +193,63 @@ export default {
           });
         });
     },
-    // init() {
-    //   Axios.get("auth/berita/show/4")
-    //     .then((response) => {
-    //       this.berita = response.data.data;
-    //       // this.$notify({
-    //       //   group: "success",
-    //       //   title: "Sukses",
-    //       //   text: "SUKSES : " + response.data.message,
-    //       //   type: "success", //nilai lain, error dan success
-    //       // });
-    //     })
-    //     .catch((error) => {
-    //       this.$notify({
-    //         group: "error",
-    //         title: "Gagal",
-    //         text: "ERROR : " + error.message,
-    //         type: "error", //nilai lain, error dan success
-    //       });
-    //     });
-    // },
-    // loadKategori() {
-    //   Axios.get("kategoris")
-    //     .then((response) => {
-    //       this.kategoris = response.data.data;
-    //       // console.log(this.kategoris);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error.message);
-    //     });
-    // },
   },
 };
 </script>
+
+<style>
+/* .ql-editor {
+    color: #306674;
+} */
+
+.ql-editor {
+  max-height: 600px;
+  overflow-y: scroll;
+  /* background-color: #c5f3fc; */
+}
+
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4 {
+  color: #4d9baff3;
+}
+
+.ql-editor img {
+  width: 50%;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .ql-editor img {
+    width: 75%;
+  }
+}
+
+@media screen and (max-width: 378px) {
+  .ql-editor img {
+    width: 100%;
+  }
+}
+
+/* .ql-editor img {
+    width: 50%;
+    float: left;
+} */
+
+/* KODE STILE MENAMBAH KE PENAMPIL QUILL-EDITOR-TEXT*/
+/* stile speed-dial */
+.v-speed-dial {
+  position: fixed;
+  /* margin-top: 50px; */
+}
+.mt-30 {
+  margin-top: 50px;
+}
+.z-back {
+  z-index: 0;
+}
+/* akhir dari speed-dial */
+</style>

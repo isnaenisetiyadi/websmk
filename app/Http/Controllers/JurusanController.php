@@ -146,7 +146,7 @@ class JurusanController extends Controller
         $code = 400;
 
         $jurusan = Jurusan::where('slug', '=', $slug)->with(['guru'])
-            ->get();
+            ->first();
         if ($jurusan) {
             $status = "success";
             $message = "BACKEND: data jurusan diperoleh";

@@ -1,5 +1,16 @@
 <template>
-  <section class="jurusan-section" id="hero">
+  <div>
+    <v-container class="pa-5">
+      <v-layout row>
+        <v-flex xs12 sm4 md3>
+
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
+
+
+  <!-- <section class="jurusan-section" id="hero">
     <div class="wave">
       <svg width="100%" height="355px" viewBox="0 0 1920 355" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -130,7 +141,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 </template>
 
 <script>
